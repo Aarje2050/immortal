@@ -25,6 +25,15 @@ const ToolsPage: React.FC = () => {
   // Tools data
   const tools: Tool[] = [
     {
+      id: 'seo-cost-calculator',
+      name: 'Free SEO Cost Calculator',
+      description: 'Free SEO Cost Calculator tool that helps users estimate their SEO costs across various industries.',
+      icon: '🤖',
+      status: 'available',
+      category: 'technical',
+      url: '/tools/seo-cost-calculator'
+    },
+    {
       id: 'robots-txt',
       name: 'Robots.txt Generator',
       description: 'Create a properly formatted robots.txt file customized for your website needs with our easy-to-use generator.',
@@ -76,7 +85,7 @@ const ToolsPage: React.FC = () => {
       icon: '📋',
       status: 'available',
       category: 'analysis',
-      url: '/tools/seo-audit'
+      url: '/tools/seo-audit-checklist'
     },
     {
       id: 'image-optimizer',
