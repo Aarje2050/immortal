@@ -1,0 +1,90 @@
+{
+  "name": "E-commerce",
+  "slug": "e-commerce",
+  "description": "Specialized SEO solutions for online stores and e-commerce businesses",
+  "keyPhrases": [
+    "e-commerce SEO",
+    "online store optimization",
+    "product page SEO",
+    "e-commerce conversion optimization"
+  ],
+  "challenges": [
+    "Product page optimization at scale",
+    "Category structure and internal linking",
+    "Duplicate content issues",
+    "User experience and conversion rate optimization",
+    "Mobile shopping experience",
+    "Structured data implementation"
+  ],
+  "metaTitle": "E-commerce SEO Services | Online Store Optimization | Immortal SEO",
+  "metaDescription": "Maximize your online store visibility and sales with our specialized e-commerce SEO services. We optimize product pages, improve site structure, and boost conversions.",
+  "headerImage": "/images/industries/e-commerce.jpg",
+  "sections": {
+    "intro": "In the competitive world of e-commerce, visibility is everything. As more consumers turn to online shopping, standing out in search results has become essential for sustainable growth. Immortal SEO delivers specialized e-commerce SEO strategies designed to increase visibility, drive qualified traffic, and convert browsers into buyers.",
+    "painPoints": "E-commerce businesses face unique challenges including managing large product catalogs, dealing with duplicate content, optimizing product descriptions at scale, maintaining optimal site architecture, and creating compelling category pages that both rank and convert.",
+    "approach": "Our e-commerce SEO approach combines technical excellence, strategic content optimization, and conversion-focused enhancements. We implement product schema markup, optimize for shopping intent keywords, create unique product descriptions, develop category page strategies, and ensure seamless mobile shopping experiences."
+  },
+  "strategies": [
+    {
+      "name": "Product Schema Implementation",
+      "description": "We implement comprehensive product structured data to enhance visibility in rich results and Google Shopping."
+    },
+    {
+      "name": "Category Page Optimization",
+      "description": "We transform category pages into powerful SEO assets with optimized content, faceted navigation, and strategic internal linking."
+    },
+    {
+      "name": "Product Description Enhancement",
+      "description": "We create unique, keyword-rich product descriptions that engage shoppers and satisfy search algorithms."
+    },
+    {
+      "name": "Technical E-commerce SEO",
+      "description": "We address e-commerce-specific technical issues including pagination, faceted navigation, URL structure, and crawl budget optimization."
+    },
+    {
+      "name": "Conversion Rate Optimization",
+      "description": "We enhance user experience and implement testing strategies to improve add-to-cart and checkout conversion rates."
+    }
+  ],
+  "statistics": {
+    "industryGrowth": "44% growth in global e-commerce sales since 2020",
+    "mobileUsage": "67% of e-commerce traffic comes from mobile devices",
+    "abandonmentRate": "69.8% average cart abandonment rate across industries",
+    "searchInfluence": "35% of product searches start on Google (rather than Amazon or other marketplaces)"
+  },
+  "faq": [
+    {
+      "question": "How do you approach SEO for large e-commerce sites with thousands of products?",
+      "answer": "For large catalogs, we implement scalable solutions including templated optimization frameworks, automated structured data, prioritization strategies for high-value products, and category-level optimizations that impact multiple products simultaneously."
+    },
+    {
+      "question": "Can SEO help reduce cart abandonment rates?",
+      "answer": "Yes, our SEO strategies address factors that impact abandonment rates, including site speed optimization, mobile usability improvements, and implementing trust signals that reassure customers throughout the buying journey."
+    },
+    {
+      "question": "How do you handle seasonal products or inventory changes?",
+      "answer": "We develop strategies for seasonal merchandise including proper use of noindex/403/301 status codes, seasonal content calendars, and structured URL patterns that support inventory fluctuations while preserving SEO value."
+    }
+  ],
+  "caseStudies": [
+    {
+      "title": "Fashion Retailer Revenue Growth",
+      "summary": "We helped an online fashion retailer increase organic traffic by 94% and improve conversion rates by 37% through comprehensive product and category page optimization.",
+      "results": [
+        "94% increase in organic traffic",
+        "37% improvement in conversion rate",
+        "124% growth in organic revenue"
+      ]
+    },
+    {
+      "title": "Home Goods Store Technical Overhaul",
+      "summary": "Our technical SEO overhaul for a home goods e-commerce site resolved critical crawling issues, resulting in 211% more indexed products and 76% higher organic visibility.",
+      "results": [
+        "211% increase in indexed products",
+        "76% improvement in organic visibility",
+        "43% reduction in bounce rate"
+      ]
+    }
+  ],
+  "relatedServices": ["technical-seo", "content-seo", "local-seo"]
+}

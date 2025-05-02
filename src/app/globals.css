@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-main: #0171CE;
+  --primary-light: #3E94E6;
+  --primary-dark: #0056A4;
+  --primary-contrast-text: #FFFFFF;
+  
+  --secondary-main: #FFFFFF;
+  --secondary-light: #F5F5F5;
+  --secondary-dark: #EAEAEA;
+  --secondary-contrast-text: #333333;
+  
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-disabled: #999999;
+  
+  --background-default: #FFFFFF;
+  --background-paper: #F5F5F5;
+  --background-accent: #F0F8FF;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-inter), 'Segoe UI', 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--background-default);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), 'Arial', sans-serif;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+/* Custom utility classes */
+.prose {
+  max-width: 65ch;
+  line-height: 1.7;
+}
+
+.prose p {
+  margin-bottom: 1.5em;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1.5em;
+  padding-left: 1.5em;
+}
+
+.prose li {
+  margin-bottom: 0.5em;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary-main);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-paper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-disabled);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
