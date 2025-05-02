@@ -14,37 +14,39 @@ type Params = {
   };
 };
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const caseStudies = await getCaseStudies();
-  const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
-
-  if (!caseStudy) {
+export async function generateMetadata({
+    params,
+  }: {
+    params: { slug: string };
+  }): Promise<Metadata> {
+    const caseStudies = await getCaseStudies();
+    const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
+  
+    if (!caseStudy) {
+      return generatePageMetadata({
+        title: 'Case Study Not Found',
+        description: 'The requested case study could not be found.',
+      });
+    }
+  
     return generatePageMetadata({
-      title: 'Case Study Not Found',
-      description: 'The requested case study could not be found.',
+      title: `${caseStudy.title} | ImmortalSEO Case Study`,
+      description: `${caseStudy.challenge.substring(0, 150)}... See how ImmortalSEO helped ${caseStudy.client} achieve ${caseStudy.results.trafficIncrease} traffic growth through strategic SEO optimization.`,
     });
   }
-
-  return generatePageMetadata({
-    title: `${caseStudy.title} | ImmortalSEO Case Study`,
-    description: `${caseStudy.challenge.substring(0, 150)}... See how ImmortalSEO helped ${caseStudy.client} achieve ${caseStudy.results.trafficIncrease} traffic growth through strategic SEO optimization.`,
-  });
-}
-
-export async function generateStaticParams() {
-  const caseStudies = await getCaseStudies();
-  return caseStudies.map((caseStudy: any) => ({
-    slug: caseStudy.slug,
-  }));
-}
-
-export default async function CaseStudyPage({ params }: Params) {
-  const caseStudies = await getCaseStudies();
-  const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
-
-  if (!caseStudy) {
-    notFound();
+  
+  export default async function CaseStudyPage({
+    params,
+  }: {
+    params: { slug: string };
+  }) {
+    const caseStudies = await getCaseStudies();
+    const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
+  
+    if (!caseStudy) {
+      notFound();
+    }
+  
+    return <CaseStudyClientPage caseStudy={caseStudy} />;
   }
-
-  return <CaseStudyClientPage caseStudy={caseStudy} />;
-}
+  
