@@ -8,11 +8,13 @@ const getCaseStudies = async () => {
   return data.default;
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+type Params = {
+  params: {
+    slug: string;
+  };
+};
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const caseStudies = await getCaseStudies();
   const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
 
@@ -31,17 +33,12 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const caseStudies = await getCaseStudies();
-
   return caseStudies.map((caseStudy: any) => ({
     slug: caseStudy.slug,
   }));
 }
 
-export default async function CaseStudyPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function CaseStudyPage({ params }: Params) {
   const caseStudies = await getCaseStudies();
   const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
 
