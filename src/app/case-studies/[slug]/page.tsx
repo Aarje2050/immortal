@@ -2,47 +2,19 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import CaseStudyClientPage from './CaseStudyClientPage';
+import caseStudiesData from '../caseStudiesData';
+import { CaseStudy } from '../caseStudiesData';
 
-// Define the proper types for case studies
-interface CaseStudy {
-  id: string;
-  title: string;
-  slug: string;
-  client: string;
-  industry: string;
-  challenge: string;
-  solution: string;
-  results: {
-    trafficIncrease: string;
-    rankingImprovement: string;
-    conversionIncrease: string;
-    additionalMetrics?: { [key: string]: string };
-  };
-  testimonial?: {
-    quote: string;
-    author: string;
-    position: string;
-  };
-  featuredImage: string;
-  services: string[];
-  duration: string;
-  tags: string[];
-  featured: boolean;
+// Define correct params type according to Next.js App Router
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
-
-// Type-safe function to get case studies
-const getCaseStudies = async (): Promise<CaseStudy[]> => {
-  const data = await import('../caseStudiesData');
-  return data.default;
-};
 
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const caseStudies = await getCaseStudies();
-  const caseStudy = caseStudies.find((cs) => cs.slug === params.slug);
+}: Props): Promise<Metadata> {
+  const caseStudy = caseStudiesData.find((cs) => cs.slug === params.slug);
 
   if (!caseStudy) {
     return generatePageMetadata({
@@ -57,23 +29,15 @@ export async function generateMetadata({
   });
 }
 
-export async function generateStaticParams() {
-  const caseStudies = await getCaseStudies();
-
-  return caseStudies.map((caseStudy) => ({
+export function generateStaticParams() {
+  return caseStudiesData.map((caseStudy) => ({
     slug: caseStudy.slug,
   }));
 }
 
-// Fix the params type by using React.FC with the appropriate props type
-interface PageProps {
-  params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-export default async function CaseStudyPage({ params }: PageProps) {
-  const caseStudies = await getCaseStudies();
-  const caseStudy = caseStudies.find((cs) => cs.slug === params.slug);
+// Use the correct Props type here
+export default function CaseStudyPage({ params }: Props) {
+  const caseStudy = caseStudiesData.find((cs) => cs.slug === params.slug);
 
   if (!caseStudy) {
     notFound();
