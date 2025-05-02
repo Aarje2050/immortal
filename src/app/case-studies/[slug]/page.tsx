@@ -3,21 +3,18 @@ import { notFound } from 'next/navigation';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import CaseStudyClientPage from './CaseStudyClientPage';
 
-// Define shared props type
-type PageProps = {
-  params: {
-    slug: string;
-  };
-};
-
-// Dummy data fetch function (replace with real data source in production)
+// Fetch case study data
 const getCaseStudies = async () => {
   const data = await import('../caseStudiesData');
   return data.default;
 };
 
-// Metadata generation
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+// Generate metadata for the page
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const caseStudies = await getCaseStudies();
   const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
 
@@ -34,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-// Static params for build
+// Generate static params
 export async function generateStaticParams() {
   const caseStudies = await getCaseStudies();
 
@@ -43,8 +40,12 @@ export async function generateStaticParams() {
   }));
 }
 
-// Page component
-export default async function CaseStudyPage({ params }: PageProps) {
+// Default page component
+export default async function CaseStudyPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const caseStudies = await getCaseStudies();
   const caseStudy = caseStudies.find((cs: any) => cs.slug === params.slug);
 
