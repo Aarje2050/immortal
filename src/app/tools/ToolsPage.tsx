@@ -34,6 +34,15 @@ const ToolsPage: React.FC = () => {
       url: '/tools/seo-cost-calculator'
     },
     {
+      id: 'llms-txt',
+      name: 'LLMs.txt Generator',
+      description: 'Create an LLMs.txt file to help AI models better understand and navigate your website content.',
+      icon: '🧠',
+      status: 'available',
+      category: 'ai',
+      url: '/tools/llms-txt-generator'
+    },
+    {
       id: 'robots-txt',
       name: 'Robots.txt Generator',
       description: 'Create a properly formatted robots.txt file customized for your website needs with our easy-to-use generator.',
