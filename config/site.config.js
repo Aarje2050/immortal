@@ -2,7 +2,6 @@
 
 /**
  * @typedef {import('../src/types/site').SiteConfig} SiteConfig
- * @type {SiteConfig}
  */
 const siteConfig = {
   name: 'Immortal SEO',
@@ -66,21 +65,29 @@ const siteConfig = {
     main: [
       { name: 'Home', href: '/' },
       { name: 'About', href: '/about' },
-      { name: 'Services', href: '/services' },
-      { name: 'Case studies', href: '/case-studies' },
-      { name: 'Tools', href: '/tools' },
-      { name: 'Blog', href: '/blog' },
+      { name: 'Services', href: '/services', hasSubmenu: true },
+      { name: 'Tools', href: '/tools', hasSubmenu: true },
+      { name: 'Case Studies', href: '/case-studies' },
+      { name: 'Pricing', href: '/pricing' },
       { name: 'Contact', href: '/contact' },
-      {
-        name: "Pricing",
-        href: "/pricing"
-      }
     ],
     services: [
       { name: 'Technical SEO', href: '/services/technical-seo' },
       { name: 'Content SEO', href: '/services/content-seo' },
+      { name: 'Off-Page SEO', href: '/services/off-page-seo' },
       { name: 'Local SEO', href: '/services/local-seo' },
+      { name: 'AI-Enhanced SEO', href: '/services/ai-enhanced-seo' },
+      { name: 'Semantic SEO', href: '/services/semantic-seo' },
       { name: 'E-commerce SEO', href: '/services/ecommerce-seo' },
+      { name: 'SaaS & B2B SEO', href: '/services/saas-seo' },
+      { name: 'Small Business SEO', href: '/services/small-business-seo' },
+      { name: 'Enterprise SEO', href: '/services/enterprise-seo' },
+    ],
+    tools: [
+      { name: 'Robots.txt Generator', href: '/tools/robots-txt-generator' },
+      { name: 'SEO Audit Checklist', href: '/tools/seo-audit-checklist' },
+      { name: 'SEO Cost Calculator', href: '/tools/seo-cost-calculator' },
+      { name: 'Schema Markup Generator', href: '/tools/schema-generator' },
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
@@ -88,6 +95,31 @@ const siteConfig = {
       { name: 'Cookie Policy', href: '/cookie-policy' },
     ],
   },
+  // Service categories for organization
+  serviceCategories: {
+    'Core SEO Services': [
+      { name: 'Technical SEO', href: '/services/technical-seo' },
+      { name: 'Content SEO', href: '/services/content-seo' },
+      { name: 'Off-Page SEO', href: '/services/off-page-seo' },
+      { name: 'Local SEO', href: '/services/local-seo' },
+    ],
+    'Advanced SEO Solutions': [
+      { name: 'AI-Enhanced SEO', href: '/services/ai-enhanced-seo' },
+      { name: 'Semantic SEO', href: '/services/semantic-seo' },
+    ],
+    'Industry-Specific SEO': [
+      { name: 'E-commerce SEO', href: '/services/ecommerce-seo' },
+      { name: 'SaaS & B2B SEO', href: '/services/saas-seo' },
+      { name: 'Small Business SEO', href: '/services/small-business-seo' },
+      { name: 'Enterprise SEO', href: '/services/enterprise-seo' },
+    ]
+  },
+  cta: {
+    primary: {
+      text: 'Free SEO Audit',
+      href: '/contact'
+    }
+  }
 };
 
 module.exports = siteConfig;

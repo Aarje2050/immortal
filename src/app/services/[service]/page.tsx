@@ -100,6 +100,45 @@ function getIconElement(iconName: string) {
   }
 }
 
+// Find related services (up to 3, excluding current service, prioritizing same category)
+async function getRelatedServices(currentSlug: string, currentCategory: string) {
+  const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const servicesData = JSON.parse(fileContent);
+  
+  // First get services in the same category
+  const sameCategory = Object.entries(servicesData)
+    .filter(([slug, service]: [string, any]) => 
+      slug !== currentSlug && service.category === currentCategory
+    )
+    .slice(0, 2)
+    .map(([slug, service]: [string, any]) => ({
+      slug,
+      name: service.name,
+      shortDescription: service.shortDescription,
+      icon: service.icon
+    }));
+  
+  // If we need more, get from other categories
+  if (sameCategory.length < 3) {
+    const otherCategories = Object.entries(servicesData)
+      .filter(([slug, service]: [string, any]) => 
+        slug !== currentSlug && service.category !== currentCategory
+      )
+      .slice(0, 3 - sameCategory.length)
+      .map(([slug, service]: [string, any]) => ({
+        slug,
+        name: service.name,
+        shortDescription: service.shortDescription,
+        icon: service.icon
+      }));
+    
+    return [...sameCategory, ...otherCategories];
+  }
+  
+  return sameCategory;
+}
+
 export default async function ServiceDetailPage({ params }: { params: { service: string } }) {
   const serviceData = await getServiceData(params.service);
   
@@ -132,31 +171,14 @@ export default async function ServiceDetailPage({ params }: { params: { service:
     })) : []
   };
 
-  // Find related services (up to 3, excluding current service)
-  const relatedServices = async () => {
-    const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    const servicesData = JSON.parse(fileContent);
-    
-    return Object.entries(servicesData)
-      .filter(([slug, _]) => slug !== params.service)
-      .slice(0, 3)
-      .map(([slug, service]: [string, any]) => ({
-        slug,
-        name: service.name,
-        shortDescription: service.shortDescription,
-        icon: service.icon
-      }));
-  };
-  
-  const relatedServicesList = await relatedServices();
+  const relatedServicesList = await getRelatedServices(params.service, serviceData.category);
 
   return (
     <Layout>
       <JsonLd data={structuredData} />
       <JsonLd data={faqSchemaData} />
       
-      {/* Hero Section with Gradient Background */}
+      {/* Hero Section with Centered Format */}
       <section className="relative bg-gradient-to-r from-primary-dark to-primary-main text-white overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -167,7 +189,7 @@ export default async function ServiceDetailPage({ params }: { params: { service:
           <div className="py-20 md:py-28 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block px-4 py-2 rounded-full bg-white/10 text-sm font-medium mb-4 backdrop-blur-sm">
-                Expert SEO Services
+                {serviceData.category}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 {serviceData.name}
@@ -181,7 +203,7 @@ export default async function ServiceDetailPage({ params }: { params: { service:
                   variant="secondary"
                   className="font-semibold text-primary-main px-8 hover:scale-105 transition-transform"
                 >
-                  Explore Benefits
+                  View Benefits
                 </Button>
                 <Button
                   href="/contact"
@@ -196,121 +218,138 @@ export default async function ServiceDetailPage({ params }: { params: { service:
         </Container>
       </section>
 
-      {/* Service Overview Section */}
-      <Section id="overview">
+      {/* Main Content Section */}
+      <Section>
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Main Content - 8 columns */}
+            {/* Main Content Column - 8 columns on desktop */}
             <div className="lg:col-span-8">
-              <div className="flex items-center mb-6">
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary-main/10 text-primary-main flex items-center justify-center mr-4">
-                  {getIconElement(serviceData.icon)}
+              {/* Service Overview with Schema-Friendly Markup */}
+              <article itemScope itemType="https://schema.org/Service">
+                <div className="flex items-center mb-6">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary-main/10 text-primary-main flex items-center justify-center mr-4">
+                    {getIconElement(serviceData.icon)}
+                  </div>
+                  <h2 className="text-3xl font-bold" itemProp="name">{serviceData.name}</h2>
                 </div>
-                <h2 className="text-3xl font-bold">{serviceData.name}</h2>
-              </div>
-              
-              <div className="prose max-w-none mb-8">
-                <p className="text-lg text-text-secondary">{serviceData.longDescription}</p>
-              </div>
-              
-              {/* Benefits Section */}
-              <div id="benefits" className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                <h3 className="text-2xl font-bold mb-6">Key Benefits</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {serviceData.benefits.map((benefit: string, index: number) => (
-                    <div key={index} className="flex items-start">
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-main/10 text-primary-main flex items-center justify-center mr-3 mt-0.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <p className="text-text-secondary">{benefit}</p>
+                
+                <div className="prose max-w-none mb-8" itemProp="description">
+                  <p className="text-lg text-text-secondary">{serviceData.longDescription}</p>
+                </div>
+
+                {/* Keywords/Topics Section - Semantic SEO Enhancement */}
+                {serviceData.primaryKeywords && (
+                  <div className="mb-8">
+                    <h3 className="text-lg font-medium text-text-secondary mb-3">Related Topics:</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {serviceData.primaryKeywords.map((keyword: string, index: number) => (
+                        <span key={index} className="px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm">
+                          {keyword}
+                        </span>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Our Process Section */}
-              <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                <h3 className="text-2xl font-bold mb-6">Our Approach</h3>
-                <div className="space-y-6">
-                  {serviceData.process.map((step: { title: string; description: string }, index: number) => (
-                    <div key={index} className="flex">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-main text-white font-semibold flex items-center justify-center mr-4">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold mb-2">{step.title}</h4>
-                        <p className="text-text-secondary">{step.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Case Studies Section (if available) */}
-              {serviceData.caseStudies && serviceData.caseStudies.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                  <h3 className="text-2xl font-bold mb-6">Success Stories</h3>
-                  {serviceData.caseStudies.map((caseStudy: { title: string; description: string; results: string[] }, index: number) => (
-                    <div key={index}>
-                      <h4 className="text-xl font-semibold mb-3">{caseStudy.title}</h4>
-                      <p className="text-text-secondary mb-4">{caseStudy.description}</p>
-                      <h5 className="font-semibold mb-2">Results:</h5>
-                      <ul className="space-y-2 mb-0">
-                        {caseStudy.results.map((result, idx) => (
-                          <li key={idx} className="flex items-start">
-                            <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>{result}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {/* FAQ Section */}
-              {serviceData.faq && serviceData.faq.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm p-8">
-                  <h3 className="text-2xl font-bold mb-6">Frequently Asked Questions</h3>
-                  <div className="space-y-4">
-                    {serviceData.faq.map((item: { question: string; answer: string }, index: number) => (
-                      <details
-                        key={index}
-                        className="group bg-gray-50 rounded-lg overflow-hidden"
-                      >
-                        <summary className="flex justify-between items-center p-4 cursor-pointer list-none">
-                          <h4 className="font-semibold text-lg">{item.question}</h4>
-                          <svg className="w-5 h-5 text-primary-main transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </div>
+                )}
+                
+                {/* Benefits Section */}
+                <section id="benefits" className="bg-white rounded-xl shadow-sm p-8 mb-8">
+                  <h3 className="text-2xl font-bold mb-6">Key Benefits</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {serviceData.benefits.map((benefit: string, index: number) => (
+                      <div key={index} className="flex items-start">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-main/10 text-primary-main flex items-center justify-center mr-3 mt-0.5">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
-                        </summary>
-                        <div className="p-4 pt-0">
-                          <p className="text-text-secondary">{item.answer}</p>
                         </div>
-                      </details>
+                        <p className="text-text-secondary">{benefit}</p>
+                      </div>
                     ))}
                   </div>
-                </div>
-              )}
+                </section>
+                
+                {/* Our Process Section */}
+                <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
+                  <h3 className="text-2xl font-bold mb-6">Our Approach</h3>
+                  <div className="space-y-6">
+                    {serviceData.process.map((step: { title: string; description: string }, index: number) => (
+                      <div key={index} className="flex">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-main text-white font-semibold flex items-center justify-center mr-4">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <h4 className="text-lg font-semibold mb-2">{step.title}</h4>
+                          <p className="text-text-secondary">{step.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+                
+                {/* Case Studies Section (if available) - More Compact */}
+                {serviceData.caseStudies && serviceData.caseStudies.length > 0 && (
+                  <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
+                    <h3 className="text-2xl font-bold mb-6">Success Stories</h3>
+                    <div className="space-y-6">
+                      {serviceData.caseStudies.map((caseStudy: { title: string; description: string; results: string[] }, index: number) => (
+                        <div key={index} className="border-l-4 border-primary-main pl-4">
+                          <h4 className="text-xl font-semibold mb-2">{caseStudy.title}</h4>
+                          <p className="text-text-secondary mb-4">{caseStudy.description}</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {caseStudy.results.map((result, idx) => (
+                              <div key={idx} className="flex items-start">
+                                <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span className="text-sm">{result}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+                
+                {/* FAQ Section with Schema.org Markup */}
+                {serviceData.faq && serviceData.faq.length > 0 && (
+                  <section className="bg-white rounded-xl shadow-sm p-8">
+                    <h3 className="text-2xl font-bold mb-6">Frequently Asked Questions</h3>
+                    <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
+                      {serviceData.faq.map((item: { question: string; answer: string }, index: number) => (
+                        <div key={index} className="border border-gray-100 rounded-lg" itemScope itemType="https://schema.org/Question">
+                          <details className="group">
+                            <summary className="flex justify-between items-center p-4 cursor-pointer list-none">
+                              <h4 className="font-semibold text-lg" itemProp="name">{item.question}</h4>
+                              <svg className="w-5 h-5 text-primary-main transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </summary>
+                            <div className="p-4 pt-0" itemScope itemType="https://schema.org/Answer" itemProp="acceptedAnswer">
+                              <p className="text-text-secondary" itemProp="text">{item.answer}</p>
+                            </div>
+                          </details>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </article>
             </div>
             
-            {/* Sidebar - 4 columns */}
+            {/* Sidebar Column - 4 columns on desktop */}
             <div className="lg:col-span-4">
               <div className="lg:sticky lg:top-24 space-y-6">
-                {/* CTA Box - Using our new component */}
+                {/* Lead Capture Component */}
                 <LeadCaptureForm 
-                  title="Ready to Get Started?"
-                  description="Schedule a free consultation with our experts"
+                  title="Get Started Today"
+                  description="Schedule a free consultation with our SEO experts"
                   service={serviceData.name} 
-                  customSubject={`New Lead for ${serviceData.name} Service - ImmortalSEO`}
+                  customSubject={`${serviceData.name} Service Inquiry`}
                   buttonText="Request Free Consultation"
                 />
                 
-                {/* Related Services */}
+                {/* Related Services - Improved Semantic Relationships */}
                 {relatedServicesList.length > 0 && (
                   <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div className="p-6">
@@ -333,11 +372,22 @@ export default async function ServiceDetailPage({ params }: { params: { service:
                           </Link>
                         ))}
                       </div>
+                      <div className="mt-4 text-center">
+                        <Link
+                          href="/services"
+                          className="inline-flex items-center text-primary-main text-sm font-medium hover:text-primary-dark"
+                        >
+                          View All SEO Services
+                          <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 )}
                 
-                {/* Why Choose Us Box */}
+                {/* Why Choose Us Box - Compact Version */}
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-4">Why Choose ImmortalSEO</h3>
@@ -352,7 +402,7 @@ export default async function ServiceDetailPage({ params }: { params: { service:
                         <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Proven results with 94% client retention</span>
+                        <span>94% client retention rate</span>
                       </li>
                       <li className="flex items-start">
                         <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -360,17 +410,11 @@ export default async function ServiceDetailPage({ params }: { params: { service:
                         </svg>
                         <span>AI-enhanced SEO strategies</span>
                       </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Transparent reporting and communication</span>
-                      </li>
                     </ul>
                     <div className="mt-4">
                       <Link
                         href="/about"
-                        className="inline-flex items-center text-primary-main font-medium hover:text-primary-dark"
+                        className="text-primary-main text-sm font-medium hover:text-primary-dark inline-flex items-center"
                       >
                         Learn More About Us
                         <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -386,17 +430,17 @@ export default async function ServiceDetailPage({ params }: { params: { service:
         </Container>
       </Section>
       
-      {/* CTA Section */}
+      {/* Simplified CTA Section */}
       <Section background="primary">
         <Container>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 md:p-12">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-2/3 mb-8 md:mb-0">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Ready to Enhance Your {serviceData.name.split(' ')[0]} Strategy?
+                  Ready to Improve Your {serviceData.name.split(' ')[0]} Strategy?
                 </h2>
                 <p className="text-xl opacity-90 max-w-2xl">
-                  Get a free consultation and discover how our {serviceData.name.toLowerCase()} services can help your business grow.
+                  Get a free consultation and personalized strategy for your business.
                 </p>
               </div>
               <div className="md:w-1/3 md:text-right">
