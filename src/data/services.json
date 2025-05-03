@@ -607,6 +607,286 @@
     ]
   },
 
+  "lead-generation-seo": {
+    "name": "Lead Generation SEO Services",
+    "slug": "lead-generation-seo",
+    "category": "Performance-Driven SEO",
+    "shortDescription": "Drive qualified leads consistently through targeted SEO strategies designed to convert high-intent search traffic.",
+    "longDescription": "Our Lead Generation SEO Services are focused on capturing transactional intent and turning organic search traffic into valuable business leads. From bottom-of-funnel keyword targeting to CRO-driven on-page optimization, we implement entity-oriented SEO strategies that align with your sales pipeline. We also use schema markup for services, FAQs, and reviews to improve click-through rates, while optimizing landing pages to maximize conversion potential. Our goal is to create a sustainable lead generation engine built on organic visibility.",
+    "metaTitle": "Lead Generation SEO Services | High-Converting Organic Traffic | ImmortalSEO",
+    "metaDescription": "Boost your business with targeted SEO for lead generation. We help you attract, engage, and convert ready-to-buy visitors with powerful organic strategies.",
+    "icon": "TargetIcon",
+    "primaryKeywords": [
+      "lead generation SEO",
+      "SEO for lead generation",
+      "SEO to generate leads",
+      "convert SEO traffic",
+      "organic lead generation",
+      "sales-focused SEO"
+    ],
+    "benefits": [
+      "Capture bottom-of-funnel organic traffic",
+      "Increase form fills and call conversions",
+      "Align SEO with your sales pipeline",
+      "Implement service-level structured data",
+      "Boost local and niche visibility for lead magnets",
+      "Improve landing page UX and call-to-action effectiveness"
+    ],
+    "process": [
+      {
+        "title": "Funnel-Focused Keyword Research",
+        "description": "We identify commercial intent keywords that map to user actions, queries, and pain points."
+      },
+      {
+        "title": "Landing Page Optimization",
+        "description": "We optimize or build landing pages designed for conversions using strong CTAs and structured content blocks."
+      },
+      {
+        "title": "Schema & SERP Optimization",
+        "description": "We add relevant schema and improve meta data to boost CTR and enrich snippets in search results."
+      },
+      {
+        "title": "Lead Tracking Integration",
+        "description": "We integrate Google Analytics and CRM systems to track actual lead sources and improve SEO attribution."
+      }
+    ],
+    "faq": [
+      {
+        "question": "How is lead generation SEO different from traditional SEO?",
+        "answer": "Lead generation SEO focuses specifically on attracting ready-to-convert visitors through commercial and transactional keywords, while traditional SEO may target broader awareness stages."
+      },
+      {
+        "question": "Do you offer lead tracking integration with CRM tools?",
+        "answer": "Yes, we integrate SEO tracking with tools like HubSpot, Salesforce, and Zoho to help clients attribute leads directly from organic channels."
+      }
+    ],
+    "caseStudies": [
+      {
+        "title": "B2B Service Provider Lead Growth",
+        "description": "We built and ranked bottom-funnel landing pages targeting high-value keywords for a software firm, leading to a surge in qualified demo requests.",
+        "results": [
+          "3X increase in lead volume within 90 days",
+          "42% increase in qualified demo requests",
+          "CTR uplift of 38% with schema and meta optimization"
+        ]
+      }
+    ]
+  },
+
+  "shopify-seo": {
+    "name": "Shopify SEO Services",
+    "slug": "shopify-seo",
+    "category": "CMS-Specific SEO",
+    "shortDescription": "Optimize your Shopify store for higher visibility, faster performance, and more conversions through tailored SEO strategies.",
+    "longDescription": "Our Shopify SEO Services are crafted to overcome platform-specific SEO limitations and leverage structured content and technical configurations to boost visibility. We optimize product pages, collection architecture, liquid theme structure, and app integrations to reduce crawl errors, improve speed, and enhance search performance. With an eCommerce-focused content strategy and conversion optimization best practices, we help Shopify store owners capture more qualified search traffic and increase revenue organically.",
+    "metaTitle": "Shopify SEO Services | Optimize Your E-Commerce Store | ImmortalSEO",
+    "metaDescription": "Dominate Shopify SEO with technical optimization, structured product markup, speed improvements, and category-level content strategies that drive organic sales.",
+    "icon": "ShoppingCartIcon",
+    "primaryKeywords": [
+      "Shopify SEO",
+      "eCommerce SEO",
+      "Shopify store optimization",
+      "Shopify speed optimization",
+      "SEO for Shopify products"
+    ],
+    "benefits": [
+      "Enhanced visibility for product and collection pages",
+      "Improved crawlability and internal linking",
+      "Faster loading speeds using Shopify-specific optimizations",
+      "Schema markup for products and reviews",
+      "Strategic blog content to target top/mid funnel keywords",
+      "App performance audit and consolidation"
+    ],
+    "process": [
+      {
+        "title": "Shopify SEO Audit",
+        "description": "We assess your store’s technical structure, theme performance, and indexing status."
+      },
+      {
+        "title": "Product & Collection Optimization",
+        "description": "We enhance on-page SEO for each product and collection with keyword targeting, structured data, and unique content."
+      },
+      {
+        "title": "Speed & UX Enhancement",
+        "description": "We optimize Liquid theme code, image delivery, and app usage to improve Core Web Vitals."
+      },
+      {
+        "title": "Content Strategy for eCommerce",
+        "description": "We develop informational and commercial content to support long-tail traffic and improve authority."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Does Shopify have built-in SEO features?",
+        "answer": "Yes, but it's limited. We enhance those features with advanced schema, page speed optimization, and deeper control over metadata and site structure."
+      }
+    ],
+    "caseStudies": [
+      {
+        "title": "Organic Revenue Growth for Shopify Store",
+        "description": "We optimized an apparel Shopify store by fixing duplicate content issues and adding schema, resulting in a 54% increase in organic revenue.",
+        "results": [
+          "54% increase in organic revenue",
+          "2X faster page speed across product pages",
+          "38% growth in category page rankings"
+        ]
+      }
+    ]
+  },
+
+  "hubspot-seo": {
+    "name": "HubSpot SEO Services",
+    "slug": "hubspot-seo-services",
+    "category": "CMS-Specific SEO",
+    "shortDescription": "Leverage HubSpot's capabilities to enhance your website's SEO performance and drive qualified traffic.",
+    "longDescription": "Our HubSpot SEO Services are tailored to maximize the platform's features for improved search engine visibility. We optimize your website's content, structure, and technical aspects within HubSpot to ensure better rankings, increased traffic, and higher lead generation. By integrating SEO best practices with HubSpot's tools, we help you achieve sustainable online growth.",
+    "metaTitle": "HubSpot SEO Services | ImmortalSEO",
+    "metaDescription": "Enhance your HubSpot website's search engine performance with our specialized SEO services designed for the HubSpot platform.",
+    "icon": "HubSpotIcon",
+    "primaryKeywords": [
+      "HubSpot SEO",
+      "SEO services for HubSpot",
+      "HubSpot website optimization",
+      "HubSpot SEO strategies",
+      "SEO on HubSpot"
+    ],
+    "benefits": [
+      "Improved search engine rankings for HubSpot-hosted content",
+      "Enhanced lead generation through optimized landing pages",
+      "Better user experience leading to increased engagement",
+      "Integration of SEO best practices within HubSpot's CMS",
+      "Comprehensive analytics and reporting through HubSpot tools"
+    ],
+    "process": [
+      {
+        "title": "SEO Audit of HubSpot Website",
+        "description": "Evaluate your HubSpot website to identify SEO strengths and areas for improvement."
+      },
+      {
+        "title": "Keyword Strategy Development",
+        "description": "Research and select keywords that align with your business goals and target audience."
+      },
+      {
+        "title": "On-Page Optimization",
+        "description": "Optimize website content, meta tags, and URLs within HubSpot for better search visibility."
+      },
+      {
+        "title": "Technical SEO Enhancements",
+        "description": "Address technical issues such as site speed, mobile optimization, and crawl errors within the HubSpot environment."
+      }
+    ],
+    "faq": [
+      {
+        "question": "Can you optimize existing HubSpot content for SEO?",
+        "answer": "Yes, we can audit and enhance your current content to improve its search engine performance."
+      },
+      {
+        "question": "Do you provide training on HubSpot SEO best practices?",
+        "answer": "Absolutely. We offer training sessions to help your team understand and implement effective SEO strategies within HubSpot."
+      },
+      {
+        "question": "How do you measure the success of HubSpot SEO efforts?",
+        "answer": "We utilize HubSpot's analytics tools to track key performance indicators such as traffic, rankings, and lead conversions."
+      }
+    ],
+    "caseStudies": [
+      {
+        "title": "Cable Manufacturer Achieves 327% Traffic Increase",
+        "description": "A cable connector manufacturer saw a 327% increase in organic traffic through our HubSpot SEO strategies.",
+        "results": [
+          "327% increase in organic traffic",
+          "Significant improvement in keyword rankings",
+          "Enhanced lead generation and conversion rates"
+        ]
+      }
+    ]
+  },
+
+  "wordpress-seo": {
+    "name": "WordPress SEO Services",
+    "slug": "wordpress-seo",
+    "category": "CMS-Specific SEO",
+    "shortDescription": "Maximize your WordPress website’s organic visibility with SEO strategies tailored for the WordPress ecosystem.",
+    "longDescription": "Our WordPress SEO Services are designed to unlock the full search potential of WordPress-based websites. From custom theme optimization and plugin performance tuning to advanced schema implementation and site speed enhancements, we handle every technical and strategic aspect. Whether you're using WooCommerce, Elementor, Gutenberg, or custom builds, we ensure your site adheres to SEO best practices for indexability, crawlability, and conversion. Our expertise spans technical audits, on-page SEO, and content strategy—built specifically for WordPress's unique architecture.",
+    "metaTitle": "WordPress SEO Services | Custom SEO for WP Sites | ImmortalSEO",
+    "metaDescription": "Boost your WordPress site rankings with our specialized SEO services. We optimize themes, plugins, and site structure to increase visibility and conversions.",
+    "icon": "WordpressIcon",
+    "primaryKeywords": [
+      "WordPress SEO",
+      "SEO for WordPress sites",
+      "WooCommerce SEO",
+      "WordPress technical SEO",
+      "Elementor SEO optimization",
+      "WordPress site speed optimization"
+    ],
+    "benefits": [
+      "SEO optimization tailored for WordPress themes and plugins",
+      "Faster load times through performance and caching enhancements",
+      "Improved on-page SEO using native WordPress structures",
+      "Schema markup and structured data for better SERP appearance",
+      "Optimized mobile and Core Web Vitals compliance",
+      "Ongoing technical support for plugin and update compatibility"
+    ],
+    "process": [
+      {
+        "title": "WordPress SEO Audit",
+        "description": "We perform a full diagnostic covering theme code, plugin compatibility, speed, indexation, and crawl behavior using WP-specific tools and techniques."
+      },
+      {
+        "title": "Site Structure & Plugin Optimization",
+        "description": "We streamline the URL structure, eliminate plugin bloat, optimize internal linking, and enhance taxonomy-based navigation."
+      },
+      {
+        "title": "Custom On-Page & Schema Enhancements",
+        "description": "We optimize metadata, headers, media, and add advanced schema markup using tools like RankMath or custom code."
+      },
+      {
+        "title": "Monitoring & Ongoing Optimization",
+        "description": "We track performance using Search Console, GA4, and WP dashboards, ensuring continuous SEO compliance and updates compatibility."
+      }
+    ],
+    "faq": [
+      {
+        "question": "What makes WordPress SEO different from regular SEO?",
+        "answer": "WordPress comes with its own ecosystem—themes, plugins, custom post types—which require platform-specific strategies. We tailor SEO based on your unique setup to ensure maximum effectiveness."
+      },
+      {
+        "question": "Do you support WooCommerce-based WordPress sites?",
+        "answer": "Yes, we specialize in WooCommerce SEO. We optimize product schema, category structure, reviews, and load speed for eCommerce performance."
+      },
+      {
+        "question": "Can you work with any theme or builder like Elementor or WPBakery?",
+        "answer": "Absolutely. We've worked with all major page builders and themes, including custom-built themes. Our optimization ensures fast, crawlable, SEO-friendly structures."
+      },
+      {
+        "question": "How do you handle plugin conflicts and SEO?",
+        "answer": "We audit plugin usage, remove conflicts or redundant plugins, and replace heavy tools with lighter SEO-compatible alternatives to improve performance and prevent crawl issues."
+      }
+    ],
+    "caseStudies": [
+      {
+        "title": "WooCommerce Store SEO Overhaul",
+        "description": "We optimized a large WooCommerce site running on a bloated theme with multiple plugins. By streamlining plugin usage, cleaning up product schema, and improving URL structure, we significantly improved crawlability and visibility.",
+        "results": [
+          "49% increase in organic traffic in 60 days",
+          "34% faster page load times sitewide",
+          "120+ new keywords ranked in top 10",
+          "20% drop in bounce rate due to better page speed and UX"
+        ]
+      },
+      {
+        "title": "Local Business WordPress SEO Success",
+        "description": "For a service-based local business, we implemented structured data, optimized local landing pages, and improved Core Web Vitals through theme customization and image optimization.",
+        "results": [
+          "70% increase in calls from local searches",
+          "4.9 rating rich snippets added across 150+ pages",
+          "3x increase in map pack visibility",
+          "Site passed all Core Web Vitals metrics in 30 days"
+        ]
+      }
+    ]
+  },
+
   "small-business-seo": {
     "name": "Small Business SEO Services",
     "slug": "small-business-seo",

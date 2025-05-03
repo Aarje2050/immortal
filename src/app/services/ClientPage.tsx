@@ -148,7 +148,18 @@ export default function ServicesPage() {
     
     'Industry-Specific SEO': Object.entries(servicesData)
       .filter(([_, service]) => service.category === 'Industry-Specific SEO')
+      .map(([key, service]) => ({ ...service, key })),
+
+      'CMS-Specific SEO': Object.entries(servicesData)
+      .filter(([_, service]) => service.category === 'CMS-Specific SEO')
+      .map(([key, service]) => ({ ...service, key })),
+
+
+      'Performance-Driven SEO': Object.entries(servicesData)
+      .filter(([_, service]) => service.category === 'Performance-Driven SEO')
       .map(([key, service]) => ({ ...service, key }))
+
+
   };
   
   const [activeService, setActiveService] = useState<string | null>(null);
@@ -259,22 +270,67 @@ export default function ServicesPage() {
               Strategic approaches to help your business thrive in both traditional and AI-driven search environments
             </p>
             
-            {/* Category Navigation Tabs */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {Object.keys(groupedServices).map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 rounded-full transition-colors ${
-                    activeCategory === category
-                      ? 'bg-primary-main text-white'
-                      : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+           {/* Category Navigation Tabs - Enhanced for More Categories */}
+<div className="mb-12">
+  {/* Mobile Dropdown for Categories */}
+  <div className="md:hidden mb-6">
+    <div className="relative">
+      <select
+        value={activeCategory}
+        onChange={(e) => setActiveCategory(e.target.value)}
+        className="w-full py-3 px-4 bg-white border border-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-main text-text-primary font-medium"
+      >
+        {Object.keys(groupedServices).map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+      <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </div>
+  </div>
+  
+  {/* Desktop Horizontal Scrollable Tabs */}
+  <div className="hidden md:block overflow-x-auto pb-4 scrollbar-hide">
+    <div className="flex gap-4 min-w-max justify-center">
+      {Object.keys(groupedServices).map((category) => (
+        <button
+          key={category}
+          onClick={() => setActiveCategory(category)}
+          className={`px-5 py-2.5 rounded-full transition-colors whitespace-nowrap ${
+            activeCategory === category
+              ? 'bg-primary-main text-white shadow-md'
+              : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
+          }`}
+        >
+          {category}
+        </button>
+      ))}
+    </div>
+    
+    {/* Optional Scroll Indicators */}
+    <div className="flex justify-center mt-3">
+      <div className="flex space-x-1">
+        {Object.keys(groupedServices).map((category, index) => (
+          <button
+            key={`indicator-${index}`}
+            onClick={() => setActiveCategory(category)}
+            className={`w-2 h-2 rounded-full transition-colors ${
+              activeCategory === category
+                ? 'bg-primary-main'
+                : 'bg-gray-300'
+            }`}
+            aria-label={`Go to ${category}`}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
           </div>
           
           {/* Service Cards with Expandable Content */}
