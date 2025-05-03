@@ -112,11 +112,13 @@ export interface NavigationItem {
   export interface ServiceData {
     name: string;
     slug: string;
+    category?: string; // Add this for service categorization
     shortDescription: string;
     longDescription: string;
     metaTitle: string;
     metaDescription: string;
     icon: string;
+    primaryKeywords?: string[]; // Add this for SEO keywords
     benefits: string[];
     process: Array<{
       title: string;
@@ -136,6 +138,7 @@ export interface NavigationItem {
   export interface ServicesData {
     [key: string]: ServiceData;
   }
+
   
   // Allowed values for changeFrequency in sitemap
   export type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
