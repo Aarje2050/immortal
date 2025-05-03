@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: seoConfig.titleTemplate,
   },
   description: seoConfig.defaultDescription,
-  keywords: ['SEO', 'search engine optimization', 'digital marketing', 'online visibility'],
+  keywords: ['SEO services', 'search engine optimization services', 'semantic seo services', 'ai seo services'],
   authors: [{ name: 'Immortal SEO Team' }],
   creator: 'Immortal SEO',
   publisher: 'Immortal SEO',

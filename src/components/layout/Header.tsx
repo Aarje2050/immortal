@@ -19,16 +19,17 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="relative h-10 w-40">
-              {/* Replace with your actual logo */}
-              <div className="flex items-center">
-                <div className="h-10 w-10 rounded-full bg-primary-main flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">I</span>
-                </div>
-                <span className="ml-2 text-xl font-bold text-primary-main">Immortal SEO</span>
-              </div>
-            </div>
-          </Link>
+  <div className="relative h-10 w-40 flex items-center">
+    <Image
+      src="/immortal-logo.svg"
+      alt="Immortal SEO Logo"
+      width={150}
+      height={40}
+      priority
+    />
+  </div>
+</Link>
+
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

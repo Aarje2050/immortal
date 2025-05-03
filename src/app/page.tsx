@@ -8,8 +8,8 @@ import { SiteConfig } from '@/types/site';
 const siteConfig = require('../../config/site.config') as SiteConfig;
 
 export const metadata: Metadata = generatePageMetadata({
-  title: 'Immortal SEO | Premium SEO Services for Sustainable Growth',
-  description: 'Boost your online visibility with Immortal SEO\'s data-driven strategies. We help businesses dominate search rankings and drive targeted traffic.',
+  title: 'Immortal SEO | Expert SEO Services for Sustainable Growth',
+  description: 'Transform your organic search visibility with our data-driven SEO services. Technical SEO, content optimization, and AI-ready strategies for sustainable growth.',
 });
 
 export default function Page() {

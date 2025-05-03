@@ -18,20 +18,18 @@ const AboutPage: React.FC = () => {
     {
       id: 1,
       name: "Rajesh Jat",
-      title: "Founder & CEO",
-      bio: "With over 15 years of SEO experience, Rajesh has helped hundreds of businesses achieve sustainable growth through organic search. Since founding ImmortalSEO in 2008, he has pioneered data-driven approaches that adapt to constant algorithm changes. Today, he leads our AI-enhanced SEO strategies, combining traditional expertise with cutting-edge innovation.",
-      image: "/images/team/rajesh-placeholder.jpg",
-      linkedin: "https://linkedin.com/in/rajesh-jat",
-      expertise: ["Technical SEO", "Algorithm Analysis", "AI Integration", "Enterprise Strategy"]
+      title: "Co-Founder & SEO Strategist",
+      bio: "Rajesh is a seasoned SEO professional with deep expertise in keyword research, competitive analysis, and decoding user search intent. With a strong technical background, he excels at leveraging AI to craft content that aligns with semantic search engine requirements. His strategies consistently drive measurable organic growth across diverse industries.",
+      image: "/images/team/rajesh-jat-seo.png",
+      linkedin: "https://linkedin.com/in/rajeshjatindia",
     },
     {
       id: 2,
       name: "Manish Lamrod",
-      title: "Co-Founder & Chief Strategy Officer",
-      bio: "Manish brings strategic vision to ImmortalSEO's innovations. His expertise in content optimization and user experience has been crucial to our evolution from traditional SEO to modern, AI-enhanced strategies. Manish leads our research into AI search patterns across platforms like ChatGPT, Perplexity, and Gemini, developing frameworks that ensure client content thrives in both traditional and AI search environments.",
-      image: "/images/team/manish-placeholder.jpg",
-      linkedin: "https://linkedin.com/in/manish-lamrod",
-      expertise: ["AI Search Optimization", "Content Strategy", "User Experience", "Market Research"]
+      title: "Co-Founder & Off-Page SEO Expert",
+      bio: "Manish is an expert in off-page SEO, specializing in white-hat link building and developing tailored SEO strategies based on client needs. With a strong grasp of relationship building and long-term client success, he ensures every campaign is backed by sustainable growth and ethical optimization practices.",
+      image: "/images/team/manish-lamrod-seo.png",
+      linkedin: "https://linkedin.com/in/manishlamrod",
     }
   ];
   
@@ -40,32 +38,45 @@ const AboutPage: React.FC = () => {
     {
       id: 0,
       year: "2008",
-      title: "Founding",
-      description: "ImmortalSEO was founded by Rajesh Jat with a mission to provide transparent, results-driven SEO strategies focused on long-term growth.",
-      icon: "🚀"
+      title: "The Beginning",
+      description:
+        "Handsome SEO Services was founded by Manish Lamrod with a focus on early SEO tactics like keyword stuffing and directory submissions, which were effective before major Google algorithm updates.",
+      icon: "🌱"
     },
     {
       id: 1,
-      year: "2010-2015",
-      title: "Early Growth",
-      description: "Manish Lamrod joined as co-founder, bringing content expertise that complemented our technical foundation. We expanded to serve clients across North America.",
-      icon: "📈"
+      year: "2015",
+      title: "Rajesh Jat Joins",
+      description:
+        "Rajesh Jat joined as Co-founder, bringing deep technical insight and strategic thinking. Together, we laid the foundation for scalable, algorithm-friendly SEO services.",
+      icon: "🤝"
     },
     {
       id: 2,
-      year: "2016-2020",
-      title: "Digital Transformation",
-      description: "We evolved our strategies to adapt to mobile-first indexing, voice search, and emerging technologies, staying ahead of industry shifts.",
-      icon: "📱"
+      year: "2016",
+      title: "Rebranding to Immortal SEO",
+      description:
+        "We rebranded from Handsome SEO to Immortal SEO, marking a shift toward sustainable, semantic SEO strategies that aligned with evolving search engine algorithms.",
+      icon: "🔁"
     },
     {
       id: 3,
-      year: "2021-Present",
-      title: "AI Revolution",
-      description: "We pioneered AI-enhanced SEO strategies, optimizing content for both traditional search engines and AI platforms like ChatGPT, Perplexity, and Gemini.",
-      icon: "🤖"
+      year: "2016-2020",
+      title: "Adapting to the Algorithm Era",
+      description:
+        "We embraced Google’s major updates (Panda, Penguin, RankBrain) and transitioned our methods to focus on user intent, mobile-first indexing, and structured content.",
+      icon: "📊"
+    },
+    {
+      id: 4,
+      year: "2021–Present",
+      title: "AI & Semantic SEO",
+      description:
+        "Immortal SEO now pioneers AI-enhanced, semantic SEO strategies — optimizing content for both search engines and AI models like ChatGPT, Gemini, and Perplexity.",
+      icon: "🧠"
     }
   ];
+  
   
   // Core values data
   const values = [
@@ -100,9 +111,9 @@ const AboutPage: React.FC = () => {
     {
       id: 1,
       text: "ImmortalSEO transformed our online presence with their AI-enhanced strategies. Our content now ranks well in both Google and appears prominently in AI search results. The ROI has been exceptional.",
-      author: "Sarah Johnson",
-      position: "Marketing Director, TechSolutions Inc.",
-      company: "TechSolutions Inc."
+      author: "Archie",
+      position: "COO, Zencoder.ai.",
+      company: "Zencoder"
     },
     {
       id: 2,
@@ -117,24 +128,27 @@ const AboutPage: React.FC = () => {
   const serviceHighlights = [
     {
       id: 1,
-      title: "AI-Enhanced SEO",
-      description: "Optimize your content for both traditional search engines and AI platforms like ChatGPT and Perplexity.",
-      icon: "🤖",
-      link: "/services/ai-enhanced-seo"
+      title: "Technical SEO & Crawl Optimization",
+      icon: "⚙️",
+      description:
+        "Ensure your website is fast, indexable, and crawl-friendly for both search engines and AI crawlers. We fix crawl errors, enhance performance, and optimize your site's architecture.",
+      link: "technical-seo",
     },
     {
       id: 2,
-      title: "Technical SEO",
-      description: "Ensure your website's technical foundation supports optimal crawling, indexing, and ranking.",
-      icon: "⚙️",
-      link: "/services/technical-seo"
+      title: "Semantic SEO & NLP Structuring",
+      icon: "🧠",
+      description:
+        "Organize your content with entities, topics, and context so LLMs and search engines can deeply understand and index it with precision.",
+      link: "semantic-seo",
     },
     {
-      id: 3,
-      title: "Content Strategy",
-      description: "Develop content that resonates with both human readers and sophisticated algorithms.",
-      icon: "📝",
-      link: "/services/content-strategy"
+      id: 6,
+      title: "AI Tools for SEO Automation",
+      icon: "🔗",
+      description:
+        "Leverage AI tools to automate SEO tasks like keyword research, content generation, and performance analysis.",
+      link: "ai-tools-in-seo",
     }
   ];
 
@@ -319,40 +333,42 @@ const AboutPage: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {founders.map((founder) => (
-              <div key={founder.id} className="bg-white rounded-xl shadow-md overflow-hidden">
-                <div className="md:flex">
-                  <div className="md:flex-shrink-0">
-                    <div className="h-48 w-full md:w-48 md:h-full bg-primary-main/10 flex items-center justify-center text-8xl text-primary-main">
-                      {founder.name.charAt(0)}
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-2xl font-semibold mb-1">{founder.name}</h3>
-                    <p className="text-primary-main font-medium mb-3">{founder.title}</p>
-                    <p className="text-text-secondary mb-4">{founder.bio}</p>
-                    
-                    <h4 className="font-medium mb-2">Areas of Expertise:</h4>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {founder.expertise.map((skill, index) => (
-                        <span key={index} className="bg-primary-main/10 text-primary-main text-sm font-medium px-3 py-1 rounded-full">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    <a 
-                      href={founder.linkedin} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-primary-main hover:text-primary-dark"
+            {founders.map((member, index) => (
+              <div
+                key={member.id}
+                className="flex flex-col md:flex-row gap-6 items-center md:items-start"
+              >
+                <div className="w-48 h-48 relative rounded-full overflow-hidden flex-shrink-0">
+                  <Image
+                    src={member.image}
+                    alt={`${member.name} - ${member.title}`}
+                    width={192}
+                    height={192}
+                    className="object-cover"
+                    priority={index === 0} // Prioritize first image for LCP
+                  />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold mb-2">{member.name}</h3>
+                  <p className="text-primary-main font-medium mb-4">
+                    {member.title}
+                  </p>
+                  <p className="text-text-secondary mb-4">{member.bio}</p>
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-primary-main hover:text-primary-dark"
+                  >
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                      </svg>
-                      Connect on LinkedIn
-                    </a>
-                  </div>
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                    Connect on LinkedIn
+                  </a>
                 </div>
               </div>
             ))}
