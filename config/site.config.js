@@ -5,7 +5,7 @@
  */
 const siteConfig = {
   name: 'Immortal SEO',
-  description: 'Premium SEO services to help your business dominate search rankings and drive targeted traffic.',
+  description: 'We at Immortal SEO Agency have been delivering white-hat SEO services since 2008, helping businesses generate quality leads and achieve sustainable organic growth.',
   url: 'https://immortalseo.com',
   ogImage: '/images/og-image.jpg',
   links: {
@@ -15,14 +15,14 @@ const siteConfig = {
     instagram: 'https://instagram.com/immortalseo',
   },
   contact: {
-    email: 'info@immortalseo.com',
-    phone: '+1 (555) 123-4567',
+    email: 'hello@immortalseo.com',
+    phone: '+919649930799',
     address: {
-      street: '123 SEO Avenue',
-      city: 'Toronto',
-      state: 'Ontario',
-      zip: 'M5V 2N4',
-      country: 'Canada',
+      street: 'A9, Pratap Nagar',
+      city: 'Chittorgarh',
+      state: 'Rajasthan',
+      zip: '312001',
+      country: 'India',
     },
   },
   companyInfo: {

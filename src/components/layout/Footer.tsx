@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
           <div className="col-span-1 md:col-span-1">
             <h3 className="text-xl font-bold mb-4">Immortal SEO</h3>
             <p className="mb-4 text-gray-300">
-              Premium SEO services to help your business dominate search rankings and drive targeted traffic.
+            We at Immortal SEO Agency have been delivering white-hat SEO services since 2008, helping businesses generate quality leads and achieve sustainable organic growth.
             </p>
             <div className="flex space-x-4">
               {Object.entries(siteConfig.links).map(([platform, url]) => (
