@@ -65,7 +65,7 @@ const LlmsTxtGenerator: React.FC = () => {
       }
 
       // Make API request to backend
-      const apiUrl = `https://llmstxt-backend.onrender.com/generate?url=${encodeURIComponent(normalizedUrl)}&max_pages=${maxPages}`;
+      const apiUrl = `https://llmstxt-backend.onrender.com/scrape?url=${encodeURIComponent(normalizedUrl)}&max_pages=${maxPages}`;
       const response = await fetch(apiUrl);
 
       if (!response.ok) {

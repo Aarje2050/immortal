@@ -306,8 +306,6 @@ const HomePage: React.FC = () => {
         
       </section>
 
-      
-
       {/* Services Section */}
       <Section>
         <Container>
