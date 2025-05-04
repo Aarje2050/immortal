@@ -45,49 +45,66 @@ const LlmsTxtGenerator: React.FC = () => {
     setUrl(exampleUrl);
   };
 
-  // Generate LLMs.txt content
-  const generateLlmsTxt = async () => {
-    // Reset states
-    setError(null);
-    setGeneratedContent('');
-    setIsLoading(true);
+ // Generate LLMs.txt content
+const generateLlmsTxt = async () => {
+  // Reset states
+  setError(null);
+  setGeneratedContent('');
+  setIsLoading(true);
 
-    try {
-      // Validate URL
-      if (!url) {
-        throw new Error('Please enter a valid URL');
-      }
-
-      // Normalize URL if needed
-      let normalizedUrl = url;
-      if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
-        normalizedUrl = 'https://' + normalizedUrl;
-      }
-
-      // Make API request to backend
-      const apiUrl = `https://llmstxt-backend.onrender.com/api/scrape?url=${encodeURIComponent(normalizedUrl)}&max_pages=${maxPages}`;
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.text();
-      setGeneratedContent(data);
-      
-      // Scroll to results after a short delay
-      setTimeout(() => {
-        if (resultsRef.current) {
-          resultsRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300);
-      
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while generating LLMs.txt content');
-    } finally {
-      setIsLoading(false);
+  try {
+    // Validate URL
+    if (!url) {
+      throw new Error('Please enter a valid URL');
     }
-  };
+
+    // Normalize URL if needed
+    let normalizedUrl = url;
+    if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+      normalizedUrl = 'https://' + normalizedUrl;
+    }
+
+    // Make API request using POST method with proper JSON body
+    const apiUrl = `https://llmstxt-backend.onrender.com/api/scrape`;
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        urls: [normalizedUrl],
+        bulkMode: false
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    // The response is now JSON, not plain text
+    const data = await response.json();
+    
+    // Extract the LLMs.txt content from the response structure
+    if (data[normalizedUrl] && data[normalizedUrl].status === 'success') {
+      setGeneratedContent(data[normalizedUrl].llms_txt);
+    } else {
+      throw new Error(`Failed to generate LLMs.txt for ${normalizedUrl}`);
+    }
+    
+    // Scroll to results after a short delay
+    setTimeout(() => {
+      if (resultsRef.current) {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+    
+  } catch (err: any) {
+    console.error('Error generating LLMs.txt:', err);
+    setError(err.message || 'An error occurred while generating LLMs.txt content');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   // Copy to clipboard function
   const copyToClipboard = () => {
