@@ -128,7 +128,7 @@ const ToolsPage: React.FC = () => {
       name: 'Blog Title Generator',
       description: 'Generate engaging, SEO-friendly blog titles that attract both readers and search engines.',
       icon: '✏️',
-      status: 'available',
+      status: 'coming-soon',
       category: 'content',
       url: '/tools/title-generator'
     },
@@ -137,7 +137,7 @@ const ToolsPage: React.FC = () => {
       name: 'Readability Analyzer',
       description: 'Check the readability score of your content and get suggestions for improvement.',
       icon: '📖',
-      status: 'available',
+      status: 'coming-soon',
       category: 'content',
       url: '/tools/readability'
     },
