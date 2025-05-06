@@ -11,6 +11,7 @@ const mainNavLinks = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Case Studies', href: '/case-studies' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'Contact', href: '/contact' }
 ];
@@ -221,6 +222,12 @@ const Header: React.FC = () => {
               className="text-text-secondary hover:text-primary-main transition-colors font-medium px-2 py-2"
             >
               Case Studies
+            </Link>
+            <Link
+              href="/blog"
+              className="text-text-secondary hover:text-primary-main transition-colors font-medium px-2 py-2"
+            >
+              Blog
             </Link>
             <Link
               href="/pricing"

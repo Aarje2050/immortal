@@ -68,6 +68,7 @@ const siteConfig = {
       { name: 'Services', href: '/services', hasSubmenu: true },
       { name: 'Tools', href: '/tools', hasSubmenu: true },
       { name: 'Case Studies', href: '/case-studies' },
+      { name: 'Blog', href: '/blog' },
       { name: 'Pricing', href: '/pricing' },
       { name: 'Contact', href: '/contact' },
     ],
@@ -84,6 +85,7 @@ const siteConfig = {
       { name: 'Enterprise SEO', href: '/services/enterprise-seo' },
     ],
     tools: [
+      { name: 'llms.txt Generator', href: '/tools/llms-txt-generator' },
       { name: 'Robots.txt Generator', href: '/tools/robots-txt-generator' },
       { name: 'SEO Audit Checklist', href: '/tools/seo-audit-checklist' },
       { name: 'SEO Cost Calculator', href: '/tools/seo-cost-calculator' },
