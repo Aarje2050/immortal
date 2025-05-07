@@ -13,15 +13,25 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/:slug((?!blog).*)', // match all slugs NOT starting with /blog
-  //       destination: '/blog/:slug',   // redirect to /blog/:slug
-  //       permanent: true,              // 308 Permanent Redirect (good for SEO)
-  //     },
-  //   ];
-  // },
+  async redirects() {
+    return [
+      {
+        source: '/llms-text-generator', // old url
+        destination: '/tools/llms-txt-generator',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+      {
+        source: '/cbd-canada-seo-case-study', // old url
+        destination: '/case-studies/cbd-canada-seo-case-study',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+      {
+        source: '/hubspot-seo-services', // old url
+        destination: '/services/hubspot-seo-services',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
