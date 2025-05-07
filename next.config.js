@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['immortalseo.com', 'secure.gravatar.com'],
+    domains: ['blog.immortalseo.com','immortalseo.com', 'secure.gravatar.com'],
   },
   eslint: {
     ignoreDuringBuilds: true,
