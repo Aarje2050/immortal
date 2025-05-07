@@ -7,6 +7,7 @@ import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 
+
 // Case study interface - same as in the case studies list page
 interface CaseStudy {
   id: string;
@@ -38,7 +39,9 @@ interface CaseStudyClientPageProps {
   caseStudy: CaseStudy;
 }
 
+
 const CaseStudyClientPage: React.FC<CaseStudyClientPageProps> = ({ caseStudy }) => {
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -121,8 +124,14 @@ const CaseStudyClientPage: React.FC<CaseStudyClientPageProps> = ({ caseStudy }) 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               <div className="aspect-video w-full mb-10 rounded-xl bg-primary-main/10 flex items-center justify-center">
-                <span className="text-primary-main font-medium">{caseStudy.client} Featured Image</span>
-              </div>
+              <Image
+          src={`${caseStudy.featuredImage}`}
+          alt={`${caseStudy.client} Featured Image`}
+          width={1280}
+          height={720}
+          className="object-cover w-full h-full"
+          priority
+        /></div>
               
               <div className="prose max-w-none">
                 <h2>The Challenge</h2>

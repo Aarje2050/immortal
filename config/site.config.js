@@ -9,10 +9,10 @@ const siteConfig = {
   url: 'https://immortalseo.com',
   ogImage: '/images/og-image.jpg',
   links: {
-    twitter: 'https://twitter.com/immortalseo',
+    // twitter: 'https://twitter.com/immortalseo',
     linkedin: 'https://linkedin.com/company/immortalseo',
-    facebook: 'https://facebook.com/immortalseo',
-    instagram: 'https://instagram.com/immortalseo',
+    // facebook: 'https://facebook.com/immortalseo',
+    // instagram: 'https://instagram.com/immortalseo',
   },
   contact: {
     email: 'hello@immortalseo.com',

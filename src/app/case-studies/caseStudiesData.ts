@@ -5,6 +5,7 @@ export interface CaseStudy {
     slug: string;
     client: string;
     industry: string;
+   
     challenge: string;
     solution: string;
     results: {
@@ -50,7 +51,7 @@ export interface CaseStudy {
         author: "Rohit Sharma",
         position: "Marketing Director, OMGS.in"
       },
-      featuredImage: "/images/case-studies/omgs-case-study.jpg",
+      featuredImage: "/images/case-studies/omgs-seo-case-study.webp",
       services: ["Technical SEO", "Semantic SEO", "AI-Enhanced Content Strategy", "Schema Implementation"],
       duration: "6 months",
       tags: ["Media", "Content", "Technical SEO", "AI Optimization"],
@@ -76,10 +77,10 @@ export interface CaseStudy {
       },
       testimonial: {
         quote: "The ImmortalSEO team fundamentally changed how we approach our content strategy. Their understanding of how AI systems retrieve and present content gave us a massive advantage. We're now seeing consistent lead generation from both traditional search and AI platforms.",
-        author: "Alex Chen",
-        position: "CEO, ZenCoder.ai"
+        author: "Archie Sharma",
+        position: "COO, ZenCoder.ai"
       },
-      featuredImage: "/images/case-studies/zencoder-case-study.jpg",
+      featuredImage: "/images/case-studies/zencoder-seo-boost-min.webp",
       services: ["Technical SEO", "AI-Ready Content Structure", "Authority Building", "Conversion Rate Optimization"],
       duration: "8 months",
       tags: ["SaaS", "AI", "Technology", "Lead Generation"],
@@ -89,6 +90,7 @@ export interface CaseStudy {
       id: "millioncases",
       title: "MillionCases.com Expands Global Reach with Multi-Platform SEO Strategy",
       slug: "millioncases-global-expansion",
+
       client: "MillionCases.com",
       industry: "E-commerce & Retail",
       challenge: "MillionCases.com, a premium phone case retailer, was facing intense competition and struggled to differentiate themselves in search results. Their international expansion efforts were hampered by poor visibility in global markets and minimal presence in AI-driven product recommendations.",
@@ -105,10 +107,10 @@ export interface CaseStudy {
       },
       testimonial: {
         quote: "ImmortalSEO's approach to international SEO completely transformed our business. Their strategy for optimizing our product content for both traditional and AI search platforms gave us a competitive edge that directly translated to increased sales across all our target markets.",
-        author: "James Wilson",
-        position: "Global Marketing Manager, MillionCases.com"
+        author: "Krishan Kumar",
+        position: "CEO, MillionCases.com"
       },
-      featuredImage: "/images/case-studies/millioncases-case-study.jpg",
+      featuredImage: "/images/case-studies/zencoder-seo-boost-min.webp",
       services: ["International SEO", "E-commerce Optimization", "Voice Search Optimization", "AI-Enhanced Content Strategy"],
       duration: "9 months",
       tags: ["E-commerce", "International", "Product SEO", "Voice Search"],
@@ -117,7 +119,8 @@ export interface CaseStudy {
     {
       id: "cbd-niche",
       title: "CBD Brand Overcomes Industry Challenges with Strategic SEO Approach",
-      slug: "cbd-brand-compliance-seo",
+      slug: "cbd-canada-seo-case-study",
+
       client: "Confidential CBD Brand",
       industry: "Health & Wellness, CBD Products",
       challenge: "Our client in the CBD industry faced significant challenges with visibility due to strict advertising limitations, competitive keywords, and complex compliance requirements that restricted their marketing options.",
@@ -147,6 +150,7 @@ export interface CaseStudy {
       id: "chittorpolyfab",
       title: "ChittorPolyFab.com Achieves 235% B2B Lead Growth Through Industry-Specific SEO",
       slug: "chittorpolyfab-b2b-lead-generation",
+
       client: "ChittorPolyFab.com",
       industry: "Manufacturing & Industrial",
       challenge: "ChittorPolyFab, a leading manufacturer of polymer products, had minimal digital presence despite their strong market position. Their website wasn't optimized for B2B search patterns, and they struggled to generate qualified leads through digital channels.",
@@ -163,7 +167,7 @@ export interface CaseStudy {
       },
       testimonial: {
         quote: "ImmortalSEO took the time to understand our complex B2B sales process and industrial market. Their technical approach to SEO transformed our digital presence, making our website a powerful lead generation tool that has directly contributed to our business growth.",
-        author: "Vikram Patel",
+        author: "Samdhani",
         position: "Director of Business Development, ChittorPolyFab"
       },
       featuredImage: "/images/case-studies/chittorpolyfab-case-study.jpg",

@@ -1,5 +1,5 @@
 // lib/blog/wp-api.ts
-const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://immortalseo.com/wp-json/wp/v2';
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://blog.immortalseo.com/wp-json/wp/v2';
 
 // Types for WordPress content
 export interface Post {
