@@ -111,12 +111,12 @@ const SEOCostCalculator: React.FC = () => {
   };
   
   // Service level multipliers
-  const serviceLevelMultipliers = {
-    basic: 0.7,               // Basic SEO services
-    standard: 1.0,            // Standard comprehensive SEO
-    premium: 1.6,             // Premium full-service SEO
-    enterprise: 2.5           // Enterprise-level SEO with dedicated team
-  };
+  // const serviceLevelMultipliers = {
+  //   basic: 0.7,               // Basic SEO services
+  //   standard: 1.0,            // Standard comprehensive SEO
+  //   premium: 1.6,             // Premium full-service SEO
+  //   enterprise: 2.5           // Enterprise-level SEO with dedicated team
+  // };
   
   // Additional service costs (monthly)
   const additionalServiceCosts = {
@@ -152,12 +152,12 @@ const SEOCostCalculator: React.FC = () => {
   
   // Base costs
   const baseMonthlyCost = {
-    min: 500,
+    min: 1200,
     max: 2000
   };
   
   const baseOneTimeCost = {
-    min: 1000,
+    min: 1500,
     max: 5000
   };
   
@@ -195,35 +195,35 @@ const SEOCostCalculator: React.FC = () => {
     const competitionMult = competitionMultipliers[inputs.competitionLevel as keyof typeof competitionMultipliers] || 1.0;
     const locationMult = locationMultipliers[inputs.targetLocation as keyof typeof locationMultipliers] || 1.0;
     const positionMult = positionMultipliers[inputs.currentPosition as keyof typeof positionMultipliers] || 1.0;
-    const serviceLevelMult = serviceLevelMultipliers[inputs.serviceLevel as keyof typeof serviceLevelMultipliers] || 1.0;
+    // const serviceLevelMult = serviceLevelMultipliers[inputs.serviceLevel as keyof typeof serviceLevelMultipliers] || 1.0;
     
     // Calculate core monthly cost
-    const monthlyCoreMin = Math.round(baseMonthlyCost.min * industryMult * sizeMult * competitionMult * locationMult * positionMult * serviceLevelMult);
-    const monthlyCoreMax = Math.round(baseMonthlyCost.max * industryMult * sizeMult * competitionMult * locationMult * positionMult * serviceLevelMult);
+    const monthlyCoreMin = Math.round(baseMonthlyCost.min * industryMult * sizeMult * competitionMult * locationMult * positionMult);
+    const monthlyCoreMax = Math.round(baseMonthlyCost.max * industryMult * sizeMult * competitionMult * locationMult * positionMult);
     
     // Calculate one-time costs
     const oneTimeCoreMin = Math.round(baseOneTimeCost.min * industryMult * sizeMult * competitionMult);
     const oneTimeCoreMax = Math.round(baseOneTimeCost.max * industryMult * sizeMult * competitionMult);
     
-    // Calculate additional service costs
-    let additionalMonthlyMin = 0;
-    let additionalMonthlyMax = 0;
+    // // Calculate additional service costs
+    // let additionalMonthlyMin = 0;
+    // let additionalMonthlyMax = 0;
     
-    inputs.additionalServices.forEach(service => {
-      const serviceCost = additionalServiceCosts[service as keyof typeof additionalServiceCosts];
-      if (serviceCost) {
-        additionalMonthlyMin += serviceCost.min;
-        additionalMonthlyMax += serviceCost.max;
-      }
-    });
+    // inputs.additionalServices.forEach(service => {
+    //   const serviceCost = additionalServiceCosts[service as keyof typeof additionalServiceCosts];
+    //   if (serviceCost) {
+    //     additionalMonthlyMin += serviceCost.min;
+    //     additionalMonthlyMax += serviceCost.max;
+    //   }
+    // });
     
-    // Calculate hours per month
-    const hoursMin = Math.round((monthlyCoreMin + additionalMonthlyMin) / 100);
-    const hoursMax = Math.round((monthlyCoreMax + additionalMonthlyMax) / 100);
+    // // Calculate hours per month
+    const hoursMin = Math.round((monthlyCoreMin ) / 100);
+    const hoursMax = Math.round((monthlyCoreMax ) / 100);
     
-    // Create cost breakdown
-    const totalMonthlyMin = monthlyCoreMin + additionalMonthlyMin;
-    const totalMonthlyMax = monthlyCoreMax + additionalMonthlyMax;
+    // // Create cost breakdown
+    const totalMonthlyMin = monthlyCoreMin ;
+    const totalMonthlyMax = monthlyCoreMax ;
     
     const breakdown: CalculatorResults['breakdown'] = {
       'Technical SEO': {
@@ -524,7 +524,7 @@ const SEOCostCalculator: React.FC = () => {
                       </div>
                       
                       {/* Service Level */}
-                      <div>
+                      {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Desired Service Level
                         </label>
@@ -538,10 +538,10 @@ const SEOCostCalculator: React.FC = () => {
                           <option value="premium">Premium (Advanced strategy with priority support)</option>
                           <option value="enterprise">Enterprise (Dedicated team with custom strategy)</option>
                         </select>
-                      </div>
+                      </div> */}
                       
                       {/* Additional Services */}
-                      <div>
+                      {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-3">
                           Additional Services (Optional)
                         </label>
@@ -638,7 +638,7 @@ const SEOCostCalculator: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
+                       */}
                       <div>
                         <Button 
                           onClick={calculateCosts}

@@ -1,5 +1,6 @@
 // app/tools/meta-tags-generator/page.tsx (server component)
 import { Metadata } from 'next';
+// import MetaTagsGenerator from './MetaTagsGenerator';
 import MetaTagsGenerator from './MetaTagsGenerator';
 
 export const metadata: Metadata = {

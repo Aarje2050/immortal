@@ -12,6 +12,16 @@ const nextConfig = {
     // Ideally, you should fix all TypeScript errors before deploying to production
     ignoreBuildErrors: true,
   },
+
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/:slug((?!blog).*)', // match all slugs NOT starting with /blog
+  //       destination: '/blog/:slug',   // redirect to /blog/:slug
+  //       permanent: true,              // 308 Permanent Redirect (good for SEO)
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;

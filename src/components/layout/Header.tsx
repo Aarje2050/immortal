@@ -38,6 +38,7 @@ const servicesData = {
 
 // Tools data
 const toolsData = [
+  { name: 'llms.txt Generator', href: '/tools/llms-txt-generator' },
   { name: 'Robots.txt Generator', href: '/tools/robots-txt-generator' },
   { name: 'SEO Audit Checklist', href: '/tools/seo-audit-checklist' },
   { name: 'SEO Cost Calculator', href: '/tools/seo-cost-calculator' },
@@ -431,6 +432,16 @@ const Header: React.FC = () => {
                 }}
               >
                 Case Studies
+              </a>
+              <a
+                href="/blog"
+                className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleMobileLinkClick('/blog');
+                }}
+              >
+                Blog
               </a>
               <a
                 href="/pricing"

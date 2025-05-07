@@ -7,7 +7,7 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 
-// Define types
+// Define types with refined error structure
 interface MetaTags {
   title: string;
   description: string;
@@ -22,6 +22,12 @@ interface MetaTags {
   twitterImage: string;
   canonical: string;
   robots: string;
+}
+
+// Enhanced error type to support warnings
+interface ValidationMessage {
+  message: string;
+  type: 'error' | 'warning';
 }
 
 const MetaTagsGenerator: React.FC = () => {
@@ -45,17 +51,18 @@ const MetaTagsGenerator: React.FC = () => {
   // State for generated tags
   const [generatedHTML, setGeneratedHTML] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, ValidationMessage>>({});
   const [previewMode, setPreviewMode] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'standard' | 'social' | 'advanced'>('standard');
+  const [activeTab, setActiveTab] = useState<'standard' | 'social' | 'advanced' | 'preview'>('standard');
+  const [previewType, setPreviewType] = useState<'google' | 'facebook' | 'twitter'>('google');
   
-  // Character count limits
+  // Recommended character limits
   const maxLengths = {
     title: 60,
     description: 160,
-    ogTitle: 60,
+    ogTitle: 95, // Facebook allows longer titles
     ogDescription: 200,
-    twitterTitle: 60,
+    twitterTitle: 70,
     twitterDescription: 200
   };
   
@@ -73,7 +80,10 @@ const MetaTagsGenerator: React.FC = () => {
     if (metaTags.description && !metaTags.twitterDescription) {
       setMetaTags(prev => ({...prev, twitterDescription: prev.description}));
     }
-  }, [metaTags.title, metaTags.description]);
+    
+    // Validate in real-time
+    validateFieldLengths();
+  }, [metaTags]);
   
   // Handle input changes
   const handleInputChange = (name: keyof MetaTags, value: string) => {
@@ -89,51 +99,83 @@ const MetaTagsGenerator: React.FC = () => {
     }
   };
   
+  // Real-time validation for field lengths
+  const validateFieldLengths = () => {
+    const newErrors: Record<string, ValidationMessage> = { ...errors };
+    
+    // Check title length
+    if (metaTags.title && metaTags.title.length > maxLengths.title) {
+      newErrors.title = { 
+        message: `Exceeds recommended ${maxLengths.title} characters - may be truncated in search results`,
+        type: 'warning'
+      };
+    } else if (newErrors.title && newErrors.title.type === 'warning') {
+      delete newErrors.title;
+    }
+    
+    // Check description length
+    if (metaTags.description && metaTags.description.length > maxLengths.description) {
+      newErrors.description = {
+        message: `Exceeds recommended ${maxLengths.description} characters - may be truncated in search results`,
+        type: 'warning'
+      };
+    } else if (newErrors.description && newErrors.description.type === 'warning') {
+      delete newErrors.description;
+    }
+    
+    // Similar checks for other fields
+    if (metaTags.ogTitle && metaTags.ogTitle.length > maxLengths.ogTitle) {
+      newErrors.ogTitle = {
+        message: `Exceeds recommended ${maxLengths.ogTitle} characters for Facebook`,
+        type: 'warning'
+      };
+    } else if (newErrors.ogTitle && newErrors.ogTitle.type === 'warning') {
+      delete newErrors.ogTitle;
+    }
+    
+    if (metaTags.ogDescription && metaTags.ogDescription.length > maxLengths.ogDescription) {
+      newErrors.ogDescription = {
+        message: `Exceeds recommended ${maxLengths.ogDescription} characters for Facebook`,
+        type: 'warning'
+      };
+    } else if (newErrors.ogDescription && newErrors.ogDescription.type === 'warning') {
+      delete newErrors.ogDescription;
+    }
+    
+    if (metaTags.twitterTitle && metaTags.twitterTitle.length > maxLengths.twitterTitle) {
+      newErrors.twitterTitle = {
+        message: `Exceeds recommended ${maxLengths.twitterTitle} characters for Twitter`,
+        type: 'warning'
+      };
+    } else if (newErrors.twitterTitle && newErrors.twitterTitle.type === 'warning') {
+      delete newErrors.twitterTitle;
+    }
+    
+    if (metaTags.twitterDescription && metaTags.twitterDescription.length > maxLengths.twitterDescription) {
+      newErrors.twitterDescription = {
+        message: `Exceeds recommended ${maxLengths.twitterDescription} characters for Twitter`,
+        type: 'warning'
+      };
+    } else if (newErrors.twitterDescription && newErrors.twitterDescription.type === 'warning') {
+      delete newErrors.twitterDescription;
+    }
+    
+    setErrors(newErrors);
+  };
+  
   // Validate form inputs
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, ValidationMessage> = {};
     let isValid = true;
     
     // Required fields
     if (!metaTags.title.trim()) {
-      newErrors.title = 'Title is required';
+      newErrors.title = { message: 'Title is required', type: 'error' };
       isValid = false;
     }
     
     if (!metaTags.description.trim()) {
-      newErrors.description = 'Description is required';
-      isValid = false;
-    }
-    
-    // Length validations
-    if (metaTags.title.length > maxLengths.title) {
-      newErrors.title = `Title should be ${maxLengths.title} characters or less`;
-      isValid = false;
-    }
-    
-    if (metaTags.description.length > maxLengths.description) {
-      newErrors.description = `Description should be ${maxLengths.description} characters or less`;
-      isValid = false;
-    }
-    
-    // Social media validations if filled
-    if (metaTags.ogTitle && metaTags.ogTitle.length > maxLengths.ogTitle) {
-      newErrors.ogTitle = `Open Graph title should be ${maxLengths.ogTitle} characters or less`;
-      isValid = false;
-    }
-    
-    if (metaTags.ogDescription && metaTags.ogDescription.length > maxLengths.ogDescription) {
-      newErrors.ogDescription = `Open Graph description should be ${maxLengths.ogDescription} characters or less`;
-      isValid = false;
-    }
-    
-    if (metaTags.twitterTitle && metaTags.twitterTitle.length > maxLengths.twitterTitle) {
-      newErrors.twitterTitle = `Twitter title should be ${maxLengths.twitterTitle} characters or less`;
-      isValid = false;
-    }
-    
-    if (metaTags.twitterDescription && metaTags.twitterDescription.length > maxLengths.twitterDescription) {
-      newErrors.twitterDescription = `Twitter description should be ${maxLengths.twitterDescription} characters or less`;
+      newErrors.description = { message: 'Description is required', type: 'error' };
       isValid = false;
     }
     
@@ -141,8 +183,30 @@ const MetaTagsGenerator: React.FC = () => {
     const urlFields = ['ogImage', 'ogUrl', 'twitterImage', 'canonical'];
     urlFields.forEach(field => {
       if (metaTags[field as keyof MetaTags] && !isValidUrl(metaTags[field as keyof MetaTags] as string)) {
-        newErrors[field] = 'Please enter a valid URL';
+        newErrors[field] = { message: 'Please enter a valid URL', type: 'error' };
         isValid = false;
+      }
+    });
+    
+    // Length warnings (don't affect validity)
+    if (metaTags.title.length > maxLengths.title) {
+      newErrors.title = { 
+        message: `Exceeds recommended ${maxLengths.title} characters - may be truncated in search results`,
+        type: 'warning'
+      };
+    }
+    
+    if (metaTags.description.length > maxLengths.description) {
+      newErrors.description = {
+        message: `Exceeds recommended ${maxLengths.description} characters - may be truncated in search results`,
+        type: 'warning'
+      };
+    }
+    
+    // Preserve previous warnings
+    Object.entries(errors).forEach(([key, value]) => {
+      if (value.type === 'warning' && !newErrors[key]) {
+        newErrors[key] = value;
       }
     });
     
@@ -270,6 +334,122 @@ const MetaTagsGenerator: React.FC = () => {
     if (percentage <= 90) return 'bg-yellow-500';
     return 'bg-red-500';
   };
+  
+  // Simulate optimizing meta tags with AI (in a real implementation, this would call an API)
+  const suggestOptimizedTags = () => {
+    if (!metaTags.title && !metaTags.description) {
+      alert('Please enter at least a basic title or description to optimize');
+      return;
+    }
+    
+    // In a real implementation, this would be an API call to generate optimized meta tags
+    // For now, we'll simulate it with a simple enhancement
+    
+    const sampleKeywords = ['SEO', 'meta tags', 'search optimization', 'website visibility'];
+    
+    setMetaTags(prev => {
+      const enhancedTitle = prev.title 
+        ? prev.title.length < 40 
+          ? `${prev.title} - Optimized for Search Engines` 
+          : prev.title
+        : 'Optimized Page Title for Better Search Rankings';
+        
+      const enhancedDescription = prev.description
+        ? prev.description
+        : 'This page has been optimized with meta tags to improve search visibility and click-through rates from search engines and social media platforms.';
+      
+      return {
+        ...prev,
+        title: enhancedTitle,
+        description: enhancedDescription,
+        keywords: prev.keywords || sampleKeywords.join(', '),
+        ogTitle: enhancedTitle,
+        ogDescription: enhancedDescription,
+        twitterTitle: enhancedTitle,
+        twitterDescription: enhancedDescription
+      };
+    });
+  };
+  
+  // Live preview renderer
+  const renderPreview = () => {
+    switch (previewType) {
+      case 'google':
+        return (
+          <div className="bg-white p-4 rounded border border-gray-200">
+            <p className="text-[#1a0dab] text-xl font-medium mb-1 truncate">
+              {metaTags.title || "Page Title"}
+            </p>
+            <p className="text-[#006621] text-sm mb-1 truncate">
+              {metaTags.ogUrl || metaTags.canonical || "https://example.com/page-url"}
+            </p>
+            <p className="text-gray-600 text-sm line-clamp-2">
+              {metaTags.description || "Page description will appear here."}
+            </p>
+          </div>
+        );
+      case 'facebook':
+        return (
+          <div className="bg-[#f2f3f5] p-4 rounded border border-gray-300">
+            <div className="bg-white rounded shadow">
+              {metaTags.ogImage ? (
+                <div className="w-full h-48 bg-gray-200 rounded-t overflow-hidden flex items-center justify-center">
+                  <img src={metaTags.ogImage} alt="Preview" className="w-full object-cover" onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/1200x630?text=Image+Preview';
+                  }} />
+                </div>
+              ) : (
+                <div className="w-full h-48 bg-gray-200 rounded-t flex items-center justify-center text-gray-500">
+                  No image provided
+                </div>
+              )}
+              <div className="p-3">
+                <p className="text-[#385898] text-sm font-semibold">
+                  {metaTags.ogUrl || metaTags.canonical || "example.com"}
+                </p>
+                <p className="text-gray-900 font-bold">
+                  {metaTags.ogTitle || metaTags.title || "Your Page Title"}
+                </p>
+                <p className="text-gray-500 text-sm line-clamp-3">
+                  {metaTags.ogDescription || metaTags.description || "Your page description will appear here."}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      case 'twitter':
+        return (
+          <div className="bg-[#e6ecf0] p-4 rounded border border-gray-300">
+            <div className="bg-white rounded-xl shadow overflow-hidden">
+              {metaTags.twitterImage ? (
+                <div className="w-full h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
+                  <img src={metaTags.twitterImage} alt="Preview" className="w-full object-cover" onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Twitter+Image';
+                  }} />
+                </div>
+              ) : (
+                <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                  No image provided
+                </div>
+              )}
+              <div className="p-4">
+                <p className="text-gray-900 font-bold text-lg mb-1">
+                  {metaTags.twitterTitle || metaTags.title || "Your Twitter Card Title"}
+                </p>
+                <p className="text-gray-500 text-sm mb-2">
+                  {metaTags.twitterDescription || metaTags.description || "Your Twitter card description will appear here."}
+                </p>
+                <p className="text-[#1da1f2] text-sm">
+                  {metaTags.ogUrl || metaTags.canonical || "example.com"}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Layout>
@@ -299,7 +479,7 @@ const MetaTagsGenerator: React.FC = () => {
                 Meta Tags <span className="text-yellow-300">Generator</span>
               </h1>
               <p className="text-xl mb-8 opacity-90">
-                Create optimized title tags and meta descriptions for better click-through rates from search results.
+                Create optimized meta tags to improve click-through rates and visibility in search results and social media.
               </p>
             </div>
           </div>
@@ -312,21 +492,20 @@ const MetaTagsGenerator: React.FC = () => {
           <div className="bg-white p-6 rounded-xl shadow-md mb-8">
             <h2 className="text-2xl font-bold mb-4">Generate Optimized Meta Tags</h2>
             <p className="text-text-secondary mb-4">
-              Meta tags provide information about your webpage to search engines and website visitors. Properly optimized meta tags can improve your click-through rates from search results and social media shares.
+              Meta tags help search engines and social platforms understand your content. Our tool recommends optimal lengths for different platforms, but allows you to customize based on your needs.
             </p>
             <div className="bg-primary-main/5 rounded-lg p-4">
               <h3 className="font-semibold mb-2 flex items-center">
                 <svg className="w-5 h-5 mr-2 text-primary-main" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Best Practices:
+                Recommended Lengths:
               </h3>
               <ul className="list-disc list-inside text-text-secondary space-y-1 ml-4">
-                <li>Keep titles under 60 characters to avoid truncation in search results</li>
-                <li>Make descriptions compelling and under 160 characters</li>
-                <li>Include relevant keywords naturally in both title and description</li>
-                <li>Create unique meta tags for each page on your website</li>
-                <li>Use Open Graph and Twitter Card tags to control how your content appears when shared on social media</li>
+                <li>Page Title: Up to 60 characters (Google typically displays 50-60)</li>
+                <li>Meta Description: Up to 160 characters (Google typically displays 150-160)</li>
+                <li>Open Graph Title: Up to 95 characters (Facebook optimal length)</li>
+                <li>Twitter Title: Up to 70 characters (Twitter optimal length)</li>
               </ul>
             </div>
           </div>
@@ -336,7 +515,21 @@ const MetaTagsGenerator: React.FC = () => {
               <div className="bg-white rounded-xl shadow-md overflow-hidden">
                 {!previewMode ? (
                   <div className="p-6">
-                    <h2 className="text-xl font-bold mb-6">Meta Tags Form</h2>
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-bold">Meta Tags Form</h2>
+                      <Button 
+                        onClick={suggestOptimizedTags}
+                        variant="outline"
+                        className="text-sm"
+                      >
+                        <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9.5 14.5L5.5 18.5L3.5 19.5L4.5 17.5L8.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M5.5 15.5L8.5 18.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M14 6L18 10M12.9 3.99999L20 11.1L12.9 18.2L5.8 11.1L12.9 3.99999Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        AI Optimize Tags
+                      </Button>
+                    </div>
                     
                     {/* Tabs Navigation */}
                     <div className="border-b border-gray-200 mb-6">
@@ -371,6 +564,16 @@ const MetaTagsGenerator: React.FC = () => {
                         >
                           Advanced Options
                         </button>
+                        <button
+                          className={`px-4 py-2 font-medium whitespace-nowrap border-b-2 ${
+                            activeTab === 'preview'
+                              ? 'border-primary-main text-primary-main'
+                              : 'border-transparent text-gray-500 hover:text-gray-700'
+                          }`}
+                          onClick={() => setActiveTab('preview')}
+                        >
+                          Live Preview
+                        </button>
                       </div>
                     </div>
                     
@@ -387,11 +590,16 @@ const MetaTagsGenerator: React.FC = () => {
                             onChange={(e) => handleInputChange('title', e.target.value)}
                             placeholder="e.g., Best SEO Practices for 2025 | Company Name"
                             className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                              errors.title ? 'border-red-500' : 'border-gray-300'
+                              errors.title?.type === 'error' ? 'border-red-500' : 
+                              errors.title?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                             }`}
                           />
                           {errors.title && (
-                            <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+                            <p className={`text-sm mt-1 ${
+                              errors.title.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                            }`}>
+                              {errors.title.message}
+                            </p>
                           )}
                           <div className="flex justify-between items-center mt-1">
                             <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -401,9 +609,9 @@ const MetaTagsGenerator: React.FC = () => {
                               ></div>
                             </div>
                             <span className={`text-xs font-medium ${
-                              metaTags.title.length > maxLengths.title ? 'text-red-500' : 'text-gray-500'
+                              metaTags.title.length > maxLengths.title ? 'text-amber-500' : 'text-gray-500'
                             }`}>
-                              {metaTags.title.length}/{maxLengths.title}
+                              {metaTags.title.length}/{maxLengths.title} recommended
                             </span>
                           </div>
                         </div>
@@ -418,11 +626,16 @@ const MetaTagsGenerator: React.FC = () => {
                             placeholder="e.g., Discover the latest SEO practices to improve your website's visibility in search engines and drive more organic traffic."
                             rows={3}
                             className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                              errors.description ? 'border-red-500' : 'border-gray-300'
+                              errors.description?.type === 'error' ? 'border-red-500' : 
+                              errors.description?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                             }`}
                           ></textarea>
                           {errors.description && (
-                            <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                            <p className={`text-sm mt-1 ${
+                              errors.description.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                            }`}>
+                              {errors.description.message}
+                            </p>
                           )}
                           <div className="flex justify-between items-center mt-1">
                             <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -432,9 +645,9 @@ const MetaTagsGenerator: React.FC = () => {
                               ></div>
                             </div>
                             <span className={`text-xs font-medium ${
-                              metaTags.description.length > maxLengths.description ? 'text-red-500' : 'text-gray-500'
+                              metaTags.description.length > maxLengths.description ? 'text-amber-500' : 'text-gray-500'
                             }`}>
-                              {metaTags.description.length}/{maxLengths.description}
+                              {metaTags.description.length}/{maxLengths.description} recommended
                             </span>
                           </div>
                         </div>
@@ -451,7 +664,7 @@ const MetaTagsGenerator: React.FC = () => {
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main"
                           />
                           <p className="text-xs text-gray-500 mt-1">
-                            Separate keywords with commas. Note: While the keywords meta tag is less important for SEO today, it can still be useful for internal site search.
+                            Separate keywords with commas. While less important for search engines today, keywords can help with internal site search and content organization.
                           </p>
                         </div>
                       </div>
@@ -473,11 +686,16 @@ const MetaTagsGenerator: React.FC = () => {
                                 onChange={(e) => handleInputChange('ogTitle', e.target.value)}
                                 placeholder="Same as meta title, or customize for social sharing"
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.ogTitle ? 'border-red-500' : 'border-gray-300'
+                                  errors.ogTitle?.type === 'error' ? 'border-red-500' : 
+                                  errors.ogTitle?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                                 }`}
                               />
                               {errors.ogTitle && (
-                                <p className="text-red-500 text-sm mt-1">{errors.ogTitle}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.ogTitle.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.ogTitle.message}
+                                </p>
                               )}
                               <div className="flex justify-between items-center mt-1">
                                 <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -487,9 +705,9 @@ const MetaTagsGenerator: React.FC = () => {
                                   ></div>
                                 </div>
                                 <span className={`text-xs font-medium ${
-                                  metaTags.ogTitle.length > maxLengths.ogTitle ? 'text-red-500' : 'text-gray-500'
+                                  metaTags.ogTitle.length > maxLengths.ogTitle ? 'text-amber-500' : 'text-gray-500'
                                 }`}>
-                                  {metaTags.ogTitle.length}/{maxLengths.ogTitle}
+                                  {metaTags.ogTitle.length}/{maxLengths.ogTitle} recommended
                                 </span>
                               </div>
                             </div>
@@ -504,11 +722,16 @@ const MetaTagsGenerator: React.FC = () => {
                                 placeholder="Same as meta description, or customize for social sharing"
                                 rows={2}
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.ogDescription ? 'border-red-500' : 'border-gray-300'
+                                  errors.ogDescription?.type === 'error' ? 'border-red-500' : 
+                                  errors.ogDescription?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                                 }`}
                               ></textarea>
                               {errors.ogDescription && (
-                                <p className="text-red-500 text-sm mt-1">{errors.ogDescription}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.ogDescription.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.ogDescription.message}
+                                </p>
                               )}
                               <div className="flex justify-between items-center mt-1">
                                 <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -518,9 +741,9 @@ const MetaTagsGenerator: React.FC = () => {
                                   ></div>
                                 </div>
                                 <span className={`text-xs font-medium ${
-                                  metaTags.ogDescription.length > maxLengths.ogDescription ? 'text-red-500' : 'text-gray-500'
+                                  metaTags.ogDescription.length > maxLengths.ogDescription ? 'text-amber-500' : 'text-gray-500'
                                 }`}>
-                                  {metaTags.ogDescription.length}/{maxLengths.ogDescription}
+                                  {metaTags.ogDescription.length}/{maxLengths.ogDescription} recommended
                                 </span>
                               </div>
                             </div>
@@ -535,14 +758,18 @@ const MetaTagsGenerator: React.FC = () => {
                                 onChange={(e) => handleInputChange('ogImage', e.target.value)}
                                 placeholder="e.g., https://example.com/images/og-image.jpg"
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.ogImage ? 'border-red-500' : 'border-gray-300'
+                                  errors.ogImage?.type === 'error' ? 'border-red-500' : 'border-gray-300'
                                 }`}
                               />
                               {errors.ogImage && (
-                                <p className="text-red-500 text-sm mt-1">{errors.ogImage}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.ogImage.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.ogImage.message}
+                                </p>
                               )}
                               <p className="text-xs text-gray-500 mt-1">
-                                Recommended size: 1200×630 pixels
+                                Recommended size: 1200×630 pixels for optimal display on Facebook
                               </p>
                             </div>
                             
@@ -556,11 +783,15 @@ const MetaTagsGenerator: React.FC = () => {
                                 onChange={(e) => handleInputChange('ogUrl', e.target.value)}
                                 placeholder="e.g., https://example.com/page-url"
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.ogUrl ? 'border-red-500' : 'border-gray-300'
+                                  errors.ogUrl?.type === 'error' ? 'border-red-500' : 'border-gray-300'
                                 }`}
                               />
                               {errors.ogUrl && (
-                                <p className="text-red-500 text-sm mt-1">{errors.ogUrl}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.ogUrl.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.ogUrl.message}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -583,6 +814,9 @@ const MetaTagsGenerator: React.FC = () => {
                                 <option value="app">App</option>
                                 <option value="player">Player</option>
                               </select>
+                              <p className="text-xs text-gray-500 mt-1">
+                                'Summary Large Image' is recommended for most content with images
+                              </p>
                             </div>
                             
                             <div>
@@ -595,11 +829,16 @@ const MetaTagsGenerator: React.FC = () => {
                                 onChange={(e) => handleInputChange('twitterTitle', e.target.value)}
                                 placeholder="Same as OG title, or customize for Twitter"
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.twitterTitle ? 'border-red-500' : 'border-gray-300'
+                                  errors.twitterTitle?.type === 'error' ? 'border-red-500' : 
+                                  errors.twitterTitle?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                                 }`}
                               />
                               {errors.twitterTitle && (
-                                <p className="text-red-500 text-sm mt-1">{errors.twitterTitle}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.twitterTitle.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.twitterTitle.message}
+                                </p>
                               )}
                               <div className="flex justify-between items-center mt-1">
                                 <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -609,9 +848,9 @@ const MetaTagsGenerator: React.FC = () => {
                                   ></div>
                                 </div>
                                 <span className={`text-xs font-medium ${
-                                  metaTags.twitterTitle.length > maxLengths.twitterTitle ? 'text-red-500' : 'text-gray-500'
+                                  metaTags.twitterTitle.length > maxLengths.twitterTitle ? 'text-amber-500' : 'text-gray-500'
                                 }`}>
-                                  {metaTags.twitterTitle.length}/{maxLengths.twitterTitle}
+                                  {metaTags.twitterTitle.length}/{maxLengths.twitterTitle} recommended
                                 </span>
                               </div>
                             </div>
@@ -626,11 +865,16 @@ const MetaTagsGenerator: React.FC = () => {
                                 placeholder="Same as OG description, or customize for Twitter"
                                 rows={2}
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.twitterDescription ? 'border-red-500' : 'border-gray-300'
+                                  errors.twitterDescription?.type === 'error' ? 'border-red-500' : 
+                                  errors.twitterDescription?.type === 'warning' ? 'border-amber-500' : 'border-gray-300'
                                 }`}
                               ></textarea>
                               {errors.twitterDescription && (
-                                <p className="text-red-500 text-sm mt-1">{errors.twitterDescription}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.twitterDescription.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.twitterDescription.message}
+                                </p>
                               )}
                               <div className="flex justify-between items-center mt-1">
                                 <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
@@ -640,9 +884,9 @@ const MetaTagsGenerator: React.FC = () => {
                                   ></div>
                                 </div>
                                 <span className={`text-xs font-medium ${
-                                  metaTags.twitterDescription.length > maxLengths.twitterDescription ? 'text-red-500' : 'text-gray-500'
+                                  metaTags.twitterDescription.length > maxLengths.twitterDescription ? 'text-amber-500' : 'text-gray-500'
                                 }`}>
-                                  {metaTags.twitterDescription.length}/{maxLengths.twitterDescription}
+                                  {metaTags.twitterDescription.length}/{maxLengths.twitterDescription} recommended
                                 </span>
                               </div>
                             </div>
@@ -657,14 +901,18 @@ const MetaTagsGenerator: React.FC = () => {
                                 onChange={(e) => handleInputChange('twitterImage', e.target.value)}
                                 placeholder="e.g., https://example.com/images/twitter-image.jpg"
                                 className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                                  errors.twitterImage ? 'border-red-500' : 'border-gray-300'
+                                  errors.twitterImage?.type === 'error' ? 'border-red-500' : 'border-gray-300'
                                 }`}
                               />
                               {errors.twitterImage && (
-                                <p className="text-red-500 text-sm mt-1">{errors.twitterImage}</p>
+                                <p className={`text-sm mt-1 ${
+                                  errors.twitterImage.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                                }`}>
+                                  {errors.twitterImage.message}
+                                </p>
                               )}
                               <p className="text-xs text-gray-500 mt-1">
-                                Recommended size: 1200×628 pixels
+                                Recommended size: 1200×628 pixels for optimal display on Twitter
                               </p>
                             </div>
                           </div>
@@ -685,14 +933,18 @@ const MetaTagsGenerator: React.FC = () => {
                             onChange={(e) => handleInputChange('canonical', e.target.value)}
                             placeholder="e.g., https://example.com/original-page"
                             className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-primary-main ${
-                              errors.canonical ? 'border-red-500' : 'border-gray-300'
+                              errors.canonical?.type === 'error' ? 'border-red-500' : 'border-gray-300'
                             }`}
                           />
                           {errors.canonical && (
-                            <p className="text-red-500 text-sm mt-1">{errors.canonical}</p>
+                            <p className={`text-sm mt-1 ${
+                              errors.canonical.type === 'error' ? 'text-red-500' : 'text-amber-500'
+                            }`}>
+                              {errors.canonical.message}
+                            </p>
                           )}
                           <p className="text-xs text-gray-500 mt-1">
-                            Use this to indicate the preferred URL for duplicate or similar content
+                            Use canonical tags to indicate the preferred URL when you have duplicate or similar content on multiple pages
                           </p>
                         </div>
                         
@@ -709,9 +961,55 @@ const MetaTagsGenerator: React.FC = () => {
                             <option value="noindex, follow">noindex, follow (Don't index, but follow links)</option>
                             <option value="index, nofollow">index, nofollow (Index, but don't follow links)</option>
                             <option value="noindex, nofollow">noindex, nofollow (Don't index and don't follow links)</option>
+                            <option value="max-snippet:-1, max-image-preview:large, max-video-preview:-1">Full rich snippet control (Recommended for most pages)</option>
                           </select>
                           <p className="text-xs text-gray-500 mt-1">
-                            Controls how search engines crawl and index your page
+                            Controls how search engines crawl and index your page. Use "noindex" with caution as it prevents your page from appearing in search results.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Live Preview Tab */}
+                    {activeTab === 'preview' && (
+                      <div>
+                        <div className="mb-4">
+                          <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+                            <button
+                              className={`flex-1 px-4 py-2 ${previewType === 'google' ? 'bg-primary-main text-white' : 'bg-gray-50 text-gray-700'}`}
+                              onClick={() => setPreviewType('google')}
+                            >
+                              Google
+                            </button>
+                            <button
+                              className={`flex-1 px-4 py-2 ${previewType === 'facebook' ? 'bg-primary-main text-white' : 'bg-gray-50 text-gray-700'}`}
+                              onClick={() => setPreviewType('facebook')}
+                            >
+                              Facebook
+                            </button>
+                            <button
+                              className={`flex-1 px-4 py-2 ${previewType === 'twitter' ? 'bg-primary-main text-white' : 'bg-gray-50 text-gray-700'}`}
+                              onClick={() => setPreviewType('twitter')}
+                            >
+                              Twitter
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="mb-6">
+                          <h3 className="font-medium mb-3">
+                            {previewType === 'google' ? 'Google Search Result Preview' : 
+                             previewType === 'facebook' ? 'Facebook Share Preview' : 
+                             'Twitter Card Preview'}
+                          </h3>
+                          
+                          {renderPreview()}
+                        </div>
+                        
+                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-4">
+                          <h4 className="font-medium text-yellow-800 mb-1">Preview Note</h4>
+                          <p className="text-sm text-yellow-700">
+                            This preview is an approximation. Actual appearance may vary based on platform updates, device type, and other factors.
                           </p>
                         </div>
                       </div>
@@ -763,7 +1061,7 @@ const MetaTagsGenerator: React.FC = () => {
                           </svg>
                         ) : (
                           <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                           </svg>
                         )}
                       </button>
@@ -792,6 +1090,22 @@ const MetaTagsGenerator: React.FC = () => {
                         </p>
                       </div>
                     </div>
+                    
+                    {/* Warning messages about length issues */}
+                    {(metaTags.title.length > maxLengths.title || 
+                      metaTags.description.length > maxLengths.description) && (
+                      <div className="bg-amber-50 p-4 rounded-lg border border-amber-200 mb-6">
+                        <h4 className="font-medium text-amber-800 mb-1">Length Warnings</h4>
+                        <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
+                          {metaTags.title.length > maxLengths.title && (
+                            <li>Your title exceeds the recommended {maxLengths.title} characters and may be truncated in search results</li>
+                          )}
+                          {metaTags.description.length > maxLengths.description && (
+                            <li>Your description exceeds the recommended {maxLengths.description} characters and may be truncated in search results</li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
                     
                     <div className="mt-8 flex justify-between">
                       <Button 
@@ -825,7 +1139,7 @@ const MetaTagsGenerator: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold mb-1">Title Tag</h3>
-                          <p className="text-text-secondary">The main title of your page that appears in search results and browser tabs.</p>
+                          <p className="text-text-secondary">The main title of your page, appearing in search results and browser tabs.</p>
                         </div>
                       </div>
                       
@@ -835,7 +1149,7 @@ const MetaTagsGenerator: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold mb-1">Meta Description</h3>
-                          <p className="text-text-secondary">A summary of your page content shown in search results.</p>
+                          <p className="text-text-secondary">A summary of your page content that appears in search results below your title.</p>
                         </div>
                       </div>
                       
@@ -845,7 +1159,7 @@ const MetaTagsGenerator: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold mb-1">Social Media Tags</h3>
-                          <p className="text-text-secondary">Control how your content appears when shared on social platforms.</p>
+                          <p className="text-text-secondary">Control how your content appears when shared on social platforms like Facebook and Twitter.</p>
                         </div>
                       </div>
                       
@@ -855,7 +1169,7 @@ const MetaTagsGenerator: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold mb-1">SEO Impact</h3>
-                          <p className="text-text-secondary">Well-optimized meta tags can improve click-through rates and visibility.</p>
+                          <p className="text-text-secondary">Well-optimized meta tags can improve click-through rates and search visibility.</p>
                         </div>
                       </div>
                     </div>
@@ -864,12 +1178,6 @@ const MetaTagsGenerator: React.FC = () => {
                   <div className="p-6 bg-gray-50">
                     <h3 className="font-semibold mb-4">Writing Tips:</h3>
                     <ul className="space-y-3 text-text-secondary">
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Include primary keywords near the beginning of titles</span>
-                      </li>
                       <li className="flex items-start">
                         <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -886,13 +1194,7 @@ const MetaTagsGenerator: React.FC = () => {
                         <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Include clear value propositions and benefits</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Avoid keyword stuffing and unnatural phrasing</span>
+                        <span>Match search intent with clear value propositions</span>
                       </li>
                     </ul>
                     
@@ -925,19 +1227,19 @@ const MetaTagsGenerator: React.FC = () => {
                     <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Keep titles under 60 characters to avoid truncation in SERPs</span>
+                    <span>Keep titles under 60 characters to avoid truncation in SERPs (but longer titles may still be beneficial)</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Craft enticing meta descriptions under 160 characters</span>
+                    <span>Craft enticing meta descriptions under 160 characters (longer descriptions may be truncated but can provide more context)</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Include primary keywords in titles and descriptions</span>
+                    <span>Include primary keywords naturally in titles and descriptions</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -985,10 +1287,20 @@ const MetaTagsGenerator: React.FC = () => {
                     <svg className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Ensure social images accurately represent content for AI understanding</span>
+                    <span>Use schema markup alongside meta tags for richer search results</span>
                   </li>
                 </ul>
               </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-primary-main/5 rounded-lg">
+              <h3 className="font-semibold mb-2">Understanding Character Limits</h3>
+              <p className="text-text-secondary mb-4">
+                While we provide recommended character limits based on display patterns, search engines don't have strict cutoff points. The actual display depends on pixel width, device size, and platform policies.
+              </p>
+              <p className="text-text-secondary">
+                A longer, more descriptive title or description can sometimes be valuable for both users and search engines, even if it gets truncated in some displays. Focus on creating compelling, informative content first, with character counts serving as guidelines rather than strict rules.
+              </p>
             </div>
           </div>
         </Container>
@@ -1004,7 +1316,7 @@ const MetaTagsGenerator: React.FC = () => {
                   Need Professional SEO Support?
                 </h2>
                 <p className="text-xl opacity-90 max-w-2xl">
-                  Our SEO experts can optimize your entire site for both traditional search engines and AI platforms to maximize your visibility.
+                  Our SEO experts can optimize your entire site for both traditional search engines and AI platforms to maximize your visibility and conversions.
                 </p>
               </div>
               <div className="md:w-1/3 md:text-right">
