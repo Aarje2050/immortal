@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://immortalseo.com'),
+  metadataBase: new URL('https://www.immortalseo.com'),
   alternates: {
     canonical: '/',
   },

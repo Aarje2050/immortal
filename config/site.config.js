@@ -6,7 +6,7 @@
 const siteConfig = {
   name: 'Immortal SEO',
   description: 'We at Immortal SEO Agency have been delivering white-hat SEO services since 2008, helping businesses generate quality leads and achieve sustainable organic growth.',
-  url: 'https://immortalseo.com',
+  url: 'https://www.immortalseo.com',
   ogImage: '/images/og-image.jpg',
   links: {
     // twitter: 'https://twitter.com/immortalseo',

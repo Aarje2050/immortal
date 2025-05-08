@@ -180,5 +180,6 @@ export interface ServicesData {
   [key: string]: ServiceData;
 }
 
+
 // Allowed values for changeFrequency in sitemap
 export type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';

@@ -30,6 +30,26 @@ const nextConfig = {
         destination: '/services/hubspot-seo-services',   // redirect to tools page
         permanent: true,              // 308 Permanent Redirect (good for SEO)
       },
+      {
+        source: '/about-us', // old url
+        destination: '/about',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+      {
+        source: '/service/ecommerce', // old url
+        destination: '/services/ecommerce-seo',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+      {
+        source: '/contact-us', // old url
+        destination: '/contact',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
+      {
+        source: '/service/lead-generation', // old url
+        destination: '/services/lead-generation-seo',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
     ];
   },
 };
