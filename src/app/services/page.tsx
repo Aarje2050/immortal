@@ -13,7 +13,7 @@ export const metadata: Metadata = ({
   },
   
   alternates: {
-    canonical :'https://immortalseo.com/servcies'
+    canonical :'https://www.immortalseo.com/services'
   }
 });
 

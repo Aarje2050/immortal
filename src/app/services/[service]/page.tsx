@@ -26,24 +26,49 @@ export async function generateStaticParams() {
 
 // Generate metadata for each service page
 export async function generateMetadata({
-  params,
+  params: paramsPromise,
 }: {
-  params: { service: string };
+  params: Promise<{ service: string }>;
 }): Promise<Metadata> {
-  const serviceData = await getServiceData(params.service);
+  // Wait for params to resolve
+  const params = await paramsPromise;
+  const service = params.service;
+  
+  // Get service data
+  const serviceData = await getServiceData(service);
   
   if (!serviceData) {
     return {
       title: 'Service Not Found',
+      alternates: {
+        canonical: 'https://www.immortalseo.com/services',
+      },
     };
   }
   
-  return generatePageMetadata({
+  // Define base URL
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
+  
+  // Generate canonical URL
+  const canonicalUrl = `${baseUrl}/services/${service}`;
+  
+  // Get base metadata and add canonical
+  const baseMetadata = generatePageMetadata({
     title: serviceData.metaTitle,
     description: serviceData.metaDescription,
   });
+  
+  return {
+    ...baseMetadata,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      ...(baseMetadata.openGraph || {}),
+      url: canonicalUrl,
+    },
+  };
 }
-
 async function getServiceData(slug: string) {
   try {
     const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
@@ -139,12 +164,20 @@ async function getRelatedServices(currentSlug: string, currentCategory: string) 
   return sameCategory;
 }
 
-export default async function ServiceDetailPage({ params }: { params: { service: string } }) {
-  const serviceData = await getServiceData(params.service);
+export default async function ServiceDetailPage({ params: paramsPromise }: { params: Promise<{ service: string }> }) {
+  // Wait for params to resolve
+  const params = await paramsPromise;
+  const service = params.service;
+  
+  const serviceData = await getServiceData(service);
   
   if (!serviceData) {
     notFound();
   }
+  
+  // Base URL for canonical and structured data
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
+  const canonicalUrl = `${baseUrl}/services/${service}`;
   
   // Generate structured data for rich snippets
   const structuredData = generateStructuredData({
@@ -156,6 +189,11 @@ export default async function ServiceDetailPage({ params }: { params: { service:
       url: 'https://immortalseo.com'
     }
   });
+
+  // Update structuredData with canonical URL
+  if (structuredData['@type'] === 'Service') {
+    structuredData.url = canonicalUrl;
+  }
   
   // Generate FAQ structured data
   const faqSchemaData = {

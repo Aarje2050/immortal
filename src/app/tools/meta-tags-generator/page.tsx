@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  alternates : {canonical : "https://www.immortalseo.com/tools/meta-tags-generator"}
 };
 
 export default function MetaTagsGeneratorPage() {

@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  alternates : {canonical : "https://www.immortalseo.com/tools/robots-txt-generator"}
+
 };
 
 export default function RobotsTxtGeneratorPage() {

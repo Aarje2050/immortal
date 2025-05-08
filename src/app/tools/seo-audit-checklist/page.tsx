@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free SEO Audit Checklist Tool | ImmortalSEO',
     description: 'Comprehensive SEO audit checklist for traditional search engines and AI platforms. Identify and fix technical, content, and semantic optimization issues.',
-    url: 'https://immortalseo.com/tools/seo-audit',
+    url: 'https://immortalseo.com/tools/seo-audit-checklist',
     siteName: 'ImmortalSEO',
     images: [
       {
@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  alternates : {canonical : "https://www.immortalseo.com/tools/seo-audit-checklist"}
+
 };
 
 export default function SEOAuditChecklistPage() {

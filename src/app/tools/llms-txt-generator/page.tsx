@@ -9,7 +9,9 @@ export const metadata: Metadata = {
     description: 'Create an LLMs.txt file to help AI models better understand and navigate your website content. Free tool by ImmortalSEO.',
     images: ['/images/og-llms-txt-generator.jpg'],
     type: 'website',
+     
   },
+  alternates : {canonical : "https://www.immortalseo.com/tools/llms-txt-generator"}
 };
 
 export default function LlmsTxtGeneratorPage() {

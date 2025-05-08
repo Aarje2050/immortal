@@ -20,6 +20,10 @@ export type MetadataParams = {
     name: string;
   };
   noIndex?: boolean;
+  alternates?: {
+    canonical?: string;
+    languages?: Record<string, string>;
+  };
 };
 
 /**
