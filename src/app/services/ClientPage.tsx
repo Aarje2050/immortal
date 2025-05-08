@@ -852,7 +852,7 @@ export default function ServicesPage() {
       </Section>
 
       {/* Industries Section */}
-      <Section background="light">
+      {/* <Section background="light">
         <Container>
           <div className="text-center mb-16">
             <span className="inline-block px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm font-medium mb-4">Industries We Serve</span>
@@ -866,7 +866,7 @@ export default function ServicesPage() {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {/* Industry Cards */}
-            {[
+            {/* {[
               { name: 'E-commerce', icon: '🛒', slug: 'ecommerce-seo' },
               { name: 'SaaS', icon: '💻', slug: 'saas-seo' },
               { name: 'Healthcare', icon: '🏥', slug: 'healthcare' },
@@ -881,8 +881,8 @@ export default function ServicesPage() {
               >
                 <div className="w-16 h-16 rounded-full bg-primary-main/10 flex items-center justify-center text-3xl mx-auto mb-4">
                   {industry.icon}
-                </div>
-                <h3 className="font-semibold group-hover:text-primary-main transition-colors">
+                </div> */}
+                {/* <h3 className="font-semibold group-hover:text-primary-main transition-colors">
                   {industry.name}
                 </h3>
                 <div className="mt-4 text-sm text-primary-main opacity-0 group-hover:opacity-100 transition-opacity flex justify-center items-center">
@@ -905,7 +905,7 @@ export default function ServicesPage() {
             </Button>
           </div>
         </Container>
-      </Section>
+      </Section> } */}
 
       {/* Enhanced CTA Section */}
       <Section background="primary">
