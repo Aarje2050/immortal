@@ -49,7 +49,7 @@ export async function generateMetadata(props: {
       images: featuredImage ? [{ url: featuredImage }] : undefined,
     },
     alternates: {
-      canonical: `https://immortalseo.com/blog/${slug}`,
+      canonical: `https://www.immortalseo.com/blog/${slug}`,
     }
   };
 }
