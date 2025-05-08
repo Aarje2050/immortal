@@ -2,7 +2,7 @@
 const site = require('./site.config');
 
 const seoConfig = {
-  titleTemplate: '%s | Immortal SEO',
+  titleTemplate: '%s',
   defaultTitle: 'Immortal SEO | Premium SEO Services for Sustainable Growth',
   defaultDescription: 'Boost your online visibility with Immortal SEO\'s data-driven strategies. We help businesses dominate search rankings and drive targeted traffic.',
   openGraph: {
