@@ -6,6 +6,9 @@ import BlogList from '@/components/blog/BlogList';
 export const metadata: Metadata = {
   title: 'Blog | ImmortalSEO',
   description: 'Discover the latest SEO strategies, tips, and insights from our experts at ImmortalSEO.',
+  alternates: {
+    canonical: 'https://www.immortalseo.com/blog', // Homepage canonical URL
+  },
 };
 
 export const revalidate = 3600; // Revalidate every hour

@@ -36,9 +36,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://www.immortalseo.com'),
-  alternates: {
-    canonical: '/',
-  },
+  
   openGraph: {
     ...seoConfig.openGraph,
     title: seoConfig.defaultTitle,

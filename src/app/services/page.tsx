@@ -3,13 +3,17 @@ import { Metadata } from 'next';
 import ClientPage from './ClientPage';
 import { generateMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = generateMetadata({
+export const metadata: Metadata = ({
   title: 'Expert SEO Services | Traditional & AI Search Optimization | ImmortalSEO',
   description: 'Comprehensive SEO services for both traditional search engines and AI platforms. Technical optimization, content strategy, off-page authority building, and industry-specific solutions.',
   openGraph: {
     title: 'SEO Services for 2025 & Beyond | ImmortalSEO',
     description: 'Dominate search results with our data-driven SEO services. From technical optimization to AI-enhanced content strategies, we deliver sustainable organic growth.',
     images: '/images/seo-services-immortalseo.jpg',
+  },
+  
+  alternates: {
+    canonical :'https://immortalseo.com/servcies'
   }
 });
 

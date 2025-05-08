@@ -4,7 +4,7 @@ import Layout from '@/components/layout/Layout';
 import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import BlogCard from '@/components/blog/BlogCard';
-// import Pagination from '@/components/ui/Pagination';
+import Pagination from '@/components/ui/Pagination';
 import { Post } from '@/lib/blog/wp-api';
 
 interface PaginationProps {
@@ -65,8 +65,8 @@ export default function BlogList({ posts, pagination }: BlogListProps) {
                 </div>
               )}
               
-              {/* Pagination */}
-              {/* {pagination.totalPages > 1 && (
+              {/* Pagination */} 
+               {pagination.totalPages > 1 && (
                 <div className="mt-12">
                   <Pagination
                     currentPage={pagination.currentPage}
@@ -74,7 +74,7 @@ export default function BlogList({ posts, pagination }: BlogListProps) {
                     basePath="/blog"
                   />
                 </div>
-              )} */}
+              )}
             </div>
             
             {/* Sidebar - Similar to your existing pages */}
