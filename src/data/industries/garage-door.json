@@ -1,0 +1,90 @@
+{
+  "name": "Garage Door Business SEO Services",
+  "slug": "garage-door-business",
+  "description": "Local SEO services tailored for garage door repair, installation, and maintenance businesses to dominate local search results and drive service calls.",
+  "keyPhrases": [
+    "garage door SEO",
+    "garage door repair marketing",
+    "garage door business SEO services",
+    "local SEO for garage door companies"
+  ],
+  "challenges": [
+    "High competition in local service areas",
+    "Generating qualified local leads",
+    "Ranking in Google Maps and local pack",
+    "Managing and optimizing customer reviews",
+    "Seasonal demand fluctuations",
+    "Content creation for niche services"
+  ],
+  "metaTitle": "Garage Door SEO Services | Local Marketing for Garage Door Companies",
+  "metaDescription": "Grow your garage door repair and installation business with targeted local SEO strategies. Rank in local search, get more service calls, and dominate your area.",
+  "headerImage": "/images/industries/garage-door-seo.jpg",
+  "sections": {
+    "intro": "Garage door companies face stiff competition in local markets, where visibility on Google Maps and local search results can make or break your business. Our Garage Door SEO Services help you get found by homeowners searching for installation, repair, and emergency services in your area.",
+    "painPoints": "Garage door service providers often struggle with low visibility in local searches, inconsistent online reviews, poor website optimization for mobile users, and lack of targeted service pages for high-intent local keywords like 'garage door repair near me' or 'emergency garage door service.'",
+    "approach": "We use a proven approach that combines local SEO, Google Business Profile optimization, high-converting service page creation, citation management, reputation enhancement, and technical improvements. Every aspect is tailored to help garage door businesses rank higher, get more calls, and convert visitors into paying customers."
+  },
+  "strategies": [
+    {
+      "name": "Google Business Profile Optimization",
+      "description": "We optimize and manage your Google Business Profile to boost visibility in Google Maps and the local pack for garage door-related keywords."
+    },
+    {
+      "name": "Local Service Page Creation",
+      "description": "We build optimized landing pages for each service (repair, installation, emergency) and each target location to capture local search intent."
+    },
+    {
+      "name": "Reputation & Review Management",
+      "description": "We implement systems to collect, manage, and respond to customer reviews, boosting trust and improving local rankings."
+    },
+    {
+      "name": "Technical SEO for Service Sites",
+      "description": "We audit and optimize your website’s speed, mobile responsiveness, structured data, and crawlability to maximize search engine performance."
+    },
+    {
+      "name": "Local Citation Building",
+      "description": "We create consistent business listings across top directories and niche platforms to improve local authority and trustworthiness."
+    }
+  ],
+  "statistics": {
+    "industryGrowth": "Garage door services are projected to grow 5.8% YoY through 2027",
+    "mobileUsage": "78% of local service searches come from mobile devices",
+    "conversionRate": "Calls from local searches convert 70% faster than generic website traffic",
+    "reviewInfluence": "87% of consumers read online reviews before choosing a local service provider"
+  },
+  "faq": [
+    {
+      "question": "How does SEO help my garage door business get more leads?",
+      "answer": "SEO helps your garage door business appear in front of people actively searching for services like repair or installation in your area. By ranking in local results and on Google Maps, you increase the chances of getting more service calls and inquiries."
+    },
+    {
+      "question": "How long does it take to see SEO results for a garage door business?",
+      "answer": "Most garage door companies start seeing local ranking and traffic improvements within 2-3 months. More competitive areas may take 4-6 months for significant gains, especially in the Maps pack."
+    },
+    {
+      "question": "Do you optimize for emergency garage door services?",
+      "answer": "Yes, we build and optimize dedicated emergency service pages to capture high-converting, time-sensitive searches like 'emergency garage door repair near me'."
+    }
+  ],
+  "caseStudies": [
+    {
+      "title": "Local Garage Door Company Doubles Leads",
+      "summary": "We helped a regional garage door repair business improve local rankings and double their monthly leads by optimizing their service pages and Google Business Profile.",
+      "results": [
+        "108% increase in monthly service calls",
+        "Top 3 ranking in local pack for 12+ target keywords",
+        "34% improvement in conversion rate from local traffic"
+      ]
+    },
+    {
+      "title": "Emergency Garage Door SEO Success",
+      "summary": "A client specializing in 24/7 emergency services saw a dramatic boost in mobile leads and after-hours calls through strategic local content and technical fixes.",
+      "results": [
+        "221% growth in mobile traffic",
+        "66% increase in after-hours inquiries",
+        "50% increase in Google Maps visibility"
+      ]
+    }
+  ],
+  "relatedServices": ["local-seo", "technical-seo", "conversion-optimization"]
+}

@@ -50,6 +50,11 @@ const nextConfig = {
         destination: '/services/lead-generation-seo',   // redirect to tools page
         permanent: true,              // 308 Permanent Redirect (good for SEO)
       },
+      {
+        source: '/business/garage-door-service-seo', // old url
+        destination: '/industries/garage-door-business',   // redirect to tools page
+        permanent: true,              // 308 Permanent Redirect (good for SEO)
+      },
     ];
   },
 };
