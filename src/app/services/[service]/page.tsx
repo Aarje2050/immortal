@@ -9,7 +9,17 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import JsonLd from '@/components/seo/JsonLd';
 import LeadCaptureForm from '@/components/forms/LeadCaptureForm';
-import { generateMetadata as generatePageMetadata, generateStructuredData } from '@/lib/metadata';
+import { 
+  generateMetadata as generatePageMetadata 
+} from '@/lib/metadata';
+import { 
+  getSchemaContext, 
+  generateWebPageSchema, 
+  generateServiceSchema, 
+  generateFAQPageSchema,
+  generateSchemaGraph,
+  BaseSchema
+} from '@/lib/schema';
 import fs from 'fs';
 import path from 'path';
 
@@ -179,42 +189,70 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
   const canonicalUrl = `${baseUrl}/services/${service}`;
   
-  // Generate structured data for rich snippets
-  const structuredData = generateStructuredData({
-    type: 'Service',
-    name: serviceData.name,
-    description: serviceData.longDescription,
-    provider: {
-      name: 'ImmortalSEO',
-      url: 'https://immortalseo.com'
-    }
-  });
+  // Get schema context
+const context = getSchemaContext();
 
-  // Update structuredData with canonical URL
-  if (structuredData['@type'] === 'Service') {
-    structuredData.url = canonicalUrl;
+// Generate WebPage schema
+const webPageSchema = generateWebPageSchema({
+  url: canonicalUrl,
+  title: serviceData.metaTitle || `${serviceData.name} | ImmortalSEO`,
+  description: serviceData.metaDescription || serviceData.shortDescription,
+  datePublished: serviceData.publishedDate || '2023-01-01T00:00:00Z',
+  dateModified: serviceData.updatedDate || new Date().toISOString(),
+  // Add breadcrumbs for semantic navigation
+  breadcrumbs: [
+    { name: 'Home', url: baseUrl },
+    { name: 'Services', url: `${baseUrl}/services` },
+    { name: serviceData.name, url: canonicalUrl },
+  ],
+});
+
+// Generate Service schema
+const serviceSchema = generateServiceSchema({
+  url: canonicalUrl,
+  name: serviceData.name,
+  description: serviceData.longDescription || serviceData.shortDescription,
+  serviceType: serviceData.category || 'SEO Service',
+  // Add service-specific details
+  offers: {
+    price: serviceData.price,
+    priceCurrency: 'USD',
+    description: `${serviceData.name} starting at ${serviceData.price || '$X,XXX'}`
   }
+});
+
+// Initialize schemas array with existing schemas
+const schemas : BaseSchema[] = [
+  context.organization,
+  context.website,
+  webPageSchema,
+  serviceSchema,
+];
+
+// Add FAQ schema if FAQs exist
+if (serviceData.faq && serviceData.faq.length > 0) {
+  // Transform data format for our generator function
+  const faqs = serviceData.faq.map((item: { question: string; answer: string }) => ({
+    question: item.question,
+    answer: item.answer
+  }));
   
-  // Generate FAQ structured data
-  const faqSchemaData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": serviceData.faq ? serviceData.faq.map((item: { question: string; answer: string }) => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    })) : []
-  };
+  schemas.push(generateFAQPageSchema(faqs));
+}
+
+// Add local business if available
+if (context.localBusiness) {
+  schemas.push(context.localBusiness);
+}
+
+// Create schema graph with all schemas
+const schemaGraph = generateSchemaGraph(schemas.filter(Boolean));
 
   const relatedServicesList = await getRelatedServices(params.service, serviceData.category);
 
   return (
     <Layout>
-      <JsonLd data={structuredData} />
-      <JsonLd data={faqSchemaData} />
+      <JsonLd data={schemaGraph} />
       
       {/* Hero Section with Centered Format */}
       <section className="relative bg-gradient-to-r from-primary-dark to-primary-main text-white overflow-hidden">
@@ -263,15 +301,15 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
             {/* Main Content Column - 8 columns on desktop */}
             <div className="lg:col-span-8">
               {/* Service Overview with Schema-Friendly Markup */}
-              <article itemScope itemType="https://schema.org/Service">
+              <article >
                 <div className="flex items-center mb-6">
                   <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary-main/10 text-primary-main flex items-center justify-center mr-4">
                     {getIconElement(serviceData.icon)}
                   </div>
-                  <h2 className="text-3xl font-bold" itemProp="name">{serviceData.name}</h2>
+                  <h2 className="text-3xl font-bold"  >{serviceData.name}</h2>
                 </div>
                 
-                <div className="prose max-w-none mb-8" itemProp="description">
+                <div className="prose max-w-none mb-8"  >
                   <p className="text-lg text-text-secondary">{serviceData.longDescription}</p>
                 </div>
 
@@ -353,18 +391,18 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                 {serviceData.faq && serviceData.faq.length > 0 && (
                   <section className="bg-white rounded-xl shadow-sm p-8">
                     <h3 className="text-2xl font-bold mb-6">Frequently Asked Questions</h3>
-                    <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
+                    <div className="space-y-4"  >
                       {serviceData.faq.map((item: { question: string; answer: string }, index: number) => (
-                        <div key={index} className="border border-gray-100 rounded-lg" itemScope itemType="https://schema.org/Question">
+                        <div key={index} className="border border-gray-100 rounded-lg" >
                           <details className="group">
                             <summary className="flex justify-between items-center p-4 cursor-pointer list-none">
-                              <h4 className="font-semibold text-lg" itemProp="name">{item.question}</h4>
+                              <h4 className="font-semibold text-lg"  >{item.question}</h4>
                               <svg className="w-5 h-5 text-primary-main transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             </summary>
-                            <div className="p-4 pt-0" itemScope itemType="https://schema.org/Answer" itemProp="acceptedAnswer">
-                              <p className="text-text-secondary" itemProp="text">{item.answer}</p>
+                            <div className="p-4 pt-0"    >
+                              <p className="text-text-secondary"  >{item.answer}</p>
                             </div>
                           </details>
                         </div>
