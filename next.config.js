@@ -52,7 +52,7 @@ const nextConfig = {
       },
       {
         source: '/business/garage-door-service-seo', // old url
-        destination: '/industries/garage-door-business',   // redirect to tools page
+        destination: '/industries/garage-door',   // redirect to tools page
         permanent: true,              // 308 Permanent Redirect (good for SEO)
       },
     ];

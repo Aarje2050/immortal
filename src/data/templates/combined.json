@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "intro": {
+      "template": "In the competitive {location} market, {industry} businesses need specialized SEO strategies to stand out. Immortal SEO combines industry-specific expertise with local market knowledge to deliver results-driven solutions for {location} {industry} businesses.",
+      "placeholders": ["location", "industry"]
+    },
+    "challenges": {
+      "template": "{industry} businesses in {location} face unique challenges including {industry_challenge1}, {industry_challenge2}, and adapting to {location}'s specific market conditions where {location_challenges}.",
+      "placeholders": [
+        "location",
+        "industry",
+        "industry_challenge1",
+        "industry_challenge2",
+        "location_challenges"
+      ]
+    },
+    "approach": {
+      "template": "We combine our deep understanding of {industry} best practices with local {location} market insights. {industry_approach} Additionally, we leverage our knowledge of the {location} market, where {location_solutions}.",
+      "placeholders": [
+        "location",
+        "industry",
+        "industry_approach",
+        "location_solutions"
+      ]
+    },
+    "cta": {
+      "template": "Ready to Dominate {industry} Search Results in {location}?",
+      "placeholders": ["location", "industry"]
+    },
+    "subheading": {
+      "template": "Our {industry} SEO Strategies for {location}",
+      "placeholders": ["location", "industry"]
+    },
+    "faq_heading": {
+      "template": "Frequently Asked Questions About {industry} SEO in {location}",
+      "placeholders": ["location", "industry"]
+    }
+  },
+  "defaultFAQs": [
+    {
+      "question_template": "How can SEO help my {industry} business in {location}?",
+      "answer_template": "Specialized SEO strategies can help your {industry} business in {location} attract more qualified leads, increase visibility in local search results, and outperform competitors. Our tailored approach accounts for {location}'s unique market characteristics and competitive landscape."
+    },
+    {
+      "question_template": "What makes {location} different for {industry} SEO?",
+      "answer_template": "{location} has specific search patterns and consumer behaviors that require specialized optimization. Our local {location} SEO experts understand these nuances and implement strategies that work specifically in this market."
+    }
+  ],
+  "seoTags": {
+    "title_template": "{industry} SEO Services in {location} | Immortal SEO",
+    "description_template": "Specialized {industry} SEO strategies for businesses in {location}. Increase visibility and grow your {industry} business with our industry-specific SEO services."
+  }
+}
