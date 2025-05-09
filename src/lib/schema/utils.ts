@@ -1,5 +1,5 @@
 // src/lib/schema/utils.ts
-import { BaseSchema } from '../../types/site';
+import { BaseSchema } from './types';
 
 /**
  * Adds an @id to a schema object
