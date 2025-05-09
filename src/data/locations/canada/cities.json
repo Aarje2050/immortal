@@ -105,6 +105,63 @@
       }
     ]
   },
+  "calgary": {
+    "name": "Calgary",
+    "province": "Alberta",
+    "country": "Canada",
+    "population": 1239000,
+    "keyIndustries": [
+      "energy",
+      "finance",
+      "technology",
+      "transportation",
+      "tourism"
+    ],
+    "localKeywords": [
+      "Calgary SEO",
+      "digital marketing Calgary",
+      "local SEO Calgary",
+      "SEO company in Calgary"
+    ],
+    "competitionLevel": "medium",
+    "metaTitle": "Calgary SEO Services | Local Digital Marketing Experts | Immortal SEO",
+    "metaDescription": "Boost your Calgary business visibility with expert SEO strategies. Immortal SEO delivers local digital marketing tailored for Alberta's thriving economy.",
+    "headerImage": "/images/locations/calgary.jpg",
+    "customContent": {
+      "intro": "Calgary is one of Canada’s fastest-growing economic hubs, combining traditional industries like energy with a booming tech and finance sector. With its entrepreneurial spirit and digitally connected population, businesses in Calgary need robust local SEO strategies to stand out. Immortal SEO delivers data-driven optimization to help Calgary companies compete in an increasingly digital landscape.",
+      "challenges": "Calgary's rapidly evolving market means businesses face strong local competition across diverse industries. Additionally, standing out in local search results across a large metro area with dispersed neighborhoods like Beltline, Inglewood, and Calgary NW can be difficult without precise geo-targeting and optimization.",
+      "solutions": "We build localized SEO strategies for Calgary businesses that prioritize neighborhood-level optimization, relevant keyword targeting, and high-performance on both desktop and mobile. From Google Maps visibility to industry-specific content and link-building, our strategies are tailored to Calgary’s competitive digital environment."
+    },
+    "localStatistics": {
+      "internetPenetration": 94.5,
+      "mobileUsage": 88.1,
+      "localSearches": "Very High",
+      "voiceSearchTrend": "Growing rapidly, especially among young professionals"
+    },
+    "faq": [
+      {
+        "question": "How do you improve local SEO rankings for Calgary businesses?",
+        "answer": "We focus on Google Business Profile optimization, hyper-local keyword targeting, structured data markup, and Calgary-specific content to boost visibility in local search and map results."
+      },
+      {
+        "question": "Do you work with Calgary businesses in specific industries?",
+        "answer": "Yes. We have experience working with businesses in Calgary’s major industries like energy, finance, tech startups, and service-based companies. Each industry gets a customized strategy tailored to its audience and competition."
+      },
+      {
+        "question": "How long does it take to see results from your Calgary SEO services?",
+        "answer": "Most Calgary clients start seeing measurable improvements within 3 to 6 months, depending on the competitiveness of the market and current SEO performance."
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Immortal SEO helped us rank on the first page for local keywords in less than four months. Our leads from Calgary have more than doubled since we started working together.",
+        "author": "Samantha K.",
+        "position": "Founder",
+        "company": "Calgary Legal Advisors"
+      }
+    ]
+  },
+
   "montreal": {
     "name": "Montreal",
     "province": "Quebec",
