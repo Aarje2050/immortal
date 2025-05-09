@@ -41,50 +41,11 @@ export default function BlogPost({ post }: BlogPostProps) {
   // Create the canonical URL for sharing
   const shareUrl = `https://www.immortalseo.com/blog/${post.slug}`;
 
-  const postSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title.rendered,
-    description: post.excerpt.rendered.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 160),
-    image: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || `https://immortalseo.com/images/blog-default.jpg`,
-    datePublished: post.date,
-    dateModified: post.modified,
-    author: {
-      '@type': 'Person',
-      name: author?.name || 'Immortal SEO Team',
-      url: author ? `https://immortalseo.com/blog/author/${author.name.toLowerCase().replace(/\s+/g, '-')}` : 'https://immortalseo.com/about'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Immortal SEO',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://immortalseo.com/images/logo.png'
-      }
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://immortalseo.com/blog/${post.slug}`
-    },
-    // Add topic/keywords based on categories and tags
-    keywords: [
-      ...categories.map(cat => cat.name),
-      ...tags.map(tag => tag.name)
-    ].join(', '),
-    articleSection: categories[0]?.name || 'SEO',
-    wordCount: words,
-    // Add potential video or audio content if embedded in the post
-    video: post.content.rendered.includes('video') ? {
-      '@type': 'VideoObject',
-      name: post.title.rendered,
-      thumbnailUrl: post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-    } : undefined
-  };
+  
   
   return (
     <Layout>
-      {/* Add JSON-LD Schema */}
-    <JsonLd data={postSchema} />
+      
       {/* Main Content */}
       <article className="blog-post">
         {/* Hero Section */}

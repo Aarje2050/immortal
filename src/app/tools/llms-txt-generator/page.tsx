@@ -59,7 +59,7 @@ export default function LlmsTxtGeneratorPage() {
       priceCurrency: 'USD',
       availability: 'https://schema.org/OnlineOnly',
     },
-    screenshot: `${baseUrl}/images/og-llms-txt-generator.jpg`,
+    screenshot: `${baseUrl}/images/tools/llms-txt-generator.jpg`,
     provider: context.organization,
   });
   
