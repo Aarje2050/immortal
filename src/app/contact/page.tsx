@@ -10,9 +10,18 @@ import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { SiteConfig, ServiceItem } from '@/types/site';
 import JsonLd from '@/components/seo/JsonLd';
 import ContactForm from '@/components/forms/ContactForm';
+import { 
+  getSchemaContext, 
+  generateWebPageSchema, 
+  generateSchemaGraph 
+} from '@/lib/schema';
 
 // Use type assertion for the site config
 const siteConfig = require('../../../config/site.config') as SiteConfig;
+
+// Define base URL for schema references
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
+const pageUrl = `${baseUrl}/contact`;
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Contact Us | Immortal SEO',
@@ -20,24 +29,95 @@ export const metadata: Metadata = generatePageMetadata({
 });
 
 export default function ContactPage() {
-  // Generate structured data for the contact page
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "name": "Contact Immortal SEO",
-    "description": "Get in touch with our SEO experts",
-    "url": "https://immortalseo.com/contact",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": siteConfig.contact.phone,
-      "contactType": "customer service",
-      "email": siteConfig.contact.email
+  // Get schema context with organization and website info
+  const context = getSchemaContext();
+  
+  // Generate WebPage schema
+  const webPageSchema = generateWebPageSchema({
+    url: pageUrl,
+    title: 'Contact Us | Immortal SEO',
+    description: 'Get in touch with our SEO experts to discuss how we can help your business achieve sustainable growth through data-driven search strategies.',
+    breadcrumbs: [
+      { name: 'Home', url: baseUrl },
+      { name: 'Contact', url: pageUrl },
+    ],
+  });
+  
+  // Generate ContactPage schema
+  const contactPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${pageUrl}#contactpage`,
+    'name': 'Contact Immortal SEO',
+    'description': 'Get in touch with our SEO experts',
+    'url': pageUrl,
+    'mainEntity': {
+      '@type': 'Organization',
+      '@id': `${baseUrl}/#organization`,
     }
   };
+  
+  // Generate Place schema with more detail
+  const placeSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    '@id': `${pageUrl}#place`,
+    'name': `${siteConfig.name} Office`,
+    'address': {
+      '@type': 'PostalAddress',
+      'streetAddress': siteConfig.contact.address.street,
+      'addressLocality': siteConfig.contact.address.city,
+      'addressRegion': siteConfig.contact.address.state,
+      'postalCode': siteConfig.contact.address.zip,
+      'addressCountry': siteConfig.contact.address.country,
+    },
+    'geo': {
+      '@type': 'GeoCoordinates',
+      'latitude': 24.88, // Replace with actual coordinates for your office
+      'longitude': 74.61, // Replace with actual coordinates for your office
+    },
+    'telephone': siteConfig.contact.phone,
+    'openingHoursSpecification': [
+      {
+        '@type': 'OpeningHoursSpecification',
+        'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        'opens': '09:00',
+        'closes': '18:00',
+      }
+    ]
+  };
+  
+  // Enhance Contact Point schema
+  const contactPointSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPoint',
+    '@id': `${pageUrl}#contactpoint`,
+    'telephone': siteConfig.contact.phone,
+    'email': siteConfig.contact.email,
+    'contactType': 'customer service',
+    'availableLanguage': ['English'],
+    'areaServed': ['US', 'CA', 'IN'], // Countries served
+    'hoursAvailable': {
+      '@type': 'OpeningHoursSpecification',
+      'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday'],
+      'opens': '09:00',
+      'closes': '18:00',
+    }
+  };
+  
+  // Create schema graph with all schemas
+  const schemaGraph = generateSchemaGraph([
+    context.organization,
+    context.website,
+    webPageSchema,
+    contactPageSchema,
+    placeSchema,
+    contactPointSchema
+  ].filter(Boolean));
 
   return (
     <Layout>
-      <JsonLd data={structuredData} />
+      <JsonLd data={schemaGraph} />
       
       {/* Hero Section with Gradient Background - CENTERED like services page */}
       <section className="relative bg-gradient-to-r from-primary-dark to-primary-main text-white overflow-hidden">

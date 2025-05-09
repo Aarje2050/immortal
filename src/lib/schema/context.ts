@@ -93,16 +93,16 @@ export function getSchemaContext(): SchemaContext {
       geo: {
         '@context': 'https://schema.org',
         '@type': 'GeoCoordinates',
-        latitude: 43.6452, // You should replace this with actual coordinates
-        longitude: -79.3806,
+        latitude: 24.88, // You should replace this with actual coordinates
+        longitude: 74.61,
       },
       openingHoursSpecification: [
         {
           '@context': 'https://schema.org',
           '@type': 'OpeningHoursSpecification',
-          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
           opens: '09:00',
-          closes: '17:00',
+          closes: '18:00',
         },
       ],
     };
