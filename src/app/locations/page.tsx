@@ -75,7 +75,7 @@ export default async function LocationsPage() {
             Don't See Your Location?
           </h2>
           <p className="text-lg text-text-secondary max-w-2xl mx-auto mb-8">
-            We serve businesses across North America. Contact us to learn how we can help with your specific location.
+            We serve businesses worldwide. Contact us to learn how we can help with your specific location.
           </p>
           <Button href="/contact" size="lg">
             Contact Us

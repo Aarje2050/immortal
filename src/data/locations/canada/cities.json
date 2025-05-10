@@ -385,5 +385,63 @@
         "company": "Prairie Logistics"
       }
     ]
+  },
+  "ontario": {
+    "name": "Ontario",
+    "province": "Ontario",
+    "country": "Canada",
+    "population": 15000000,
+    "keyIndustries": [
+      "finance",
+      "manufacturing",
+      "technology",
+      "healthcare",
+      "education",
+      "agriculture",
+      "tourism"
+    ],
+    "localKeywords": [
+      "Ontario SEO agency",
+      "digital marketing Ontario",
+      "Ontario web design",
+      "SEO services Ontario"
+    ],
+    "competitionLevel": "very high",
+    "metaTitle": "Ontario SEO Services | Get Found Across the Province | Immortal SEO",
+    "metaDescription": "Immortal SEO helps Ontario businesses dominate local and provincial search results with proven SEO strategies customized to your industry and city.",
+    "headerImage": "/images/locations/ontario.jpg",
+    "customContent": {
+      "intro": "Ontario is Canada’s economic powerhouse, home to major cities like Toronto, Ottawa, and Hamilton. With its diverse economy and highly competitive digital space, ranking on search engines in Ontario requires advanced, localized SEO strategies.",
+      "challenges": "Businesses in Ontario face stiff competition across urban and suburban markets. The province's vast geographic and demographic diversity demands tailored messaging for both English and French-speaking regions. SEO efforts must also navigate differences between city-focused and rural consumer behaviors.",
+      "solutions": "Immortal SEO builds scalable strategies for Ontario-based businesses. Whether you serve the Greater Toronto Area or rural communities, our local SEO campaigns are customized by city, language, and industry to maximize discoverability and growth."
+    },
+    "localStatistics": {
+      "internetPenetration": 94.8,
+      "mobileUsage": 88.1,
+      "localSearches": "Extremely High",
+      "voiceSearchTrend": "Rapidly increasing"
+    },
+    "faq": [
+      {
+        "question": "Do you offer SEO for businesses outside of Toronto?",
+        "answer": "Yes, we serve clients across Ontario—from major cities like Ottawa and Mississauga to smaller towns. Each campaign is customized for your local audience."
+      },
+      {
+        "question": "Can you manage multi-location SEO for Ontario businesses?",
+        "answer": "Absolutely. We specialize in multi-location SEO strategies that improve visibility across different cities and regions within Ontario."
+      },
+      {
+        "question": "Is SEO different across Ontario's urban and rural areas?",
+        "answer": "Yes, search intent and competition vary by location. We tailor strategies based on local demographics, competition level, and user behavior."
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Immortal SEO helped us expand across multiple Ontario cities. Our local search rankings improved drastically and brought in a consistent stream of leads.",
+        "author": "Alicia M.",
+        "position": "Operations Manager",
+        "company": "GreenTech Ontario"
+      }
+    ]
   }
 }
