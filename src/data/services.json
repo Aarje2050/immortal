@@ -795,9 +795,108 @@
         "description": "A cable connector manufacturer saw a 327% increase in organic traffic through our HubSpot SEO strategies.",
         "results": [
           "327% increase in organic traffic",
-          "Significant improvement in keyword rankings",
-          "Enhanced lead generation and conversion rates"
+          "156% growth in qualified leads",
+          "42% increase in conversion rate"
         ]
+      }
+    ],
+    "price": "$1,500/month",
+    "displaySections": {
+      "supplementaryContent": true,
+      "serviceExamples": true,
+      "comparison": true,
+      "resources": true,
+      "testimonials": true
+    },
+    "supplementaryContent": {
+      "importance": "HubSpot offers powerful CMS capabilities, but without proper SEO optimization, your HubSpot website won't reach its full potential in search engine rankings. While HubSpot provides basic SEO tools, professional optimization requires deeper expertise.",
+      "challenges": [
+        {
+          "title": "Template Limitations",
+          "description": "Default templates may not be fully optimized for search engines"
+        },
+        {
+          "title": "Technical Constraints",
+          "description": "Some advanced SEO implementations require custom development"
+        },
+        {
+          "title": "Content Strategy Gaps",
+          "description": "Basic tools don't provide comprehensive keyword and content planning"
+        },
+        {
+          "title": "Schema Implementation",
+          "description": "Advanced structured data often requires custom coding"
+        },
+        {
+          "title": "Integration Complexity",
+          "description": "Connecting HubSpot with other marketing tools needs expert setup"
+        }
+      ],
+      "differences": "Optimizing a HubSpot website requires understanding both HubSpot's unique architecture and SEO best practices. Our specialists bring expertise in both areas, helping you unlock HubSpot's full potential while avoiding common optimization pitfalls."
+    },
+    "serviceExamples": [
+      {
+        "category": "Technical HubSpot Optimization",
+        "items": [
+          "HubSpot template optimization for speed and SEO",
+          "Advanced schema markup implementation",
+          "URL structure optimization and redirects",
+          "Mobile optimization and Core Web Vitals"
+        ]
+      },
+      {
+        "category": "Content & On-Page SEO",
+        "items": [
+          "HubSpot blog strategy and optimization",
+          "Landing page keyword optimization",
+          "Title and meta description optimization",
+          "Internal linking structure improvements"
+        ]
+      },
+      {
+        "category": "HubSpot Analytics & Reporting",
+        "items": [
+          "Custom SEO dashboard creation",
+          "Google Analytics integration",
+          "Conversion tracking setup",
+          "Regular performance reporting"
+        ]
+      },
+      {
+        "category": "HubSpot Integration & Strategy",
+        "items": [
+          "SEO and marketing automation alignment",
+          "Lead nurturing workflow optimization",
+          "CRM and sales integration",
+          "Multi-channel marketing strategy"
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "title": "Ultimate Guide to HubSpot SEO in 2024",
+        "description": "Learn how to maximize your HubSpot website's search engine visibility with our comprehensive guide.",
+        "url": "/blog/ultimate-guide-to-hubspot-seo",
+        "icon": "DocumentIcon"
+      },
+      {
+        "title": "HubSpot SEO vs WordPress SEO: Which Is Better?",
+        "description": "Compare the SEO capabilities of HubSpot and WordPress to determine which platform better suits your business needs.",
+        "url": "/blog/hubspot-seo-vs-wordpress-seo",
+        "icon": "LanguageIcon"
+      },
+      {
+        "title": "10 HubSpot SEO Tips Every Marketer Should Know",
+        "description": "Discover practical tips and strategies to improve your HubSpot website's search visibility and lead generation.",
+        "url": "/blog/hubspot-seo-tips",
+        "icon": "MicrophoneIcon"
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "ImmortalSEO's HubSpot optimization transformed our online presence. Their team understands both SEO and the HubSpot platform, delivering results we couldn't achieve on our own. Our organic traffic increased by 156% within 4 months.",
+        "author": "Sarah Thompson",
+        "position": "Marketing Director, SaaS Company"
       }
     ]
   },

@@ -5,6 +5,7 @@ export interface BaseSchema {
     '@context': string;
     '@type': string;
     '@id'?: string;
+    [key: string]: any; 
   }
   
   // Organization schema
@@ -183,3 +184,62 @@ export interface BaseSchema {
     website: WebSiteSchema;
     localBusiness?: LocalBusinessSchema;
   }
+
+  // Review/Testimonial schema
+export interface ReviewSchema extends BaseSchema {
+  author: PersonSchema;
+  reviewBody: string;
+  datePublished: string;
+  itemReviewed: ProductSchema | ServiceSchema | OrganizationSchema;
+  reviewRating?: {
+    '@type': string;
+    ratingValue: number;
+    bestRating?: number;
+    worstRating?: number;
+  };
+}
+
+// HowTo schema
+export interface HowToSchema extends BaseSchema {
+  name: string;
+  description: string;
+  step: HowToStepSchema[];
+  totalTime?: string;
+  image?: ImageSchema;
+}
+
+// HowToStep schema
+export interface HowToStepSchema extends BaseSchema {
+  position: number;
+  name: string;
+  text: string;
+  image?: ImageSchema;
+}
+
+// Course schema
+export interface CourseSchema extends BaseSchema {
+  name: string;
+  description: string;
+  provider: OrganizationSchema;
+  url: string;
+  courseCode?: string;
+  coursePrerequisites?: string | string[];
+  educationalLevel?: string;
+  learningResourceType?: string;
+  hasCourseInstance?: CourseInstanceSchema[];
+}
+
+// CourseInstance schema
+export interface CourseInstanceSchema extends BaseSchema {
+  name: string;
+  startDate: string;
+  endDate: string;
+  location?: PlaceSchema;
+}
+
+// Place schema
+export interface PlaceSchema extends BaseSchema {
+  name: string;
+  address?: PostalAddressSchema;
+  geo?: GeoSchema;
+}

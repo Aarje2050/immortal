@@ -121,73 +121,106 @@ import {
     return addId(schema, url);
   }
   
-  /**
+ /**
  * Generates Service schema
  */
 export function generateServiceSchema({
-    url,
+  url,
+  name,
+  description,
+  serviceType,
+  areaServed,
+  offers,
+  provider,
+  sameAs,
+}: {
+  url: string;
+  name: string;
+  description?: string;
+  serviceType?: string;
+  areaServed?: string | { name: string; geo?: { latitude: number; longitude: number } };
+  offers?: { 
+    price?: string | number; // Accept both string and number
+    priceCurrency?: string; 
+    description?: string;
+  };
+  provider?: {
+    '@type': string;
+    name: string;
+    url: string;
+  };
+  sameAs?: string[];
+}): any {
+  const context = getSchemaContext();
+  
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
     name,
     description,
-    serviceType,
-    areaServed,
-    offers,
-  }: {
-    url: string;
-    name: string;
-    description?: string;
-    serviceType?: string;
-    areaServed?: string | { name: string; geo?: { latitude: number; longitude: number } };
-    offers?: { price?: number; priceCurrency?: string; description?: string };
-  }): ServiceSchema {
-    const context = getSchemaContext();
-    
-    const schema: ServiceSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'Service',
-      name,
-      description,
-      provider: context.organization,
-      serviceType: serviceType || name,
-    };
-  
-    // Handle areaServed properly
-    if (areaServed) {
-      if (typeof areaServed === 'string') {
-        schema.areaServed = areaServed;
-      } else {
-        // Create a PlaceSchema object with the correct structure
-        const placeSchema: any = {
+    provider: provider || context.organization,
+    serviceType: serviceType || name,
+  };
+
+  // Handle areaServed properly
+  if (areaServed) {
+    if (typeof areaServed === 'string') {
+      schema.areaServed = areaServed;
+    } else {
+      // Create a PlaceSchema object with the correct structure
+      const placeSchema: any = {
+        '@context': 'https://schema.org',
+        '@type': 'Place',
+        name: areaServed.name,
+      };
+      
+      // Add geo coordinates if provided
+      if (areaServed.geo) {
+        placeSchema.geo = {
           '@context': 'https://schema.org',
-          '@type': 'Place',
-          name: areaServed.name,
+          '@type': 'GeoCoordinates',
+          latitude: areaServed.geo.latitude,
+          longitude: areaServed.geo.longitude,
         };
-        
-        // Add geo coordinates if provided
-        if (areaServed.geo) {
-          placeSchema.geo = {
-            '@context': 'https://schema.org',
-            '@type': 'GeoCoordinates',
-            latitude: areaServed.geo.latitude,
-            longitude: areaServed.geo.longitude,
-          };
+      }
+      
+      schema.areaServed = placeSchema;
+    }
+  }
+
+  // Handle offers if provided
+  if (offers) {
+    // Parse price to number if it's a string
+    let numericPrice: number | undefined = undefined;
+    
+    if (offers.price !== undefined) {
+      if (typeof offers.price === 'string') {
+        // Extract numeric part from string (e.g., "$1,500/month" -> 1500)
+        const matches = offers.price.match(/[\d,.]+/);
+        if (matches && matches.length > 0) {
+          numericPrice = parseFloat(matches[0].replace(/,/g, ''));
         }
-        
-        schema.areaServed = placeSchema;
+      } else {
+        numericPrice = offers.price;
       }
     }
-  
-    // Handle offers if provided
-    if (offers) {
-      schema.offers = {
-        '@context': 'https://schema.org',
-        '@type': 'Offer',
-        price: offers.price,
-        priceCurrency: offers.priceCurrency,
-      };
-    }
-  
-    return addId(schema, url);
+    
+    schema.offers = {
+      '@context': 'https://schema.org',
+      '@type': 'Offer',
+      ...(numericPrice !== undefined && { price: numericPrice }),
+      priceCurrency: offers.priceCurrency || 'USD',
+      ...(offers.description && { description: offers.description }),
+    };
   }
+
+  // Add sameAs if provided
+  if (sameAs && sameAs.length > 0) {
+    schema.sameAs = sameAs;
+  }
+
+  return addId(schema, url);
+}
   /**
    * Generates BreadcrumbList schema
    */
@@ -333,6 +366,232 @@ export function generateServiceSchema({
   
     return schema;
   }
+
+
+/**
+ * Generates TableOfContents schema (as ItemList)
+ */
+export function generateTableOfContentsSchema({
+  name,
+  itemListElement,
+}: {
+  name: string;
+  itemListElement: Array<{ position: number; name: string; url: string }>;
+}): any {
+  // Use 'any' here or create a specific interface
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    itemListElement: itemListElement.map(item => ({
+      '@context': 'https://schema.org',
+      '@type': 'ListItem',
+      position: item.position,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+/**
+ * Generates Testimonial/Review schema
+ */
+export function generateTestimonialSchema({
+  author,
+  reviewBody,
+  datePublished,
+  itemReviewed,
+}: {
+  author: string;
+  reviewBody: string;
+  datePublished: string;
+  itemReviewed: {
+    '@type': string;
+    name: string;
+  };
+}): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    author: {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: author,
+    },
+    reviewBody,
+    datePublished,
+    itemReviewed: {
+      '@context': 'https://schema.org',
+      ...itemReviewed,
+    },
+  };
+}
+
+/**
+ * Generates Comparison schema (as ItemList)
+ */
+export function generateComparisonSchema({
+  name,
+  itemListElement,
+}: {
+  name: string;
+  itemListElement: Array<{ 
+    position: number; 
+    name: string; 
+    description: string;
+    url?: string;
+  }>;
+}): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    itemListElement: itemListElement.map(item => ({
+      '@context': 'https://schema.org',
+      '@type': 'ListItem',
+      position: item.position,
+      name: item.name,
+      description: item.description,
+      ...(item.url && { url: item.url }),
+    })),
+  };
+}
+
+/**
+ * Generates HowTo schema for step-by-step processes
+ */
+export function generateHowToSchema({
+  name,
+  description,
+  steps,
+  totalTime,
+  image,
+}: {
+  name: string;
+  description: string;
+  steps: Array<{ name: string; text: string; image?: string }>;
+  totalTime?: string; // ISO 8601 duration format, e.g., "PT2H30M"
+  image?: string;
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((step, index) => ({
+      '@context': 'https://schema.org',
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.image && {
+        image: {
+          '@context': 'https://schema.org',
+          '@type': 'ImageObject',
+          url: step.image,
+        },
+      }),
+    })),
+  };
+
+  if (totalTime) {
+    schema.totalTime = totalTime;
+  }
+
+  if (image) {
+    schema.image = {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      url: image,
+    };
+  }
+
+  return schema;
+}
+
+/**
+ * Generates CourseSchema for educational content
+ */
+export function generateCourseSchema({
+  name,
+  description,
+  provider,
+  url,
+  courseCode,
+  coursePrerequisites,
+  educationalLevel,
+  learningResourceType,
+  hasCourseInstance,
+}: {
+  name: string;
+  description: string;
+  provider: {
+    name: string;
+    url?: string;
+  };
+  url: string;
+  courseCode?: string;
+  coursePrerequisites?: string | string[];
+  educationalLevel?: string;
+  learningResourceType?: string;
+  hasCourseInstance?: Array<{
+    name: string;
+    startDate: string;
+    endDate: string;
+    location?: string;
+  }>;
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name,
+    description,
+    provider: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: provider.name,
+      ...(provider.url && { url: provider.url }),
+    },
+    url,
+  };
+
+  if (courseCode) {
+    schema.courseCode = courseCode;
+  }
+
+  if (coursePrerequisites) {
+    schema.coursePrerequisites = coursePrerequisites;
+  }
+
+  if (educationalLevel) {
+    schema.educationalLevel = educationalLevel;
+  }
+
+  if (learningResourceType) {
+    schema.learningResourceType = learningResourceType;
+  }
+
+  if (hasCourseInstance && hasCourseInstance.length > 0) {
+    schema.hasCourseInstance = hasCourseInstance.map(instance => ({
+      '@context': 'https://schema.org',
+      '@type': 'CourseInstance',
+      name: instance.name,
+      startDate: instance.startDate,
+      endDate: instance.endDate,
+      ...(instance.location && {
+        location: {
+          '@context': 'https://schema.org',
+          '@type': 'Place',
+          name: instance.location,
+        },
+      }),
+    }));
+  }
+
+  return schema;
+}
+
+  
   
   /**
    * Combines multiple schema objects into a graph
