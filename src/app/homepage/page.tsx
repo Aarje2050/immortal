@@ -253,51 +253,22 @@ const HomePage: React.FC = () => {
                 <div className="absolute -top-6 -left-6 w-32 h-32 bg-yellow-300 rounded-full opacity-20 blur-2xl"></div>
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-400 rounded-full opacity-20 blur-3xl"></div>
 
-                {/* Main card */}
-                <div className="bg-white rounded-xl shadow-2xl p-6 relative z-10">
-                  <div className="h-72 bg-gradient-to-br from-background-paper to-background-accent rounded-lg flex items-center justify-center mb-4">
-                    {/* Placeholder for dashboard/analytics image */}
-                    <div className="text-center text-text-secondary">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-16 w-16 mx-auto mb-2 text-primary-main"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                        />
-                      </svg>
-                      <p className="text-sm font-medium">
-                        SEO Analytics Dashboard
-                      </p>
-                    </div>
-                  </div>
+                {/* Main card – Image only Hero Section */}
+<div className="bg-white rounded-xl shadow-2xl p-2 sm:p-4 md:p-6 relative z-10">
+  <div className="bg-gradient-to-br from-background-paper to-background-accent rounded-lg overflow-hidden">
+    <Image
+      src="/images/homepage/immortalseo.webp"
+      alt="Immortal SEO Dashboard – Advanced SEO Analytics View"
+      width={1200}
+      height={675}
+      priority
+      quality={90}
+      sizes="(max-width: 768px) 100vw, 1200px"
+      className="w-full h-auto object-cover"
+    />
+  </div>
+</div>
 
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-background-paper p-3 rounded-lg">
-                      <p className="text-sm text-text-secondary">
-                        Avg. Traffic Increase
-                      </p>
-                      <p className="text-2xl font-bold text-primary-main">
-                        +187%
-                      </p>
-                    </div>
-                    <div className="bg-background-paper p-3 rounded-lg">
-                      <p className="text-sm text-text-secondary">
-                        Keyword Rankings
-                      </p>
-                      <p className="text-2xl font-bold text-primary-main">
-                        Top 10
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
