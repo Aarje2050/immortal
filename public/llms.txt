@@ -1,0 +1,73 @@
+# Immortal SEO
+
+> Transform your online visibility with AI‑enhanced SEO services since 2008—combining technical mastery, semantic structuring, and AI‑ready content strategies to drive sustainable organic growth across Google, ChatGPT, Perplexity, and beyond.
+
+Immortal SEO is a data-driven agency with over 15 years of experience, boasting a 94% client retention rate and tailored strategies for businesses of all sizes across traditional and emerging AI search environments.
+
+## Quick Links
+
+* [Home](https://immortalseo.com/): Landing page overview of AI-enhanced SEO services and methodology  
+* [About Us](https://immortalseo.com/about): Company history, team, mission, and certifications since 2008  
+* [Services](https://immortalseo.com/services): Comprehensive SEO offerings for both traditional and AI-driven search  
+* [Tools](https://immortalseo.com/tools): Free SEO and AI optimization tools to support your strategy  
+* [Case Studies](https://immortalseo.com/case-studies): Real-world success stories showcasing transformative SEO results  
+* [Blog](https://immortalseo.com/blog): SEO insights, guides, and industry updates from our expert team  
+* [Pricing](https://immortalseo.com/pricing): Transparent, competition-based SEO investment plans starting at $2,000/month  
+* [Free SEO Audit](https://immortalseo.com/contact): Get a complimentary SEO analysis worth $1,500  
+
+## Services
+
+* [Technical SEO & Site Architecture](https://immortalseo.com/services/technical-seo): Optimize crawlability, indexation, site speed, mobile friendliness, and structured data  
+* [Content SEO & Topic Authority](https://immortalseo.com/services/content-seo): Develop topic clusters and E‑E‑A‑T optimized content to establish subject‑matter authority  
+* [Off-Page SEO & Authority Building](https://immortalseo.com/services/off-page-seo): Execute high-quality backlink acquisition, digital PR, and brand signal development  
+* [Local SEO & Google Business Optimization](https://immortalseo.com/services/local-seo): Enhance local search visibility, citations, and review management  
+* [AI-Enhanced SEO](https://immortalseo.com/services/ai-enhanced-seo): Dual-optimize for traditional SERPs and AI platforms like ChatGPT and SGE  
+* [Semantic SEO & NLP Structuring](https://immortalseo.com/services/semantic-seo): Structure content around entities and semantic relationships for knowledge graph alignment  
+* [E-commerce SEO](https://immortalseo.com/services/ecommerce-seo): Optimize product catalogs, implement schemas, and boost shopping feed performance  
+* [SaaS & B2B SEO Services](https://immortalseo.com/services/saas-seo): Generate qualified leads with persona mapping and conversion-focused funnels  
+* [Small Business SEO Services](https://immortalseo.com/services/small-business-seo): Affordable, high-impact SEO tailored for growing businesses  
+* [Enterprise SEO & Large Site Optimization](https://immortalseo.com/services/enterprise-seo): Scalable frameworks for multi-million-page sites and global brands  
+
+## Tools
+
+* [SEO Cost Calculator](https://immortalseo.com/tools/seo-cost-calculator): Estimate your SEO investment based on industry, website size, and goals  
+* [LLMs.txt Generator](https://immortalseo.com/tools/llmstxt-generator): Auto-generate LLM-friendly Markdown context files for your site  
+* [Robots.txt Generator](https://immortalseo.com/tools/robots-txt-generator): Create customized robots.txt files to guide crawlers  
+* [Schema Markup Generator](https://immortalseo.com/tools/schema-generator): Generate JSON-LD structured data for enhanced snippet visibility  
+* [Meta Tags Generator](https://immortalseo.com/tools/meta-tags-generator): Craft optimized title tags and meta descriptions  
+* [SEO Audit Checklist](https://immortalseo.com/tools/seo-audit-checklist): Comprehensive audit framework to identify SEO issues  
+
+## Case Studies
+
+* [OMGS.in – 270% Organic Traffic Growth](https://immortalseo.com/case-studies/omgs-in): AI-enhanced SEO strategy that delivered 270% growth in 6 months  
+* [Zencoder.ai – 320% Growth in Organic Leads](https://immortalseo.com/case-studies/zencoder-ai): AI-ready content structure achieving top rankings and lead growth  
+* [MillionCases.com – 340% Global Traffic Increase](https://immortalseo.com/case-studies/millioncases-com): Multi-platform SEO strategy for international expansion  
+* [Confidential CBD Brand – 195% Traffic Growth](https://immortalseo.com/case-studies/cbd-brand): Authority-building SEO within regulatory constraints  
+* [ChittorPolyFab.com – 180% Lead Growth](https://immortalseo.com/case-studies/chittorpolyfab-com): B2B SEO for manufacturing niche  
+
+## Blog
+
+* [Top 7 AI SEO Tools Every Small Business in Canada Should Know About](https://immortalseo.com/blog/top-7-ai-seo-tools-every-small-business-in-canada-should-know-about): Actionable tool recommendations and use cases (May 9, 2025)  
+* [Local SEO in Canada: How to Rank Your Business in Toronto, Calgary, Vancouver & More](https://immortalseo.com/blog/local-seo-in-canada-how-to-rank-your-business-in-toronto-calgary-vancouver-more): Strategies for dominating local markets (May 8, 2025)  
+* [Why AI SEO Isn’t About Keywords Anymore – It’s About Intent & Entities](https://immortalseo.com/blog/why-ai-seo-isnt-about-keywords-anymore-its-about-intent-entities): Shifting focus in modern SEO (May 6, 2025)  
+
+## Pricing
+
+* [Local Domination Plan – Starting at $2,000/mo](https://immortalseo.com/pricing#local-domination): Coverage for regional businesses with foundational and AI features  
+* [National Authority Plan – Starting at $4,000/mo](https://immortalseo.com/pricing#national-authority): Advanced strategies for competitive markets  
+* [Enterprise & Custom Strategies](https://immortalseo.com/pricing#enterprise-high-competition): Tailored solutions for ultra-competitive and multi-location enterprises  
+
+## Company
+
+* [About Us](https://immortalseo.com/about): Mission, team members, certifications, and company evolution since 2008  
+* [Meet the Team](https://immortalseo.com/about#team): Profiles of co-founders Rajesh Jat and Manish Lamrod  
+
+## Contact
+
+* [Get in Touch](https://immortalseo.com/contact): Free SEO audit, consultation forms, email, phone, and office visit details  
+
+## Policies
+
+* [Privacy Policy](https://immortalseo.com/privacy-policy): Data usage and user privacy details  
+* [Terms of Service](https://immortalseo.com/terms-of-service): Service agreements and legal terms  
+* [Sitemap](https://immortalseo.com/sitemap): XML sitemap of indexable pages  
