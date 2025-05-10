@@ -217,5 +217,173 @@
         "company": "Solutions Technologiques Montréal"
       }
     ]
+  },
+  "ottawa": {
+    "name": "Ottawa",
+    "province": "Ontario",
+    "country": "Canada",
+    "population": 1010000,
+    "keyIndustries": [
+      "government",
+      "technology",
+      "education",
+      "healthcare",
+      "tourism"
+    ],
+    "localKeywords": [
+      "Ottawa SEO agency",
+      "digital marketing Ottawa",
+      "Ottawa web design",
+      "SEO services Ottawa"
+    ],
+    "competitionLevel": "medium",
+    "metaTitle": "Ottawa SEO Services | Boost Your Digital Visibility | Immortal SEO",
+    "metaDescription": "Grow your Ottawa-based business with our strategic SEO services. Immortal SEO delivers results-driven solutions tailored for the nation's capital.",
+    "headerImage": "/images/locations/ottawa.jpg",
+    "customContent": {
+      "intro": "As Canada's capital city, Ottawa is home to a mix of government, tech, and educational institutions. This unique blend demands a nuanced SEO strategy to engage diverse local audiences and high-trust sectors. Immortal SEO empowers Ottawa businesses with ethical, strategic SEO designed for long-term visibility.",
+      "challenges": "Ottawa's business scene is shaped by government-related competition, bilingual language requirements, and a growing but specialized tech sector. Businesses must navigate strict regulatory environments and localized content expectations in both English and French.",
+      "solutions": "Our Ottawa SEO strategies focus on authority building, compliance-friendly content, and multilingual optimization. We help you gain visibility through trusted government and educational networks, and local-focused keyword strategies to stand out in this unique marketplace."
+    },
+    "localStatistics": {
+      "internetPenetration": 93.7,
+      "mobileUsage": 86.4,
+      "localSearches": "High",
+      "voiceSearchTrend": "Moderately growing"
+    },
+    "faq": [
+      {
+        "question": "Is bilingual SEO important in Ottawa?",
+        "answer": "Yes. Ottawa businesses often benefit from bilingual SEO strategies, especially in public service, education, and retail sectors due to the city’s English and French-speaking population."
+      },
+      {
+        "question": "What industries do you specialize in for Ottawa?",
+        "answer": "We work across sectors but have strong experience in technology, government services, healthcare, and education."
+      },
+      {
+        "question": "What sets your SEO services apart for Ottawa clients?",
+        "answer": "We combine regulatory-compliant strategies with local content, ensuring you stay relevant, visible, and trustworthy in the Ottawa business landscape."
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Working with Immortal SEO in Ottawa helped us reach the right audience with culturally relevant content. We saw a 60% increase in engagement from government and academic sectors.",
+        "author": "Claire M.",
+        "position": "Operations Lead",
+        "company": "Capital Research Labs"
+      }
+    ]
+  },
+  "quebec-city": {
+    "name": "Québec City",
+    "province": "Quebec",
+    "country": "Canada",
+    "population": 550000,
+    "keyIndustries": [
+      "tourism",
+      "government",
+      "insurance",
+      "manufacturing",
+      "technology"
+    ],
+    "localKeywords": [
+      "SEO Québec City",
+      "agence de référencement Québec",
+      "conception de site Web Québec",
+      "services SEO Québec"
+    ],
+    "competitionLevel": "medium",
+    "metaTitle": "SEO Québec City | Services de Référencement Local | Immortal SEO",
+    "metaDescription": "Augmentez votre visibilité à Québec avec nos services SEO spécialisés. Immortal SEO crée des stratégies localisées pour les entreprises francophones et bilingues.",
+    "headerImage": "/images/locations/quebec-city.jpg",
+    "customContent": {
+      "intro": "Québec City’s charm and heritage attract businesses in tourism, government, and manufacturing. But to succeed online, local businesses need French-language SEO that resonates with this market. Immortal SEO delivers culturally tailored strategies built for Québec City.",
+      "challenges": "Businesses in Québec City face language-specific SEO challenges, a tight-knit local market, and seasonal fluctuations due to tourism. It's essential to create French-first content and understand Québécois search behavior.",
+      "solutions": "Our SEO team includes native French speakers and Québec-local specialists. We build geo-targeted pages, optimize for Québec-based search intent, and ensure your site complies with local norms and preferences."
+    },
+    "localStatistics": {
+      "internetPenetration": 92.5,
+      "mobileUsage": 84.3,
+      "localSearches": "Moderate to High",
+      "voiceSearchTrend": "Emerging"
+    },
+    "faq": [
+      {
+        "question": "Do you offer SEO services in French for Québec City?",
+        "answer": "Absolutely. Our team includes fluent French SEO specialists who understand local dialects and search behavior in Québec City."
+      },
+      {
+        "question": "Is SEO different in Québec compared to the rest of Canada?",
+        "answer": "Yes. French language, cultural nuances, and regional platforms make Québec SEO unique. A local-first strategy is essential."
+      },
+      {
+        "question": "What sectors do you serve in Québec City?",
+        "answer": "Tourism, insurance, retail, and government-linked sectors are our specialties in the Québec City region."
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Grâce à Immortal SEO, notre hôtel est passé en première page pour les recherches locales à Québec. Le contenu en français était parfaitement adapté à notre clientèle.",
+        "author": "Julien R.",
+        "position": "Directeur Général",
+        "company": "Hôtel Montcalm"
+      }
+    ]
+  },
+  "winnipeg": {
+    "name": "Winnipeg",
+    "province": "Manitoba",
+    "country": "Canada",
+    "population": 749500,
+    "keyIndustries": [
+      "transportation",
+      "manufacturing",
+      "agriculture",
+      "insurance",
+      "healthcare"
+    ],
+    "localKeywords": [
+      "Winnipeg SEO agency",
+      "digital marketing Winnipeg",
+      "Winnipeg web development",
+      "SEO services Winnipeg"
+    ],
+    "competitionLevel": "low to medium",
+    "metaTitle": "SEO Services Winnipeg | Get Found Locally | Immortal SEO",
+    "metaDescription": "Drive local traffic and grow your Winnipeg business with SEO strategies tailored to your market. Immortal SEO helps you reach the right customers with precision.",
+    "headerImage": "/images/locations/winnipeg.jpg",
+    "customContent": {
+      "intro": "Winnipeg's strategic location and diverse industries make it a growing hub for businesses seeking digital visibility. Whether you're in agriculture, logistics, or healthcare, Immortal SEO helps you connect with the local community through targeted SEO services.",
+      "challenges": "Winnipeg businesses often deal with low population density, limited local digital competition, and a need for regional trust-building. SEO strategies here must be deeply localized and community-focused.",
+      "solutions": "We develop hyper-local content, optimize for Google Maps, and build backlinks through Manitoba-based directories and organizations. Our goal is to make your business highly visible in Winnipeg’s growing digital ecosystem."
+    },
+    "localStatistics": {
+      "internetPenetration": 91.8,
+      "mobileUsage": 83.9,
+      "localSearches": "Moderate",
+      "voiceSearchTrend": "Growing steadily"
+    },
+    "faq": [
+      {
+        "question": "How competitive is SEO in Winnipeg?",
+        "answer": "Compared to larger cities, Winnipeg has lower SEO competition, making it an ideal market for businesses looking to gain early traction."
+      },
+      {
+        "question": "What types of businesses benefit most from SEO in Winnipeg?",
+        "answer": "Local service providers, agriculture businesses, logistics firms, and healthcare clinics see excellent results from SEO in Winnipeg."
+      },
+      {
+        "question": "Do you offer SEO content tailored to Manitoba’s audience?",
+        "answer": "Yes, our content strategy incorporates regional language, references, and trust signals unique to the Winnipeg and Manitoba community."
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Immortal SEO helped our logistics company appear in top local search results. Their Manitoba-focused content strategy was a game changer.",
+        "author": "Nathan K.",
+        "position": "Business Owner",
+        "company": "Prairie Logistics"
+      }
+    ]
   }
 }
