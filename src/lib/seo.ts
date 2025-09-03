@@ -336,7 +336,8 @@ export function generateRobots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      allow: ['/',
+      '?page=*'],
       disallow: [
         '/admin/', 
         '/api/',
@@ -356,7 +357,7 @@ export function generateRobots(): MetadataRoute.Robots {
  * Generates a sitemap index that links to all other sitemaps
  */
 export async function generateSitemapIndex(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://immortalseo.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
   const lastModified = new Date();
   
   // Define sitemap index entries with proper type
