@@ -85,8 +85,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function IndustryPage({ params }: { params: { industry: string } }) {
-  const industryData = await loadIndustryData(params.industry);
+export default async function IndustryPage({ params }: { params: Promise<{ industry: string }> }) {
+  const resolvedParams = await params;
+  const industryData = await loadIndustryData(resolvedParams.industry);
   
   if (!industryData) {
     return (
@@ -101,7 +102,7 @@ export default async function IndustryPage({ params }: { params: { industry: str
   
   // Base URL for schemas
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
-  const canonicalUrl = `${baseUrl}/industries/${params.industry}`;
+  const canonicalUrl = `${baseUrl}/industries/${resolvedParams.industry}`;
   
   // Get schema context
   const context = getSchemaContext();
@@ -182,8 +183,14 @@ export default async function IndustryPage({ params }: { params: { industry: str
     tableOfContents.push({ id: 'faq', label: 'FAQ' });
   }
 
+  // Define breadcrumbs
+  const breadcrumbs = [
+    { name: 'Industries', href: '/industries' },
+    { name: industryData.name, href: `/industries/${resolvedParams.industry}` }
+  ];
+
   return (
-    <Layout>
+    <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       
       <PageHeader
@@ -713,6 +720,146 @@ export default async function IndustryPage({ params }: { params: { industry: str
        </Container>
      </Section>
      
+     {/* Related Services Section */}
+     <Section className="bg-white">
+       <Container>
+         <div className="text-center mb-12">
+           <h2 className="text-3xl font-bold text-gray-900 mb-4">
+             SEO Services for {industryData.name} Businesses
+           </h2>
+           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+             We provide comprehensive SEO solutions tailored specifically for {industryData.name} companies.
+           </p>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {/* Core SEO Services */}
+           <div className="bg-gray-50 p-6 rounded-lg">
+             <h3 className="text-xl font-semibold mb-4 text-primary-main">Core SEO Services</h3>
+             <ul className="space-y-2">
+               <li>
+                 <Link href="/services/technical-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Technical SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/content-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Content SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Local SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/off-page-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Off-Page SEO
+                 </Link>
+               </li>
+             </ul>
+           </div>
+           
+           {/* Advanced Solutions */}
+           <div className="bg-gray-50 p-6 rounded-lg">
+             <h3 className="text-xl font-semibold mb-4 text-primary-main">Advanced Solutions</h3>
+             <ul className="space-y-2">
+               <li>
+                 <Link href="/services/ai-enhanced-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   AI-Enhanced SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/semantic-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Semantic SEO
+                 </Link>
+               </li>
+             </ul>
+           </div>
+           
+           {/* Industry-Specific */}
+           <div className="bg-gray-50 p-6 rounded-lg">
+             <h3 className="text-xl font-semibold mb-4 text-primary-main">Industry-Specific</h3>
+             <ul className="space-y-2">
+               <li>
+                 <Link href="/services/small-business-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Small Business SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/enterprise-seo" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Enterprise SEO
+                 </Link>
+               </li>
+             </ul>
+           </div>
+         </div>
+       </Container>
+     </Section>
+
+     {/* Related Locations Section */}
+     <Section className="bg-gray-50">
+       <Container>
+         <div className="text-center mb-12">
+           <h2 className="text-3xl font-bold text-gray-900 mb-4">
+             {industryData.name} SEO Services by Location
+           </h2>
+           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+             We provide specialized {industryData.name} SEO services to businesses across major Canadian cities.
+           </p>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+           <div className="bg-white p-6 rounded-lg shadow-sm">
+             <h3 className="text-lg font-semibold mb-3 text-primary-main">Major Cities</h3>
+             <ul className="space-y-2">
+               <li>
+                 <Link href="/services/local-seo/locations/toronto" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Toronto {industryData.name} SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo/locations/vancouver" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Vancouver {industryData.name} SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo/locations/montreal" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Montreal {industryData.name} SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo/locations/calgary" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Calgary {industryData.name} SEO
+                 </Link>
+               </li>
+             </ul>
+           </div>
+           
+           <div className="bg-white p-6 rounded-lg shadow-sm">
+             <h3 className="text-lg font-semibold mb-3 text-primary-main">Additional Cities</h3>
+             <ul className="space-y-2">
+               <li>
+                 <Link href="/services/local-seo/locations/ottawa" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Ottawa {industryData.name} SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo/locations/winnipeg" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Winnipeg {industryData.name} SEO
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/services/local-seo/locations/quebec-city" className="text-gray-700 hover:text-primary-main transition-colors">
+                   Québec City {industryData.name} SEO
+                 </Link>
+               </li>
+             </ul>
+           </div>
+         </div>
+       </Container>
+     </Section>
+
      {/* Final CTA Section */}
      <Section background="primary">
        <Container>
@@ -750,7 +897,7 @@ export default async function IndustryPage({ params }: { params: { industry: str
              </div>
              <div className="md:w-1/3 md:text-right">
                <Button 
-                 href={`/contact?industry=${params.industry}`}
+                 href={`/contact?industry=${resolvedParams.industry}`}
                  variant="secondary" 
                  size="lg"
                  className="font-semibold text-primary-main px-8 hover:scale-105 transition-transform"

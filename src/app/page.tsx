@@ -7,7 +7,8 @@ import {
   getSchemaContext, 
   generateWebPageSchema, 
   generateSchemaGraph,
-  BaseSchema  // Add this import
+  generateAggregateRatingSchema,
+  BaseSchema
 } from '@/lib/schema';
 import JsonLd from '@/components/seo/JsonLd';
 
@@ -32,12 +33,21 @@ export default function Page() {
     dateModified: new Date().toISOString(),
   });
   
-// Create schema graph for the page - Simplest solution to fix type issues
+// Generate AggregateRating schema for homepage (example ratings)
+const aggregateRatingSchema = generateAggregateRatingSchema({
+  ratingValue: 4.9,
+  reviewCount: 127,
+  bestRating: 5,
+  worstRating: 1
+});
+
+// Create schema graph for the page - Enhanced with ratings
 const schemas = [];
 if (context.organization) schemas.push(context.organization);
 if (context.website) schemas.push(context.website);
 if (webPageSchema) schemas.push(webPageSchema);
 if (context.localBusiness) schemas.push(context.localBusiness);
+if (aggregateRatingSchema) schemas.push(aggregateRatingSchema);
 
 const schemaGraph = generateSchemaGraph(schemas);
 

@@ -1,6 +1,5 @@
 // components/blog/BlogList.tsx (Server Component)
 import Link from 'next/link';
-import Layout from '@/components/layout/Layout';
 import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import BlogCard from '@/components/blog/BlogCard';
@@ -20,7 +19,7 @@ interface BlogListProps {
 
 export default function BlogList({ posts, pagination }: BlogListProps) {
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary-dark to-primary-main text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -108,6 +107,6 @@ export default function BlogList({ posts, pagination }: BlogListProps) {
           </div>
         </Container>
       </Section>
-    </Layout>
+    </>
   );
 }

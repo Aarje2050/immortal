@@ -17,6 +17,7 @@ import {
   generateServiceSchema, 
   generateFAQPageSchema,
   generateSchemaGraph,
+  generateHowToSchema,
   BaseSchema
 } from '@/lib/schema';
 import { ServiceData } from '@/types/service';
@@ -254,6 +255,23 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     
     schemas.push(generateFAQPageSchema(faqs));
   }
+
+  // Add HowTo schema for service process if process steps exist
+  if (serviceData.process && serviceData.process.length > 0) {
+    const howToSchema = generateHowToSchema({
+      name: `How to Get ${serviceData.name}`,
+      description: `Step-by-step process for getting ${serviceData.name} services`,
+      steps: serviceData.process.map((step: any, index: number) => ({
+        name: step.title || `Step ${index + 1}`,
+        text: step.description || step.content || '',
+        image: step.image || undefined
+      })),
+      totalTime: 'PT2H', // Estimated 2 hours for consultation
+      image: `${baseUrl}/images/services/${service}.jpg`
+    });
+    
+    schemas.push(howToSchema);
+  }
   
   // Add local business if available
   if (context.localBusiness) {
@@ -286,8 +304,14 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     return serviceData.displaySections[sectionName as keyof typeof serviceData.displaySections] !== false;
   };
 
+  // Define breadcrumbs
+  const breadcrumbs = [
+    { name: 'Services', href: '/services' },
+    { name: serviceData.name, href: `/services/${service}` }
+  ];
+
   return (
-    <Layout>
+    <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       
       {/* Hero Section with Centered Format */}
@@ -800,6 +824,146 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
         </Section>
       )}
       
+      {/* Related Industries Section */}
+      <Section className="bg-white">
+        <Container>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Industries We Serve with {serviceData.name}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Our {serviceData.name.toLowerCase()} expertise spans across various industries, delivering tailored strategies for each sector.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Healthcare Industries */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4 text-primary-main">Healthcare</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/industries/dermatologist" className="text-gray-700 hover:text-primary-main transition-colors">
+                    Dermatologist SEO
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/industries/ivf-hospitals" className="text-gray-700 hover:text-primary-main transition-colors">
+                    IVF Hospitals SEO
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            {/* Service Industries */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4 text-primary-main">Services</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/industries/plumbing-service" className="text-gray-700 hover:text-primary-main transition-colors">
+                    Plumbing SEO
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/industries/house-cleaning" className="text-gray-700 hover:text-primary-main transition-colors">
+                    House Cleaning SEO
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/industries/towing-service" className="text-gray-700 hover:text-primary-main transition-colors">
+                    Towing Service SEO
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            {/* Retail & Food */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4 text-primary-main">Retail & Food</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/industries/restaurants" className="text-gray-700 hover:text-primary-main transition-colors">
+                    Restaurant SEO
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/industries/e-commerce" className="text-gray-700 hover:text-primary-main transition-colors">
+                    E-commerce SEO
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/industries/tattoo-shops" className="text-gray-700 hover:text-primary-main transition-colors">
+                    Tattoo Shop SEO
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Related Locations Section */}
+      <Section className="bg-gray-50">
+        <Container>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {serviceData.name} Services by Location
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We provide {serviceData.name.toLowerCase()} services to businesses across major Canadian cities.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-lg font-semibold mb-3 text-primary-main">Major Cities</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href={`/services/${params.service}/locations/toronto`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Toronto
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/services/${params.service}/locations/vancouver`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Vancouver
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/services/${params.service}/locations/montreal`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Montreal
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/services/${params.service}/locations/calgary`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Calgary
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-lg font-semibold mb-3 text-primary-main">Additional Cities</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href={`/services/${params.service}/locations/ottawa`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Ottawa
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/services/${params.service}/locations/winnipeg`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Winnipeg
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/services/${params.service}/locations/quebec-city`} className="text-gray-700 hover:text-primary-main transition-colors">
+                    {serviceData.name} Québec City
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
       {/* CTA Section */}
       <Section background="primary">
         <Container>

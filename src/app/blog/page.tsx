@@ -2,6 +2,7 @@
 import { Metadata } from 'next';
 import { getAllPosts, Post } from '@/lib/blog/wp-api'; // Import Post type
 import BlogList from '@/components/blog/BlogList';
+import Layout from '@/components/layout/Layout';
 import JsonLd from '@/components/seo/JsonLd';
 import { 
   getSchemaContext, 
@@ -130,10 +131,15 @@ export default async function BlogPage(props: {
     itemListSchema
   ].filter(Boolean));
   
+  // Define breadcrumbs
+  const breadcrumbs = [
+    { name: 'Blog', href: '/blog' }
+  ];
+
   return (
-    <>
+    <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       <BlogList posts={posts} pagination={pagination} />
-    </>
+    </Layout>
   );
 }

@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { getAllPostSlugs, getPostBySlug, Post } from '@/lib/blog/wp-api';
 import BlogPost from '@/components/blog/BlogPost';
 import BlogPostSkeleton from '@/components/blog/BlogPostSkeleton';
+import Layout from '@/components/layout/Layout';
 import JsonLd from '@/components/seo/JsonLd';
 import { 
   getSchemaContext, 
@@ -156,34 +157,25 @@ async function BlogPostContent({ slug }: { slug: string }) {
     ],
   });
   
-  // Generate ArticleSchema using our function or with direct object
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    '@id': `${postUrl}#article`,
-    'headline': postTitle,
-    'description': postDescription,
-    'image': featuredImage ? {
-      '@type': 'ImageObject',
-      'url': featuredImage,
-      'caption': imageAlt
-    } : undefined,
-    'datePublished': datePublished,
-    'dateModified': dateModified,
-    'author': {
-      '@id': `${authorUrl}#person`
+  // Generate enhanced ArticleSchema using our generator
+  const articleSchema = generateArticleSchema({
+    type: 'BlogPosting',
+    url: postUrl,
+    title: postTitle,
+    description: postDescription,
+    image: featuredImage,
+    datePublished: datePublished,
+    dateModified: dateModified,
+    author: {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      '@id': `${authorUrl}#person`,
+      name: authorName,
+      url: authorUrl
     },
-    'publisher': {
-      '@id': `${baseUrl}/#organization`
-    },
-    'mainEntityOfPage': {
-      '@id': `${postUrl}#webpage`
-    },
-    'keywords': keywords,
-    'articleSection': mainCategory,
-    'inLanguage': 'en',
-    'url': postUrl
-  };
+    content: sanitizeText(post.content?.rendered || ''),
+    keywords: keywords
+  });
   
   // Create schema graph
   const schemaGraph = generateSchemaGraph([
@@ -194,10 +186,17 @@ async function BlogPostContent({ slug }: { slug: string }) {
     articleSchema
   ].filter(Boolean));
   
+  // Define breadcrumbs
+  const breadcrumbs = [
+    { name: 'Blog', href: '/blog' },
+    { name: mainCategory, href: `/blog/category/${categories.length > 0 ? categories[0].slug : ''}` },
+    { name: postTitle, href: postUrl }
+  ];
+
   return (
-    <>
+    <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       <BlogPost post={post} />
-    </>
+    </Layout>
   );
 }

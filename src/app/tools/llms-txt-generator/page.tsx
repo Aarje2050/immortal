@@ -6,10 +6,9 @@ import {
   getSchemaContext, 
   generateWebPageSchema, 
   generateSchemaGraph,
-  BaseSchema,
-  generateFAQPageSchema
-} from '@/lib/schema';
-import { generateSoftwareApplicationSchema } from '@/lib/schema/toolSchemas'; 
+  generateFAQPageSchema,
+  generateSoftwareApplicationSchema
+} from '@/lib/schema'; 
 import { llmsTxtGeneratorData } from '@/data/tools/llmsTxtGenerator';
 // We'll create this
 
@@ -52,15 +51,17 @@ export default function LlmsTxtGeneratorPage() {
     name: llmsTxtGeneratorData.name,
     description: llmsTxtGeneratorData.description,
     url: toolUrl,
-    applicationCategory: llmsTxtGeneratorData.category,
+    applicationCategory: 'WebApplication',
     operatingSystem: 'Web browser',
     offers: {
       price: '0',
       priceCurrency: 'USD',
-      availability: 'https://schema.org/OnlineOnly',
     },
     screenshot: `${baseUrl}/images/tools/llms-txt-generator.jpg`,
-    provider: context.organization,
+    author: {
+      name: 'ImmortalSEO',
+      url: baseUrl
+    }
   });
   
   // Generate FAQ schema

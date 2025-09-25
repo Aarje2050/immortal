@@ -591,6 +591,288 @@ export function generateCourseSchema({
   return schema;
 }
 
+/**
+ * Generates SoftwareApplication schema for SEO tools
+ */
+export function generateSoftwareApplicationSchema({
+  name,
+  description,
+  url,
+  applicationCategory,
+  operatingSystem,
+  offers,
+  screenshot,
+  author,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+  operatingSystem?: string;
+  offers?: {
+    price?: string | number;
+    priceCurrency?: string;
+  };
+  screenshot?: string;
+  author?: {
+    name: string;
+    url?: string;
+  };
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name,
+    description,
+    url,
+  };
+
+  if (applicationCategory) {
+    schema.applicationCategory = applicationCategory;
+  }
+
+  if (operatingSystem) {
+    schema.operatingSystem = operatingSystem;
+  }
+
+  if (offers) {
+    schema.offers = {
+      '@context': 'https://schema.org',
+      '@type': 'Offer',
+      ...(offers.price && { price: offers.price }),
+      priceCurrency: offers.priceCurrency || 'USD',
+    };
+  }
+
+  if (screenshot) {
+    schema.screenshot = {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      url: screenshot,
+    };
+  }
+
+  if (author) {
+    schema.author = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: author.name,
+      ...(author.url && { url: author.url }),
+    };
+  }
+
+  return addId(schema, url);
+}
+
+/**
+ * Generates CollectionPage schema for listing pages
+ */
+export function generateCollectionPageSchema({
+  url,
+  name,
+  description,
+  mainEntity,
+  numberOfItems,
+}: {
+  url: string;
+  name: string;
+  description?: string;
+  mainEntity?: any[];
+  numberOfItems?: number;
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    url,
+    name,
+    ...(description && { description }),
+    ...(numberOfItems && { numberOfItems }),
+  };
+
+  if (mainEntity && mainEntity.length > 0) {
+    schema.mainEntity = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      numberOfItems: mainEntity.length,
+      itemListElement: mainEntity.map((item, index) => ({
+        '@context': 'https://schema.org',
+        '@type': 'ListItem',
+        position: index + 1,
+        item: item,
+      })),
+    };
+  }
+
+  return addId(schema, url);
+}
+
+/**
+ * Generates Event schema for webinars, workshops, etc.
+ */
+export function generateEventSchema({
+  name,
+  description,
+  startDate,
+  endDate,
+  location,
+  organizer,
+  offers,
+  eventStatus,
+  eventAttendanceMode,
+}: {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate?: string;
+  location?: {
+    name: string;
+    address?: string;
+    url?: string;
+  };
+  organizer: {
+    name: string;
+    url?: string;
+  };
+  offers?: {
+    price?: string | number;
+    priceCurrency?: string;
+    availability?: string;
+  };
+  eventStatus?: string;
+  eventAttendanceMode?: string;
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name,
+    description,
+    startDate,
+    organizer: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: organizer.name,
+      ...(organizer.url && { url: organizer.url }),
+    },
+  };
+
+  if (endDate) {
+    schema.endDate = endDate;
+  }
+
+  if (location) {
+    schema.location = {
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: location.name,
+      ...(location.address && { address: location.address }),
+      ...(location.url && { url: location.url }),
+    };
+  }
+
+  if (offers) {
+    schema.offers = {
+      '@context': 'https://schema.org',
+      '@type': 'Offer',
+      ...(offers.price && { price: offers.price }),
+      priceCurrency: offers.priceCurrency || 'USD',
+      ...(offers.availability && { availability: offers.availability }),
+    };
+  }
+
+  if (eventStatus) {
+    schema.eventStatus = eventStatus;
+  }
+
+  if (eventAttendanceMode) {
+    schema.eventAttendanceMode = eventAttendanceMode;
+  }
+
+  return schema;
+}
+
+/**
+ * Generates VideoObject schema for video content
+ */
+export function generateVideoObjectSchema({
+  name,
+  description,
+  thumbnailUrl,
+  uploadDate,
+  duration,
+  contentUrl,
+  embedUrl,
+  publisher,
+}: {
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  uploadDate: string;
+  duration?: string;
+  contentUrl?: string;
+  embedUrl?: string;
+  publisher: {
+    name: string;
+    url?: string;
+  };
+}): any {
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name,
+    description,
+    thumbnailUrl: {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      url: thumbnailUrl,
+    },
+    uploadDate,
+    publisher: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: publisher.name,
+      ...(publisher.url && { url: publisher.url }),
+    },
+  };
+
+  if (duration) {
+    schema.duration = duration;
+  }
+
+  if (contentUrl) {
+    schema.contentUrl = contentUrl;
+  }
+
+  if (embedUrl) {
+    schema.embedUrl = embedUrl;
+  }
+
+  return schema;
+}
+
+/**
+ * Generates AggregateRating schema for reviews/ratings
+ */
+export function generateAggregateRatingSchema({
+  ratingValue,
+  reviewCount,
+  bestRating = 5,
+  worstRating = 1,
+}: {
+  ratingValue: number;
+  reviewCount: number;
+  bestRating?: number;
+  worstRating?: number;
+}): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AggregateRating',
+    ratingValue,
+    reviewCount,
+    bestRating,
+    worstRating,
+  };
+}
+
   
   
   /**

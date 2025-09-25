@@ -5,7 +5,9 @@ import JsonLd from '@/components/seo/JsonLd';
 import { 
   getSchemaContext, 
   generateWebPageSchema, 
-  generateSchemaGraph 
+  generateSchemaGraph,
+  generateCollectionPageSchema,
+  generateSoftwareApplicationSchema
 } from '@/lib/schema';
 
 // Define the site URL
@@ -107,6 +109,25 @@ export default function ToolsIndexPage() {
     ],
   });
   
+  // Generate individual SoftwareApplication schemas for each tool
+  const softwareApplicationSchemas = toolsData.map(tool => 
+    generateSoftwareApplicationSchema({
+      name: tool.name,
+      description: tool.description,
+      url: `${baseUrl}/tools/${tool.slug}`,
+      applicationCategory: 'WebApplication',
+      operatingSystem: 'Web browser',
+      offers: {
+        price: '0',
+        priceCurrency: 'USD'
+      },
+      author: {
+        name: 'ImmortalSEO',
+        url: baseUrl
+      }
+    })
+  );
+
   // Create ItemList schema for tools
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -157,21 +178,16 @@ export default function ToolsIndexPage() {
     });
   });
   
-  // Create collection schema for each category
-  const toolCollectionSchemas = Object.entries(toolCategories).map(([category, tools]) => ({
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    'name': category,
-    'url': `${pageUrl}#${category.toLowerCase().replace(/\s+/g, '-')}`,
-    'mainEntity': {
-      '@type': 'ItemList',
-      'itemListElement': tools.map((tool, toolIndex) => ({
-        '@type': 'ListItem',
-        'position': toolIndex + 1,
-        'item': tool
-      }))
-    }
-  }));
+  // Create collection schema for each category using the new generator
+  const toolCollectionSchemas = Object.entries(toolCategories).map(([category, tools]) => 
+    generateCollectionPageSchema({
+      url: `${pageUrl}#${category.toLowerCase().replace(/\s+/g, '-')}`,
+      name: category,
+      description: `Collection of ${category.toLowerCase()} tools`,
+      mainEntity: tools,
+      numberOfItems: tools.length
+    })
+  );
   
   // Collect all schemas
   const schemas = [
@@ -179,6 +195,7 @@ export default function ToolsIndexPage() {
     context.website,
     webPageSchema,
     itemListSchema,
+    ...softwareApplicationSchemas,
     ...toolCollectionSchemas
   ].filter(Boolean);
   

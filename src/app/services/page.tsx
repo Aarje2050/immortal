@@ -1,6 +1,7 @@
 // app/services/page.tsx (server component)
 import { Metadata } from 'next';
 import ClientPage from './ClientPage';
+import Layout from '@/components/layout/Layout';
 import { generateMetadata } from '@/lib/metadata';
 import JsonLd from '@/components/seo/JsonLd';
 import { 
@@ -161,10 +162,15 @@ export default function ServicesPage() {
   // Create schema graph
   const schemaGraph = generateSchemaGraph(schemas);
   
+  // Define breadcrumbs
+  const breadcrumbs = [
+    { name: 'Services', href: '/services' }
+  ];
+
   return (
-    <>
+    <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       <ClientPage />
-    </>
+    </Layout>
   );
 }
