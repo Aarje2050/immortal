@@ -44,8 +44,7 @@ export default function BlogPost({ post }: BlogPostProps) {
   
   
   return (
-    <Layout>
-      
+    <>
       {/* Main Content */}
       <article className="blog-post">
         {/* Hero Section */}
@@ -312,6 +311,6 @@ export default function BlogPost({ post }: BlogPostProps) {
           </div>
         </Container>
       </Section>
-    </Layout>
+    </>
   );
 }

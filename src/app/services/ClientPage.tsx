@@ -195,7 +195,7 @@ export default function ServicesPage() {
   const activeFaqs = getActiveFaqs();
 
   return (
-    <Layout>
+    <>
      {/* Hero Section with Consistency Matching About Page */}
 <section className="relative overflow-hidden bg-gradient-to-r from-primary-dark to-primary-main text-white">
   {/* Background Pattern */}
@@ -955,6 +955,6 @@ export default function ServicesPage() {
           </div>
         </Container>
       </Section>
-    </Layout>
+    </>
   );
 }
