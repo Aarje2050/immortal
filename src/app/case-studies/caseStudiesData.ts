@@ -175,6 +175,66 @@ export interface CaseStudy {
       duration: "7 months",
       tags: ["Manufacturing", "B2B", "Industrial", "Technical SEO"],
       featured: false
+    },
+    {
+      id: "bherunath-pest-control",
+      title: "Bherunath Pest Control Dominates Local Search in Chittorgarh with Comprehensive Local SEO Strategy",
+      slug: "bherunath-pest-control-local-seo-success",
+      client: "Bherunath Pest Control",
+      industry: "Pest Control Services",
+      challenge: "Bherunath Pest Control, a local pest control service in Chittorgarh, was struggling to compete with larger regional competitors despite offering superior service quality. Their website had poor technical foundation, limited local search visibility, and minimal presence in AI-powered search results, making it difficult to attract quality organic leads in their service area.",
+      solution: "We implemented a comprehensive local SEO strategy that included technical optimization, semantic structuring, and AI-enhanced content development. Our approach focused on improving crawl budget efficiency, implementing local schema markup, and creating educational content that established the business as a local authority while optimizing for both traditional search engines and AI platforms like ChatGPT and Perplexity.",
+      results: {
+        trafficIncrease: "185%",
+        rankingImprovement: "Top 3 positions for all major local pest control keywords",
+        conversionIncrease: "220%",
+        additionalMetrics: {
+          "Local Search Visibility": "Ranked #1 for 'pest control Chittorgarh' and related terms",
+          "AI Search Mentions": "Featured in ChatGPT and Perplexity responses for local pest control queries",
+          "Lead Quality": "95% increase in qualified service inquiries",
+          "Google My Business": "Enhanced profile optimization with 40% increase in profile views"
+        }
+      },
+      testimonial: {
+        quote: "ImmortalSEO transformed our local presence in Chittorgarh. Even though the search volume is lower in our area, we're now getting high-quality organic leads consistently. The fact that we're being mentioned in AI search engines like ChatGPT has been incredible for our business credibility.",
+        author: "Bherunath Pest Control Team",
+        position: "Management Team"
+      },
+      featuredImage: "/images/case-studies/bherunath-pest-control-case-study.jpg",
+      services: ["Local SEO", "Technical SEO", "Semantic SEO", "AI-Enhanced Content Strategy", "Google My Business Optimization"],
+      duration: "3 months",
+      tags: ["Local SEO", "Pest Control", "Chittorgarh", "AI Optimization", "Technical SEO"],
+      featured: true
+    },
+    {
+      id: "nikhar-jewellers",
+      title: "Nikhar Jewellers Achieves Complete Local Market Dominance with Multi-Platform SEO Strategy",
+      slug: "nikhar-jewellers-local-seo-dominance",
+      client: "Nikhar Jewellers",
+      industry: "Jewelry & Retail",
+      challenge: "Nikhar Jewellers, a family-owned jewelry store in Chittorgarh, needed to establish strong online presence to compete with both local competitors and online jewelry retailers. Their website lacked proper optimization, Google My Business profile was incomplete, and they had no presence on video platforms, limiting their ability to showcase their craftsmanship and attract local customers.",
+      solution: "We developed a comprehensive multi-platform SEO strategy that included website optimization, Google My Business enhancement, YouTube channel optimization, and targeted long-tail keyword strategies. Our approach combined semantic SEO techniques with technical optimization to ensure visibility across all platforms where potential customers might discover their jewelry services.",
+      results: {
+        trafficIncrease: "250%",
+        rankingImprovement: "Top positions for all jewelry-related keywords in Chittorgarh",
+        conversionIncrease: "180%",
+        additionalMetrics: {
+          "Google My Business": "Complete profile optimization with 60% increase in profile interactions",
+          "YouTube Visibility": "Optimized video content ranking for jewelry-related searches",
+          "Long-tail Keywords": "Ranked for 50+ specific jewelry and wedding-related terms",
+          "Local Authority": "Established as top jewelry destination in Chittorgarh"
+        }
+      },
+      testimonial: {
+        quote: "ImmortalSEO's comprehensive approach exceeded our expectations. They didn't just optimize our website - they transformed our entire digital presence. We're now ranking for all jewelry-related keywords in Chittorgarh, and our Google My Business profile and YouTube videos are bringing in customers we never reached before. Sandeep Mehta is extremely happy with the results.",
+        author: "Sandeep Mehta",
+        position: "Owner, Nikhar Jewellers"
+      },
+      featuredImage: "/images/case-studies/nikhar-jewellers-case-study.jpg",
+      services: ["Local SEO", "Google My Business Optimization", "YouTube SEO", "Semantic SEO", "Technical SEO", "Long-tail Keyword Strategy"],
+      duration: "2 months",
+      tags: ["Jewelry", "Local SEO", "Chittorgarh", "Multi-platform", "Retail"],
+      featured: true
     }
   ];
   
