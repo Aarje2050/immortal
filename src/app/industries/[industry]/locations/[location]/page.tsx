@@ -36,10 +36,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { industry: string; location: string };
+  params: Promise<{ industry: string; location: string }>;
 }): Promise<Metadata> {
-  const industryData = await loadIndustryData(params.industry);
-  const locationData = await loadLocationData(params.location);
+  const resolvedParams = await params;
+  const industryData = await loadIndustryData(resolvedParams.industry);
+  const locationData = await loadLocationData(resolvedParams.location);
   
   if (!industryData || !locationData) {
     return {
@@ -64,10 +65,11 @@ export async function generateMetadata({
 export default async function IndustryLocationPage({ 
   params 
 }: { 
-  params: { industry: string; location: string } 
+  params: Promise<{ industry: string; location: string }> 
 }) {
-  const industryData = await loadIndustryData(params.industry);
-  const locationData = await loadLocationData(params.location);
+  const resolvedParams = await params;
+  const industryData = await loadIndustryData(resolvedParams.industry);
+  const locationData = await loadLocationData(resolvedParams.location);
   
   if (!industryData || !locationData) {
     return (

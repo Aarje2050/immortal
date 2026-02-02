@@ -5,16 +5,17 @@ import CaseStudyClientPage from './CaseStudyClientPage';
 import caseStudiesData from '../caseStudiesData';
 import { CaseStudy } from '../caseStudiesData';
 
-// Define correct params type according to Next.js App Router
+// Define correct params type according to Next.js 15 App Router
 type Props = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
-  const caseStudy = caseStudiesData.find((cs) => cs.slug === params.slug);
+  const resolvedParams = await params;
+  const caseStudy = caseStudiesData.find((cs) => cs.slug === resolvedParams.slug);
 
   if (!caseStudy) {
     return generatePageMetadata({
@@ -36,8 +37,9 @@ export function generateStaticParams() {
 }
 
 // Use the correct Props type here
-export default function CaseStudyPage({ params }: Props) {
-  const caseStudy = caseStudiesData.find((cs) => cs.slug === params.slug);
+export default async function CaseStudyPage({ params }: Props) {
+  const resolvedParams = await params;
+  const caseStudy = caseStudiesData.find((cs) => cs.slug === resolvedParams.slug);
 
   if (!caseStudy) {
     notFound();
