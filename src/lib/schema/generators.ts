@@ -401,6 +401,9 @@ export function generateTestimonialSchema({
   reviewBody,
   datePublished,
   itemReviewed,
+  ratingValue,
+  bestRating = 5,
+  worstRating = 1,
 }: {
   author: string;
   reviewBody: string;
@@ -408,9 +411,13 @@ export function generateTestimonialSchema({
   itemReviewed: {
     '@type': string;
     name: string;
+    url?: string;
   };
+  ratingValue?: number;
+  bestRating?: number;
+  worstRating?: number;
 }): any {
-  return {
+  const schema: any = {
     '@context': 'https://schema.org',
     '@type': 'Review',
     author: {
@@ -424,6 +431,44 @@ export function generateTestimonialSchema({
       '@context': 'https://schema.org',
       ...itemReviewed,
     },
+  };
+
+  if (ratingValue !== undefined) {
+    schema.reviewRating = {
+      '@context': 'https://schema.org',
+      '@type': 'Rating',
+      ratingValue,
+      bestRating,
+      worstRating,
+    };
+  }
+
+  return schema;
+}
+
+/**
+ * Generates AggregateRating schema for multiple reviews
+ */
+export function generateAggregateRatingFromReviews(
+  reviews: Array<{
+    ratingValue?: number;
+  }>
+): any {
+  const ratings = reviews
+    .map(r => r.ratingValue)
+    .filter((r): r is number => r !== undefined);
+  
+  if (ratings.length === 0) return null;
+
+  const averageRating = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AggregateRating',
+    ratingValue: Math.round(averageRating * 10) / 10, // Round to 1 decimal
+    reviewCount: ratings.length,
+    bestRating: 5,
+    worstRating: 1,
   };
 }
 

@@ -336,8 +336,7 @@ export function generateRobots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: ['/',
-      '?page=*'],
+      allow: ['/'],
       disallow: [
         '/admin/', 
         '/api/',
@@ -346,7 +345,8 @@ export function generateRobots(): MetadataRoute.Robots {
         '/wp-admin/',    // WordPress admin if using headless WordPress
         '/wp-includes/', // WordPress includes
         '*/preview/',    // Preview pages
-        '*?*',           // URLs with query parameters if they duplicate content
+        // Allow pagination and specific query parameters
+        // Removed '*?*' to allow pagination (?page=) and other legitimate query params
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`, // Main sitemap index
@@ -382,8 +382,6 @@ export async function generateSitemapIndex(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/tools-sitemap.xml`,
       lastModified,
     },
-    // Uncomment these when you're ready to add location and industry sitemaps
-    /*
     {
       url: `${baseUrl}/locations-sitemap.xml`,
       lastModified,
@@ -396,7 +394,6 @@ export async function generateSitemapIndex(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/location-industry-sitemap.xml`,
       lastModified,
     },
-    */
   ];
   
   return sitemapIndex;
@@ -588,7 +585,7 @@ export async function generateLocationsSitemap(): Promise<MetadataRoute.Sitemap>
   
   // Create sitemap entries for each location
   const locationPages: SitemapEntry[] = locations.map(location => ({
-    url: `${baseUrl}/${location.slug}`,
+    url: `${baseUrl}/locations/${location.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as ChangeFrequency,
     priority: 0.7,
@@ -608,7 +605,7 @@ export async function generateIndustriesSitemap(): Promise<MetadataRoute.Sitemap
   
   // Create sitemap entries for each industry
   const industryPages: SitemapEntry[] = industries.map(industry => ({
-    url: `${baseUrl}/${industry.slug}`,
+    url: `${baseUrl}/industries/${industry.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as ChangeFrequency,
     priority: 0.7,
@@ -632,7 +629,7 @@ export async function generateLocationIndustrySitemap(): Promise<MetadataRoute.S
   for (const industry of industries) {
     for (const location of locations) {
       combinedPages.push({
-        url: `${baseUrl}/${industry.slug}/${location.slug}`,
+        url: `${baseUrl}/industries/${industry.slug}/locations/${location.slug}`,
         lastModified: new Date(),
         changeFrequency: 'monthly' as ChangeFrequency,
         priority: 0.6,

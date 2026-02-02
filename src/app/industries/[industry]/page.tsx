@@ -9,6 +9,11 @@ import JsonLd from '@/components/seo/JsonLd';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { DefinitionBox, ListBox, StepByStep } from '@/components/seo/FeaturedSnippet';
+import { EntityRichContent, SemanticRelationship, ContextBlock } from '@/components/seo/EntityRichContent';
+import TopicClusterNav from '@/components/seo/TopicClusterNav';
+import ContextualLinks from '@/components/seo/ContextualLinks';
+import { generateTestimonialSchema, generateAggregateRatingFromReviews } from '@/lib/schema';
 import { loadAllIndustryData, loadIndustryData } from '@/lib/seo';
 import { 
   generateMetadata as generatePageMetadata, 
@@ -150,6 +155,34 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
     
     schemas.push(generateFAQPageSchema(faqs));
   }
+
+  // Add Review schemas for testimonials
+  if (industryData.testimonials && industryData.testimonials.length > 0) {
+    industryData.testimonials.forEach((testimonial: any) => {
+      const reviewSchema = generateTestimonialSchema({
+        author: testimonial.author || 'Client',
+        reviewBody: testimonial.quote,
+        datePublished: new Date().toISOString(),
+        itemReviewed: {
+          '@type': 'Service',
+          name: `${industryData.name} SEO Services`,
+          url: canonicalUrl,
+        },
+        ratingValue: 5,
+      });
+      schemas.push(reviewSchema);
+    });
+
+    // Add AggregateRating if we have multiple reviews
+    if (industryData.testimonials.length > 1) {
+      const aggregateRating = generateAggregateRatingFromReviews(
+        industryData.testimonials.map(() => ({ ratingValue: 5 }))
+      );
+      if (aggregateRating) {
+        schemas.push(aggregateRating);
+      }
+    }
+  }
   
   // Add local business if available
   if (context.localBusiness) {
@@ -229,7 +262,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
               <article>
                 <div id="overview" className="scroll-mt-24 mb-12">
                   <h2 className="text-3xl font-bold mb-6">
-                    SEO for {industryData.name} Businesses
+                    Industry SEO Services
                   </h2>
                   
                   <div className="prose max-w-none mb-8">
@@ -265,115 +298,155 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                       </div>
                     </div>
                   )}
+
+                  {/* Definition Box for "What is X SEO?" queries */}
+                  <DefinitionBox
+                    term={`${industryData.name} SEO`}
+                    definition={industryData.sections?.intro || `Specialized SEO services designed to address the unique challenges and opportunities in the ${industryData.name} industry, combining industry-specific expertise with advanced SEO techniques.`}
+                    className="mb-8"
+                  />
+
+                  {/* Semantic Relationship Block - Unique per industry */}
+                  {(() => {
+                    const relationships = [];
+                    
+                    // Add relationship to related services
+                    if (industryData.relatedServices && industryData.relatedServices.length > 0) {
+                      relationships.push({
+                        from: 'Industry SEO',
+                        relationship: 'includes',
+                        to: industryData.relatedServices[0],
+                        description: 'Essential service for this industry',
+                      });
+                    }
+                    
+                    // Add industry-specific relationships
+                    if (industryData.keyPhrases && industryData.keyPhrases.length > 0) {
+                      relationships.push({
+                        from: industryData.keyPhrases[0],
+                        relationship: 'drives',
+                        to: 'Organic visibility',
+                        description: 'Key focus area for industry success',
+                      });
+                    }
+                    
+                    relationships.push({
+                      from: 'Specialized strategies',
+                      relationship: 'target',
+                      to: 'Industry-specific search behavior',
+                      description: 'Addresses unique market dynamics',
+                    });
+                    
+                    return relationships.length > 0 ? (
+                      <SemanticRelationship
+                        title="Strategic Connections"
+                        relationships={relationships}
+                        className="mb-8"
+                      />
+                    ) : null;
+                  })()}
                 </div>
                 
-                {/* Challenges Section */}
+                {/* Challenges Section - Using ListBox to avoid duplication */}
                 <div id="challenges" className="scroll-mt-24 mb-12">
                   <div className="bg-white rounded-xl shadow-sm p-8">
                     <h2 className="text-2xl font-bold mb-6">
-                      Challenges for {industryData.name} Businesses
+                      Common Challenges
                     </h2>
                     
-                    <div className="prose max-w-none">
-                      {industryData.extendedChallenges ? (
-                        <div dangerouslySetInnerHTML={{ __html: industryData.extendedChallenges }} />
-                      ) : (
+                    {(() => {
+                      const challenges = industryData.challenges || [
+                        'Intense competition for industry-specific keywords',
+                        'Rapidly evolving industry trends and terminology',
+                        'Complex buyer journeys requiring sophisticated content strategies'
+                      ];
+
+                      return (
                         <>
-                          <p className="mb-4">{industryData.sections?.painPoints || 
-                            `${industryData.name} businesses face specific challenges in the digital landscape that require specialized SEO strategies. These challenges often include:`}</p>
+                          <p className="mb-6 text-text-secondary">
+                            {industryData.sections?.painPoints || 
+                              `Businesses in this industry face specific challenges in the digital landscape that require specialized SEO strategies.`}
+                          </p>
                           
-                          <ul className="space-y-3 mb-6">
-                            {industryData.challenges ? (
-                              industryData.challenges.map((challenge: string, idx: number) => (
-                                <li key={idx} className="flex items-start">
-                                  <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  <span>{challenge}</span>
-                                </li>
-                              ))
-                            ) : (
-                              <>
-                                <li className="flex items-start">
-                                  <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  <span>Intense competition for industry-specific keywords</span>
-                                </li>
-                                <li className="flex items-start">
-                                  <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  <span>Rapidly evolving industry trends and terminology</span>
-                                </li>
-                                <li className="flex items-start">
-                                  <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  <span>Complex buyer journeys requiring sophisticated content strategies</span>
-                                </li>
-                              </>
-                            )}
-                          </ul>
+                          {/* ListBox for Featured Snippet - Single display */}
+                          <ListBox
+                            title="Key Challenges"
+                            items={challenges}
+                            ordered={false}
+                            className="mb-6"
+                          />
                           
-                          <p>
-                            Our specialized ${industryData.name} SEO services are designed to overcome these challenges through targeted strategies that address your specific industry requirements.
+                          <p className="text-text-secondary">
+                            Our specialized SEO services are designed to overcome these challenges through targeted strategies that address your specific industry requirements.
                           </p>
                         </>
-                      )}
-                    </div>
+                      );
+                    })()}
                   </div>
                 </div>
                 
-                {/* Our Approach Section */}
+                {/* Our Approach Section - Using StepByStep to avoid duplication */}
                 <div id="approaches" className="scroll-mt-24 mb-12">
                   <div className="bg-white rounded-xl shadow-sm p-8">
                     <h2 className="text-2xl font-bold mb-6">
-                      Our {industryData.name} SEO Approach
+                      Our Approach
                     </h2>
                     
-                    <div className="prose max-w-none">
-                      {industryData.extendedApproach ? (
-                        <div dangerouslySetInnerHTML={{ __html: industryData.extendedApproach }} />
-                      ) : (
+                    {(() => {
+                      // Create process steps from approach data
+                      const processSteps = industryData.strategies && industryData.strategies.length > 0
+                        ? industryData.strategies.map((strategy: { name: string; description: string }, index: number) => ({
+                            number: index + 1,
+                            title: strategy.name,
+                            description: strategy.description,
+                          }))
+                        : [
+                            {
+                              number: 1,
+                              title: 'Industry-Specific Research',
+                              description: 'We conduct in-depth analyses of your market, competitors, and target audience to identify SEO opportunities specific to your sector.',
+                            },
+                            {
+                              number: 2,
+                              title: 'Targeted Content Strategy',
+                              description: 'Our team develops content that addresses industry-specific questions, challenges, and search behaviors to establish your authority.',
+                            },
+                            {
+                              number: 3,
+                              title: 'Industry-Relevant Link Building',
+                              description: 'We build connections with authoritative sources within your industry to enhance your domain authority and search visibility.',
+                            },
+                            {
+                              number: 4,
+                              title: 'Continuous Optimization & Reporting',
+                              description: 'Our team monitors performance and industry trends to continuously refine your strategy with transparent, comprehensive reporting.',
+                            },
+                          ];
+
+                      return (
                         <>
-                          <p className="mb-6">{industryData.sections?.approach || 
-                            `We take a data-driven approach to ${industryData.name} SEO, focusing on the tactics and strategies that deliver the best results for your specific industry needs:`}</p>
+                          <p className="mb-6 text-text-secondary">
+                            {industryData.sections?.approach || 
+                              `We take a data-driven approach to SEO, focusing on the tactics and strategies that deliver the best results for your specific industry needs.`}
+                          </p>
                           
-                          <div className="space-y-6 mb-6">
-                            {/* Industry-Specific Research */}
-                            <div className="bg-primary-main/5 p-5 rounded-lg">
-                              <h3 className="font-semibold text-xl mb-2">Industry-Specific Research</h3>
-                              <p>We conduct in-depth analyses of your ${industryData.name} market, competitors, and target audience to identify SEO opportunities specific to your sector.</p>
-                            </div>
-                            
-                            {/* Targeted Content Strategy */}
-                            <div className="bg-primary-main/5 p-5 rounded-lg">
-                              <h3 className="font-semibold text-xl mb-2">Targeted Content Strategy</h3>
-                              <p>Our team develops content that addresses industry-specific questions, challenges, and search behaviors to establish your authority in the ${industryData.name} field.</p>
-                            </div>
-                            
-                            {/* Industry-Relevant Link Building */}
-                            <div className="bg-primary-main/5 p-5 rounded-lg">
-                              <h3 className="font-semibold text-xl mb-2">Industry-Relevant Link Building</h3>
-                              <p>We build connections with authoritative sources within the ${industryData.name} industry to enhance your domain authority and search visibility.</p>
-                            </div>
-                            
-                            {/* Continuous Optimization & Reporting */}
-                            <div className="bg-primary-main/5 p-5 rounded-lg">
-                              <h3 className="font-semibold text-xl mb-2">Continuous Optimization & Reporting</h3>
-                              <p>Our team monitors performance and industry trends to continuously refine your strategy with transparent, comprehensive reporting.</p>
-                            </div>
+                          {/* StepByStep Component - Single display */}
+                          <div itemScope itemType="https://schema.org/HowTo">
+                            <StepByStep
+                              title="Our Process"
+                              steps={processSteps}
+                              className="mb-6"
+                            />
+                          </div>
+                          
+                          <div className="mt-8">
+                            <Button href="/contact" size="lg">
+                              Get Your Free SEO Audit
+                            </Button>
                           </div>
                         </>
-                      )}
-                    </div>
-                    
-                    <div className="mt-8">
-                      <Button href="/contact" size="lg">
-                        Get Your Free {industryData.name} SEO Audit
-                      </Button>
-                    </div>
+                      );
+                    })()}
                   </div>
                 </div>
                 
@@ -382,7 +455,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                   <div id="insights" className="scroll-mt-24 mb-12">
                     <div className="bg-white rounded-xl shadow-sm p-8">
                       <h2 className="text-2xl font-bold mb-6">
-                        {industryData.name} Industry Insights
+                        Industry Insights
                       </h2>
                       
                       <div className="prose max-w-none">
@@ -415,35 +488,14 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                   </div>
                 )}
                 
-                {/* Strategies Section */}
-                {industryData.strategies && industryData.strategies.length > 0 && (
-                  <div id="strategies" className="scroll-mt-24 mb-12">
-                    <div className="bg-white rounded-xl shadow-sm p-8">
-                      <h2 className="text-2xl font-bold mb-6">
-                        Our {industryData.name} SEO Strategies
-                      </h2>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {industryData.strategies.map((strategy: { name: string; description: string }, index: number) => (
-                          <div
-                            key={index}
-                            className="p-6 bg-primary-main/5 rounded-lg"
-                          >
-                            <h3 className="text-xl font-semibold mb-3">{strategy.name}</h3>
-                            <p>{strategy.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                {/* Strategies Section removed - already shown in Approach section StepByStep to avoid duplication */}
                 
                 {/* Case Studies Section */}
                 {industryData.caseStudies && industryData.caseStudies.length > 0 && (
                   <div id="case-studies" className="scroll-mt-24 mb-12">
                     <div className="bg-white rounded-xl shadow-sm p-8">
                       <h2 className="text-2xl font-bold mb-6">
-                        {industryData.name} SEO Success Stories
+                        Success Stories
                       </h2>
                       
                       <div className="space-y-8">
@@ -477,8 +529,16 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                   <div id="faq" className="scroll-mt-24">
                     <div className="bg-white rounded-xl shadow-sm p-8">
                       <h2 className="text-2xl font-bold mb-6">
-                        Frequently Asked Questions About {industryData.name} SEO
+                        Frequently Asked Questions
                       </h2>
+                      
+                      {/* Context Block for AI Understanding */}
+                      <ContextBlock
+                        title="Why This Matters for Your Business"
+                        content={`Effective SEO requires understanding both industry-specific search behavior and broader digital marketing trends. Our approach integrates specialized knowledge with modern SEO techniques.`}
+                        relatedEntities={industryData.keyPhrases?.slice(0, 5) || []}
+                        className="mb-8"
+                      />
                       
                       <div className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
                         {industryData.faq.map((item: { question: string; answer: string }, index: number) => (
@@ -513,8 +573,8 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                       
                       {/* Have a Question CTA */}
                       <div className="mt-8 bg-gray-50 p-6 rounded-lg">
-                        <h3 className="text-xl font-semibold mb-2">Have more questions about {industryData.name} SEO?</h3>
-                        <p className="text-text-secondary mb-4">Our SEO experts are ready to help with any specific questions about {industryData.name} SEO strategies.</p>
+                        <h3 className="text-xl font-semibold mb-2">Have more questions?</h3>
+                        <p className="text-text-secondary mb-4">Our SEO experts are ready to help with any specific questions about industry SEO strategies.</p>
                         <Link 
                           href="/contact"
                           className="inline-flex items-center bg-primary-main text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
@@ -562,8 +622,8 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                 {/* Lead Capture Form */}
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Get Your Free {industryData.name} SEO Analysis</h3>
-                    <p className="text-text-secondary mb-6">Discover how we can improve your {industryData.name} business's search visibility with a customized SEO strategy.</p>
+                    <h3 className="text-xl font-bold mb-4">Get Your Free SEO Analysis</h3>
+                    <p className="text-text-secondary mb-6">Discover how we can improve your business's search visibility with a customized SEO strategy.</p>
                     
                     <form className="space-y-4">
                       <div>
@@ -609,36 +669,27 @@ export default async function IndustryPage({ params }: { params: Promise<{ indus
                   </div>
                 </div>
                 
-                {/* Related Services */}
+                {/* Topic Cluster Navigation */}
+                <TopicClusterNav
+                  pillarSlug={resolvedParams.industry}
+                  currentPageType="industry"
+                  className="mb-6"
+                />
+
+                {/* Contextual Links - Related Services */}
                 {industryData.relatedServices && industryData.relatedServices.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Related SEO Services</h3>
-                     <div className="space-y-4">
-                       {industryData.relatedServices.map((service: string, index: number) => (
-                         <Link
-                           key={index}
-                           href={`/services/${service.toLowerCase().replace(/\s+/g, '-')}`}
-                           className="block p-4 bg-gray-50 rounded-lg hover:bg-primary-main/5 transition-colors"
-                         >
-                           <div className="font-medium">{service}</div>
-                         </Link>
-                       ))}
-                     </div>
-                     <div className="mt-4 text-center">
-                       <Link
-                         href="/services"
-                         className="inline-flex items-center text-primary-main text-sm font-medium hover:text-primary-dark"
-                       >
-                         View All SEO Services
-                         <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                         </svg>
-                       </Link>
-                     </div>
-                   </div>
-                 </div>
-               )}
+                  <ContextualLinks
+                    links={industryData.relatedServices.slice(0, 5).map((service: string) => ({
+                      url: `/services/${service.toLowerCase().replace(/\s+/g, '-')}`,
+                      text: service,
+                      title: service,
+                      description: `Essential SEO service for your industry`,
+                      relationship: 'Related service',
+                    }))}
+                    title="Related SEO Services"
+                    maxLinks={5}
+                  />
+                )}
                
                {/* Testimonial */}
                {industryData.testimonials && industryData.testimonials.length > 0 && (

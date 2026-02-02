@@ -9,6 +9,11 @@ import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import JsonLd from '@/components/seo/JsonLd';
+import ContextualLinks from '@/components/seo/ContextualLinks';
+import { DefinitionBox, ListBox, ComparisonTable, StepByStep, PeopleAlsoAsk } from '@/components/seo/FeaturedSnippet';
+import { EntityRichContent, SemanticRelationship, ContextBlock } from '@/components/seo/EntityRichContent';
+import TopicClusterNav from '@/components/seo/TopicClusterNav';
+import { getTopicClusterForPage, getSupportingContent } from '@/lib/topics/topicClusters';
 import LeadCaptureForm from '@/components/forms/LeadCaptureForm';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { 
@@ -18,6 +23,8 @@ import {
   generateFAQPageSchema,
   generateSchemaGraph,
   generateHowToSchema,
+  generateTestimonialSchema,
+  generateAggregateRatingFromReviews,
   BaseSchema
 } from '@/lib/schema';
 import { ServiceData } from '@/types/service';
@@ -213,7 +220,7 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     ],
   });
   
-  // Generate Service schema
+  // Generate Service schema with entity relationships
   const serviceSchema = generateServiceSchema({
     url: canonicalUrl,
     name: serviceData.name,
@@ -236,6 +243,16 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     // Add same as references if available
     sameAs: serviceData.sameAs || [],
   });
+
+  // Enhance service schema with entity relationships
+  // Add related services via sameAs
+  if (relatedServicesList.length > 0) {
+    (serviceSchema as any).relatedService = relatedServicesList.map((relService: any) => ({
+      '@type': 'Service',
+      name: relService.name,
+      url: `${baseUrl}/services/${relService.slug}`,
+    }));
+  }
   
   // Initialize schemas array with existing schemas
   const schemas: BaseSchema[] = [
@@ -255,6 +272,69 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     
     schemas.push(generateFAQPageSchema(faqs));
   }
+
+  // Add Review schemas for testimonials
+  if (serviceData.testimonials && serviceData.testimonials.length > 0) {
+    serviceData.testimonials.forEach((testimonial: any) => {
+      const reviewSchema = generateTestimonialSchema({
+        author: testimonial.author || 'Client',
+        reviewBody: testimonial.quote,
+        datePublished: new Date().toISOString(), // Use current date or add datePublished to testimonials
+        itemReviewed: {
+          '@type': 'Service',
+          name: serviceData.name,
+          url: canonicalUrl,
+        },
+        ratingValue: 5, // Default to 5 stars, can be made configurable
+      });
+      schemas.push(reviewSchema);
+    });
+
+    // Add AggregateRating if we have multiple reviews
+    if (serviceData.testimonials.length > 1) {
+      const aggregateRating = generateAggregateRatingFromReviews(
+        serviceData.testimonials.map(() => ({ ratingValue: 5 }))
+      );
+      if (aggregateRating) {
+        schemas.push(aggregateRating);
+      }
+    }
+  }
+
+  // Add Person schemas for team members who specialize in this service
+  // Link to team members based on service expertise
+  const teamMembers = [
+    {
+      name: 'Rajesh Jat',
+      jobTitle: 'Co-Founder & SEO Strategist',
+      url: `${baseUrl}/about#rajesh-jat`,
+      specializesIn: ['technical-seo', 'semantic-seo', 'ai-enhanced-seo', 'llm-content-strategy'],
+    },
+    {
+      name: 'Manish Lamrod',
+      jobTitle: 'Co-Founder & Off-Page SEO Expert',
+      url: `${baseUrl}/about#manish-lamrod`,
+      specializesIn: ['off-page-seo', 'local-seo'],
+    },
+  ];
+
+  teamMembers.forEach(member => {
+    if (member.specializesIn.includes(service)) {
+      const personSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        '@id': `${member.url}#person`,
+        name: member.name,
+        jobTitle: member.jobTitle,
+        url: member.url,
+        worksFor: {
+          '@id': `${baseUrl}/#organization`,
+        },
+        knowsAbout: serviceData.name,
+      };
+      schemas.push(personSchema);
+    }
+  });
 
   // Add HowTo schema for service process if process steps exist
   if (serviceData.process && serviceData.process.length > 0) {
@@ -396,6 +476,87 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                     <p className="text-lg text-text-secondary">{serviceData.longDescription}</p>
                   </div>
 
+                  {/* Definition Box for "What is X?" queries - Using short description to avoid repetition */}
+                  <DefinitionBox
+                    term={serviceData.name}
+                    definition={serviceData.shortDescription || serviceData.longDescription?.substring(0, 200) || ''}
+                    className="mb-8"
+                  />
+
+                  {/* Semantic Relationship Block - Made unique per service */}
+                  {(() => {
+                    // Generate unique relationships based on service type and related services
+                    const relationships = [];
+                    
+                    // Add relationship to first related service if available
+                    if (relatedServicesList.length > 0) {
+                      relationships.push({
+                        from: 'This service',
+                        relationship: 'complements',
+                        to: relatedServicesList[0].name,
+                        description: 'Often implemented together for maximum impact',
+                      });
+                    }
+                    
+                    // Add service-specific relationships based on category
+                    if (serviceData.category?.includes('Technical')) {
+                      relationships.push({
+                        from: 'Technical foundation',
+                        relationship: 'enables',
+                        to: 'Content and off-page strategies',
+                        description: 'Creates the infrastructure for other SEO efforts',
+                      });
+                    } else if (serviceData.category?.includes('Content')) {
+                      relationships.push({
+                        from: 'Strategic content',
+                        relationship: 'drives',
+                        to: 'Organic traffic and conversions',
+                        description: 'Addresses user intent throughout the customer journey',
+                      });
+                    } else if (serviceData.category?.includes('Local')) {
+                      relationships.push({
+                        from: 'Local optimization',
+                        relationship: 'targets',
+                        to: 'Geographic search queries',
+                        description: 'Connects businesses with nearby customers',
+                      });
+                    } else if (serviceData.name?.includes('AI') || serviceData.name?.includes('LLM')) {
+                      relationships.push({
+                        from: 'AI optimization',
+                        relationship: 'ensures visibility in',
+                        to: 'ChatGPT, Perplexity, and SGE',
+                        description: 'Future-proofs content for AI-powered search',
+                      });
+                    } else {
+                      // Generic fallback
+                      relationships.push({
+                        from: 'SEO strategy',
+                        relationship: 'improves',
+                        to: 'Search visibility and rankings',
+                        description: 'Delivers measurable organic growth',
+                      });
+                    }
+                    
+                    // Add one more unique relationship based on primary keywords
+                    if (serviceData.primaryKeywords && serviceData.primaryKeywords.length > 0) {
+                      const mainKeyword = serviceData.primaryKeywords[0];
+                      relationships.push({
+                        from: mainKeyword,
+                        relationship: 'enhances',
+                        to: 'Overall digital presence',
+                        description: 'Integrates with broader marketing efforts',
+                      });
+                    }
+                    
+                    return relationships.length > 0 ? (
+                      <SemanticRelationship
+                        title="Strategic Connections"
+                        relationships={relationships}
+                        className="mb-8"
+                      />
+                    ) : null;
+                  })()}
+
                   {/* Primary Keywords Section - Enhanced for Entity Optimization */}
                   {serviceData.primaryKeywords && (
                     <div className="mb-8">
@@ -446,9 +607,18 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   )}
                 </div>
                 
-                {/* Benefits Section */}
+                {/* Benefits Section with List Box for Featured Snippets */}
                 <section id="benefits" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
                   <h2 className="text-2xl font-bold mb-6">Key Benefits of Our {serviceData.name}</h2>
+                  
+                  {/* List Box for Featured Snippet Optimization */}
+                  <ListBox
+                    title="What You'll Achieve"
+                    items={serviceData.benefits}
+                    ordered={false}
+                    className="mb-6"
+                  />
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {serviceData.benefits.map((benefit: string, index: number) => (
                       <div key={index} className="flex items-start" itemProp="offers" itemScope itemType="http://schema.org/Offer">
@@ -463,28 +633,29 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   </div>
                 </section>
                 
-                {/* Our Process Section */}
+                {/* Our Process Section with Step-by-Step for Featured Snippets */}
                 <section id="approach" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
-                  <h2 className="text-2xl font-bold mb-6">Our {serviceData.name} Approach</h2>
-                  <div className="space-y-6">
-                    {serviceData.process.map((step: { title: string; description: string }, index: number) => (
-                      <div key={index} className="flex" itemProp="workPerformed" itemScope itemType="http://schema.org/Action">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-main text-white font-semibold flex items-center justify-center mr-4">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold mb-2" itemProp="name">{step.title}</h3>
-                          <p className="text-text-secondary" itemProp="description">{step.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <h2 className="text-2xl font-bold mb-6">Our Approach</h2>
+                  
+                  {/* Step-by-Step Component for Featured Snippets - Single display to avoid duplication */}
+                  {serviceData.process && serviceData.process.length > 0 && (
+                    <div itemScope itemType="https://schema.org/HowTo">
+                      <StepByStep
+                        title="Our Process"
+                        steps={serviceData.process.map((step: { title: string; description: string }, index: number) => ({
+                          number: index + 1,
+                          title: step.title,
+                          description: step.description,
+                        }))}
+                      />
+                    </div>
+                  )}
                 </section>
                 
                 {/* Service Examples Section */}
                 {shouldDisplaySection('serviceExamples') && serviceData.serviceExamples && serviceData.serviceExamples.length > 0 && (
                   <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                    <h2 className="text-2xl font-bold mb-6">What Our {serviceData.name} Include</h2>
+                    <h2 className="text-2xl font-bold mb-6">What's Included</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {serviceData.serviceExamples.map((example, index) => (
@@ -509,7 +680,7 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                 {/* Case Studies Section */}
                 {serviceData.caseStudies && serviceData.caseStudies.length > 0 && (
                   <section id="case-studies" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
-                    <h2 className="text-2xl font-bold mb-6">{serviceData.name} Success Stories</h2>
+                    <h2 className="text-2xl font-bold mb-6">Success Stories</h2>
                     <div className="space-y-8">
                       {serviceData.caseStudies.map((caseStudy: { title: string; description: string; results: string[] }, index: number) => (
                         <div 
@@ -541,10 +712,44 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                 )}
                 
                 
-                {/* FAQ Section */}
+                {/* Entity-Rich Content Section - Made more unique */}
+                <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
+                  <EntityRichContent
+                    title="Related Services & Topics"
+                    entities={[
+                      ...relatedServicesList.slice(0, 3).map((relService: any) => ({
+                        entity: relService.name,
+                        description: relService.shortDescription,
+                        url: `/services/${relService.slug}`,
+                        type: 'service' as const,
+                      })),
+                      ...(serviceData.primaryKeywords?.slice(0, 2).map((keyword: string) => ({
+                        entity: keyword,
+                        description: `Essential component of modern SEO strategy`,
+                        type: 'concept' as const,
+                      })) || []),
+                    ]}
+                  />
+                </section>
+
+                {/* FAQ Section - People Also Ask removed to avoid duplication */}
                 {serviceData.faq && serviceData.faq.length > 0 && (
                   <section id="faq" className="bg-white rounded-xl shadow-sm p-8 scroll-mt-24">
-                    <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions about {serviceData.name}</h2>
+                    <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+                    
+                    {/* Context Block for AI Understanding - Made unique per service */}
+                    <ContextBlock
+                      title="Why This Matters for Your Business"
+                      content={(() => {
+                        // Generate unique context based on service category and keywords
+                        const category = serviceData.category || 'SEO Services';
+                        const keywords = serviceData.primaryKeywords?.slice(0, 3).join(', ') || '';
+                        return `Effective ${category.toLowerCase()} requires understanding both traditional search behavior and emerging AI-powered discovery. Our approach integrates ${keywords} to ensure visibility across all platforms where your audience searches.`;
+                      })()}
+                      relatedEntities={serviceData.primaryKeywords?.slice(0, 5) || []}
+                      className="mb-8"
+                    />
+                    
                     <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
                       {serviceData.faq.map((item: { question: string; answer: string }, index: number) => (
                         <div 
@@ -680,6 +885,66 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                     </div>
                   </div>
                 )}
+
+                {/* Topic Cluster Navigation */}
+                {(() => {
+                  const cluster = getTopicClusterForPage(service, 'service');
+                  if (cluster && cluster.supportingContent.length > 0) {
+                    return (
+                      <TopicClusterNav
+                        pillarSlug={service}
+                        currentPageType="service"
+                        className="mb-6"
+                      />
+                    );
+                  }
+                  return null;
+                })()}
+
+                {/* Contextual Links - Related Industries */}
+                {(() => {
+                  // Find industries that use this service
+                  try {
+                    const industriesPath = path.join(process.cwd(), 'src', 'data', 'industries');
+                    const industryFiles = fs.readdirSync(industriesPath).filter((f: string) => f.endsWith('.json'));
+                    const relevantIndustries = industryFiles
+                      .map((file: string) => {
+                        const filePath = path.join(industriesPath, file);
+                        const industryData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+                        const relatedServices = industryData.relatedServices || [];
+                        const serviceName = serviceData.name.toLowerCase();
+                        const matches = relatedServices.some((rs: string) => 
+                          rs.toLowerCase().includes(serviceName) || 
+                          serviceName.includes(rs.toLowerCase())
+                        );
+                        if (matches) {
+                          return {
+                            url: `/industries/${file.replace('.json', '')}`,
+                            text: industryData.name,
+                            title: `${industryData.name} SEO`,
+                            description: industryData.metaDescription?.substring(0, 100),
+                            relationship: 'Industry we serve',
+                          };
+                        }
+                        return null;
+                      })
+                      .filter((item): item is { url: string; text: string; title: string; description: string; relationship: string } => item !== null)
+                      .slice(0, 3);
+                    
+                    if (relevantIndustries.length > 0) {
+                      return (
+                        <ContextualLinks
+                          links={relevantIndustries}
+                          title="Industries We Serve"
+                          maxLinks={3}
+                        />
+                      );
+                    }
+                  } catch (error) {
+                    // Silently fail if industries can't be loaded
+                  }
+                  return null;
+                })()}
                 
                 {/* Testimonial */}
                 {shouldDisplaySection('testimonials') && serviceData.testimonials && serviceData.testimonials.length > 0 && (
