@@ -9,6 +9,8 @@ import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { Post } from '@/lib/blog/wp-api';
 import ClientTableOfContents from './ClientTableOfContents';
 import ClientShareButtons from './ClientShareButtons';
+import TopicClusterNav from '@/components/seo/TopicClusterNav';
+import ContextualLinks from '@/components/seo/ContextualLinks';
 import JsonLd from '@/components/seo/JsonLd';
 import { generateStructuredData } from '@/lib/metadata';
 
@@ -205,6 +207,92 @@ export default function BlogPost({ post }: BlogPostProps) {
                   <div className="hidden md:block">
                     <ClientTableOfContents />
                   </div>
+
+                  {/* Topic Cluster Navigation */}
+                  {(() => {
+                    // Try to match blog post to a topic cluster based on categories or title
+                    const categorySlugs = categories.map((cat: any) => cat.slug);
+                    const titleLower = post.title.rendered.toLowerCase();
+                    
+                    // Check if post matches any topic cluster
+                    let clusterSlug = null;
+                    if (titleLower.includes('technical') || categorySlugs.some((slug: string) => slug.includes('technical'))) {
+                      clusterSlug = 'technical-seo';
+                    } else if (titleLower.includes('content') || categorySlugs.some((slug: string) => slug.includes('content'))) {
+                      clusterSlug = 'content-seo';
+                    } else if (titleLower.includes('ai') || titleLower.includes('llm') || titleLower.includes('chatgpt') || categorySlugs.some((slug: string) => slug.includes('ai'))) {
+                      clusterSlug = 'ai-enhanced-seo';
+                    } else if (titleLower.includes('local') || categorySlugs.some((slug: string) => slug.includes('local'))) {
+                      clusterSlug = 'local-seo';
+                    }
+                    
+                    if (clusterSlug) {
+                      return (
+                        <TopicClusterNav
+                          pillarSlug={clusterSlug}
+                          currentPageType="blog"
+                          className="mb-6"
+                        />
+                      );
+                    }
+                    return null;
+                  })()}
+
+                  {/* Related Services - Contextual Links */}
+                  {(() => {
+                    const relatedServices = [];
+                    const titleLower = post.title.rendered.toLowerCase();
+                    const categorySlugs = categories.map((cat: any) => cat.slug);
+                    
+                    // Match services based on content
+                    if (titleLower.includes('technical') || categorySlugs.some((slug: string) => slug.includes('technical'))) {
+                      relatedServices.push({
+                        url: '/services/technical-seo',
+                        text: 'Technical SEO',
+                        title: 'Technical SEO Services',
+                        description: 'Site architecture and crawlability optimization',
+                        relationship: 'Related service',
+                      });
+                    }
+                    if (titleLower.includes('semantic') || titleLower.includes('entity') || categorySlugs.some((slug: string) => slug.includes('semantic'))) {
+                      relatedServices.push({
+                        url: '/services/semantic-seo',
+                        text: 'Semantic SEO',
+                        title: 'Semantic SEO Services',
+                        description: 'Entity-based optimization strategies',
+                        relationship: 'Related service',
+                      });
+                    }
+                    if (titleLower.includes('ai') || titleLower.includes('llm') || titleLower.includes('chatgpt')) {
+                      relatedServices.push({
+                        url: '/services/ai-enhanced-seo',
+                        text: 'AI-Enhanced SEO',
+                        title: 'AI-Enhanced SEO Services',
+                        description: 'Optimization for AI search platforms',
+                        relationship: 'Related service',
+                      });
+                    }
+                    if (titleLower.includes('local') || categorySlugs.some((slug: string) => slug.includes('local'))) {
+                      relatedServices.push({
+                        url: '/services/local-seo',
+                        text: 'Local SEO',
+                        title: 'Local SEO Services',
+                        description: 'Google Business Profile and local search optimization',
+                        relationship: 'Related service',
+                      });
+                    }
+                    
+                    if (relatedServices.length > 0) {
+                      return (
+                        <ContextualLinks
+                          links={relatedServices}
+                          title="Related Services"
+                          maxLinks={3}
+                        />
+                      );
+                    }
+                    return null;
+                  })()}
                   
                   {/* Author Bio (Desktop) */}
                   {author && (

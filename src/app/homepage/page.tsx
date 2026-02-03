@@ -6,6 +6,8 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Section from "@/components/ui/Section";
+import { EntityRichContent, SemanticRelationship } from "@/components/seo/EntityRichContent";
+import { ListBox } from "@/components/seo/FeaturedSnippet";
 
 const HomePage: React.FC = () => {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
@@ -456,6 +458,20 @@ const HomePage: React.FC = () => {
             </p>
           </div>
 
+          {/* ListBox for Featured Snippet - Benefits of our approach */}
+          <div className="max-w-3xl mx-auto mb-12">
+            <ListBox
+              title="Why Our Approach Works"
+              items={[
+                'Data-driven decision making based on comprehensive audits',
+                'Custom strategies tailored to your business goals',
+                'Technical and content optimization working together',
+                'Continuous monitoring and refinement for maximum results',
+              ]}
+              ordered={false}
+            />
+          </div>
+
           <div className="relative">
             {/* Timeline bar */}
             <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-primary-main/20 hidden md:block"></div>
@@ -499,6 +515,94 @@ const HomePage: React.FC = () => {
             >
               Start Your SEO Journey
             </Button>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Topic Cluster Overview Section */}
+      <Section>
+        <Container>
+          <div className="text-center mb-16">
+            <span className="inline-block px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm font-medium mb-4">
+              Comprehensive SEO Expertise
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Our SEO Topic Clusters
+            </h2>
+            <p className="text-lg text-text-secondary max-w-3xl mx-auto">
+              We build comprehensive topic authority across key SEO domains, ensuring your content performs well in both traditional search and AI-powered platforms.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3 text-primary-main">Technical SEO</h3>
+              <p className="text-text-secondary mb-4">Site architecture, crawlability, indexation, and performance optimization.</p>
+              <Link href="/services/technical-seo" className="text-primary-main hover:text-primary-dark font-medium">
+                Learn More →
+              </Link>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3 text-primary-main">Content SEO</h3>
+              <p className="text-text-secondary mb-4">Topic authority, E-E-A-T optimization, and strategic content development.</p>
+              <Link href="/services/content-seo" className="text-primary-main hover:text-primary-dark font-medium">
+                Learn More →
+              </Link>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3 text-primary-main">AI-Enhanced SEO</h3>
+              <p className="text-text-secondary mb-4">Optimization for ChatGPT, Perplexity, Google SGE, and other AI platforms.</p>
+              <Link href="/services/ai-enhanced-seo" className="text-primary-main hover:text-primary-dark font-medium">
+                Learn More →
+              </Link>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3 text-primary-main">Local SEO</h3>
+              <p className="text-text-secondary mb-4">Google Business Profile optimization, local citations, and map pack rankings.</p>
+              <Link href="/services/local-seo" className="text-primary-main hover:text-primary-dark font-medium">
+                Learn More →
+              </Link>
+            </div>
+          </div>
+
+          {/* Entity-Rich Content */}
+          <div className="bg-white rounded-xl shadow-sm p-8">
+            <EntityRichContent
+              title="Core SEO Services & Concepts"
+              entities={[
+                {
+                  entity: 'Technical SEO',
+                  description: 'Foundation for all SEO success - ensures search engines can crawl, index, and understand your site',
+                  url: '/services/technical-seo',
+                  type: 'service',
+                },
+                {
+                  entity: 'Semantic SEO',
+                  description: 'Entity-based optimization that helps search engines understand context and relationships',
+                  url: '/services/semantic-seo',
+                  type: 'service',
+                },
+                {
+                  entity: 'AI Search Optimization',
+                  description: 'Future-proof your content for AI-powered search platforms like ChatGPT and Perplexity',
+                  url: '/services/ai-enhanced-seo',
+                  type: 'service',
+                },
+                {
+                  entity: 'E-E-A-T',
+                  description: 'Experience, Expertise, Authoritativeness, and Trustworthiness - critical for modern SEO',
+                  type: 'concept',
+                },
+                {
+                  entity: 'Topic Clusters',
+                  description: 'Comprehensive content strategy that establishes authority across related topics',
+                  type: 'concept',
+                },
+              ]}
+            />
           </div>
         </Container>
       </Section>
