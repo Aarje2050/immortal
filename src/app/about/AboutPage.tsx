@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import Layout from '@/components/layout/Layout';
 import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
@@ -157,7 +155,6 @@ const AboutPage: React.FC = () => {
   ];
 
   return (
-    <Layout>
     <div className="flex flex-col min-h-screen">
       {/* Hero Section with Parallax Effect */}
       <section className="relative overflow-hidden bg-gradient-to-r from-primary-dark to-primary-main text-white">
@@ -644,6 +641,73 @@ const AboutPage: React.FC = () => {
         </Container>
       </Section>
 
+      {/* Our Expertise Section - Targets "SEO experts", "SEO consultants", "SEO specialists" naturally */}
+      <Section>
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="inline-block px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm font-medium mb-4">
+                Our Expertise
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                SEO Experts Who Understand Both Search Engines &amp; AI
+              </h2>
+              <p className="text-lg text-text-secondary max-w-3xl mx-auto">
+                Our SEO consultants bring deep, specialized knowledge across every facet of modern search optimization
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold mb-3 text-primary-main">Technical SEO Specialists</h3>
+                <p className="text-text-secondary text-sm">
+                  Our technical SEO experts handle site architecture, crawlability, Core Web Vitals, 
+                  structured data implementation, and server-side optimization to ensure search engines 
+                  can efficiently discover and index your content.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold mb-3 text-primary-main">Content &amp; Semantic SEO Experts</h3>
+                <p className="text-text-secondary text-sm">
+                  Our content strategists specialize in entity-based optimization, topical authority building, 
+                  and creating content that satisfies both user search intent and AI system comprehension 
+                  through proper semantic structure.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold mb-3 text-primary-main">AI Search Optimization Consultants</h3>
+                <p className="text-text-secondary text-sm">
+                  Our AI SEO consultants optimize your digital presence for emerging platforms like 
+                  Google&apos;s AI Overviews, ChatGPT, Perplexity, and Claude — ensuring your brand 
+                  appears in AI-generated answers and recommendations.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold mb-3 text-primary-main">Local &amp; International SEO Advisors</h3>
+                <p className="text-text-secondary text-sm">
+                  Our local SEO specialists help businesses dominate city-level search results in the USA 
+                  and Canada, while our international SEO expertise ensures visibility across multiple 
+                  geographic markets.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 bg-background-paper rounded-xl p-6 md:p-8">
+              <div className="prose prose-lg max-w-none text-text-secondary">
+                <p>
+                  What sets our SEO experts apart is our commitment to continuous learning and adaptation. 
+                  As search algorithms evolve — from Google&apos;s helpful content updates to the rise of 
+                  AI-powered search — our consultants stay at the forefront, adapting strategies in real-time. 
+                  Every member of our team holds expertise in both traditional search optimization and the 
+                  emerging discipline of AI search visibility, ensuring your business is prepared for 
+                  the future of digital discovery.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
       {/* Testimonials Section */}
 <Section>
   <Container>
@@ -735,7 +799,7 @@ const AboutPage: React.FC = () => {
   </Container>
 </Section>
     </div>
-    </Layout>);
+  );
 };
 
 export default AboutPage;

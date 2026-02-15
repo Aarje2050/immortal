@@ -1174,55 +1174,68 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
               {serviceData.name} Services by Location
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We provide {serviceData.name.toLowerCase()} services to businesses across major Canadian cities.
+              We provide {serviceData.name.toLowerCase()} services to businesses across the United States and Canada.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* USA Major Cities */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3 text-primary-main">Major Cities</h3>
+              <h3 className="text-lg font-semibold mb-3 text-primary-main">United States</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href={`/services/${params.service}/locations/toronto`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Toronto
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/services/${params.service}/locations/vancouver`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Vancouver
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/services/${params.service}/locations/montreal`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Montreal
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/services/${params.service}/locations/calgary`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Calgary
-                  </Link>
-                </li>
+                {[
+                  { name: 'New York', slug: 'new-york' },
+                  { name: 'Los Angeles', slug: 'los-angeles' },
+                  { name: 'Chicago', slug: 'chicago' },
+                  { name: 'Houston', slug: 'houston' },
+                  { name: 'San Francisco', slug: 'san-francisco' },
+                ].map((city) => (
+                  <li key={city.slug}>
+                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {serviceData.name} {city.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* More USA Cities */}
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-lg font-semibold mb-3 text-primary-main">More US Cities</h3>
+              <ul className="space-y-2">
+                {[
+                  { name: 'Dallas', slug: 'dallas' },
+                  { name: 'Seattle', slug: 'seattle' },
+                  { name: 'Miami', slug: 'miami' },
+                  { name: 'Boston', slug: 'boston' },
+                  { name: 'Phoenix', slug: 'phoenix' },
+                ].map((city) => (
+                  <li key={city.slug}>
+                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {serviceData.name} {city.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
             
+            {/* Canada Cities */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3 text-primary-main">Additional Cities</h3>
+              <h3 className="text-lg font-semibold mb-3 text-primary-main">Canada</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href={`/services/${params.service}/locations/ottawa`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Ottawa
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/services/${params.service}/locations/winnipeg`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Winnipeg
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/services/${params.service}/locations/quebec-city`} className="text-gray-700 hover:text-primary-main transition-colors">
-                    {serviceData.name} Québec City
-                  </Link>
-                </li>
+                {[
+                  { name: 'Toronto', slug: 'toronto' },
+                  { name: 'Vancouver', slug: 'vancouver' },
+                  { name: 'Montreal', slug: 'montreal' },
+                  { name: 'Calgary', slug: 'calgary' },
+                  { name: 'Ottawa', slug: 'ottawa' },
+                ].map((city) => (
+                  <li key={city.slug}>
+                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {serviceData.name} {city.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

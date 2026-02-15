@@ -884,6 +884,159 @@ const HomePage: React.FC = () => {
         </Container>
       </Section>
 
+      {/* About Our SEO Company Section - Targets "SEO company", "SEO agency", "SEO firm" naturally */}
+      <Section>
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="inline-block px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm font-medium mb-4">
+                About Our SEO Company
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                A Results-Driven SEO Agency Built on Transparency
+              </h2>
+            </div>
+
+            <div className="prose prose-lg max-w-none text-text-secondary">
+              <p className="mb-6">
+                Immortal SEO is a full-service SEO company that helps businesses across the United States, Canada, and globally 
+                achieve sustainable organic growth through ethical, data-driven search optimization. Unlike agencies that rely on 
+                outdated tactics or one-size-fits-all packages, our SEO firm takes a consultative approach — analyzing your 
+                unique business landscape, competitive environment, and growth objectives before crafting a custom strategy.
+              </p>
+              <p className="mb-6">
+                As an SEO agency specializing in both traditional search engines and AI-powered platforms like ChatGPT, Perplexity, 
+                and Google&apos;s AI Overviews, we ensure your business stays visible wherever your customers are searching. Our team 
+                of SEO specialists combines deep technical expertise with strategic content development and ethical authority building 
+                to deliver results that compound over time.
+              </p>
+              <p className="mb-8">
+                Every engagement starts with a comprehensive SEO audit that identifies your highest-impact opportunities. From there, 
+                we develop a roadmap that prioritizes quick wins while building toward long-term topical authority — the kind of 
+                sustainable visibility that withstands algorithm updates and market shifts.
+              </p>
+            </div>
+
+            {/* Key differentiators as semantic entities */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+                <h3 className="text-lg font-semibold mb-2 text-primary-main">Ethical SEO Practices</h3>
+                <p className="text-text-secondary text-sm">
+                  100% white-hat strategies aligned with Google&apos;s Webmaster Guidelines. No shortcuts, no risks to your domain.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+                <h3 className="text-lg font-semibold mb-2 text-primary-main">AI + Traditional Search</h3>
+                <p className="text-text-secondary text-sm">
+                  Dual-optimized strategies for Google, Bing, and AI search platforms including ChatGPT and Perplexity.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+                <h3 className="text-lg font-semibold mb-2 text-primary-main">Transparent Reporting</h3>
+                <p className="text-text-secondary text-sm">
+                  Real-time dashboards showing rankings, traffic, conversions, and ROI. No vanity metrics — only business impact.
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center mt-10">
+              <Button
+                href="/about"
+                variant="outline"
+                className="hover:bg-primary-main hover:text-white transition-colors"
+              >
+                Learn More About Our SEO Company
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Where We Serve Section - Creates contextual links to location pages */}
+      <Section background="light">
+        <Container>
+          <div className="text-center mb-12">
+            <span className="inline-block px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm font-medium mb-4">
+              Where We Serve
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              SEO Services Across the United States &amp; Canada
+            </h2>
+            <p className="text-lg text-text-secondary max-w-3xl mx-auto">
+              We help businesses improve their search visibility in competitive markets across North America. 
+              Our team delivers location-aware SEO strategies tailored to each city&apos;s unique business landscape.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* USA Cities */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <span className="mr-2">🇺🇸</span> United States
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { name: 'New York', slug: 'new-york' },
+                  { name: 'Los Angeles', slug: 'los-angeles' },
+                  { name: 'Chicago', slug: 'chicago' },
+                  { name: 'Houston', slug: 'houston' },
+                  { name: 'Phoenix', slug: 'phoenix' },
+                  { name: 'Dallas', slug: 'dallas' },
+                  { name: 'San Francisco', slug: 'san-francisco' },
+                  { name: 'Seattle', slug: 'seattle' },
+                  { name: 'Miami', slug: 'miami' },
+                  { name: 'Boston', slug: 'boston' },
+                ].map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/locations/${city.slug}`}
+                    className="text-text-secondary hover:text-primary-main transition-colors py-1 text-sm"
+                  >
+                    SEO in {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Canada Cities */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <span className="mr-2">🇨🇦</span> Canada
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { name: 'Toronto', slug: 'toronto' },
+                  { name: 'Vancouver', slug: 'vancouver' },
+                  { name: 'Montreal', slug: 'montreal' },
+                  { name: 'Calgary', slug: 'calgary' },
+                  { name: 'Ottawa', slug: 'ottawa' },
+                  { name: 'Winnipeg', slug: 'winnipeg' },
+                  { name: 'Quebec City', slug: 'quebec-city' },
+                ].map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/locations/${city.slug}`}
+                    className="text-text-secondary hover:text-primary-main transition-colors py-1 text-sm"
+                  >
+                    SEO in {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <Button
+              href="/locations"
+              variant="outline"
+              className="hover:bg-primary-main hover:text-white transition-colors"
+            >
+              View All Locations
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
       {/* Final CTA Section */}
       <Section background="primary">
         <Container>

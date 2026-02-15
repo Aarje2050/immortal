@@ -61,21 +61,23 @@ const seoConfig = {
   schemaOrg: {
     organization: {
       name: site.name,
-      logo: `${site.url}/images/logo.png`,
+      logo: `${site.url}/immortal-logo.svg`,
       url: site.url,
+      // Filter out empty strings so only real profile URLs appear in schema
       sameAs: [
         site.links.twitter,
         site.links.linkedin,
         site.links.facebook,
         site.links.instagram,
-      ],
+        site.links.youtube,
+      ].filter(Boolean),
       contactPoint: [
         {
           '@type': 'ContactPoint',
           telephone: site.contact.phone,
           contactType: 'customer service',
           email: site.contact.email,
-          areaServed: 'CA US IN',
+          areaServed: ['US', 'CA', 'IN'],
           availableLanguage: ['English'],
         },
       ],
@@ -98,8 +100,9 @@ const seoConfig = {
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: 43.6452,
-        longitude: -79.3806,
+        // Chittorgarh, Rajasthan, India - matches the real business address
+        latitude: 24.8887,
+        longitude: 74.6269,
       },
       openingHoursSpecification: [
         {

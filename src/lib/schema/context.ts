@@ -32,7 +32,45 @@ export function getSchemaContext(): SchemaContext {
     },
     sameAs: Object.values(siteConfig.links).filter(Boolean) as string[],
     description: siteConfig.description,
-  };
+    // Area served as proper GeoShape entities
+    areaServed: [
+      { '@type': 'Country', name: 'United States' },
+      { '@type': 'Country', name: 'Canada' },
+      { '@type': 'Country', name: 'India' },
+    ],
+    // Service catalog linking to all service pages
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'SEO Services',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Technical SEO', url: `${baseUrl}/services/technical-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Content SEO', url: `${baseUrl}/services/content-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Local SEO', url: `${baseUrl}/services/local-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Off-Page SEO', url: `${baseUrl}/services/off-page-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AI-Enhanced SEO', url: `${baseUrl}/services/ai-enhanced-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Semantic SEO', url: `${baseUrl}/services/semantic-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'E-commerce SEO', url: `${baseUrl}/services/ecommerce-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SaaS & B2B SEO', url: `${baseUrl}/services/saas-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Small Business SEO', url: `${baseUrl}/services/small-business-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Enterprise SEO', url: `${baseUrl}/services/enterprise-seo` } },
+      ],
+    },
+    // Founders
+    founder: [
+      {
+        '@type': 'Person',
+        name: 'Rajesh Jat',
+        jobTitle: 'Co-Founder & SEO Strategist',
+        url: `${baseUrl}/about#rajesh-jat`,
+      },
+      {
+        '@type': 'Person',
+        name: 'Manish Lamrod',
+        jobTitle: 'Co-Founder & Off-Page SEO Expert',
+        url: `${baseUrl}/about#manish-lamrod`,
+      },
+    ],
+  } as any; // Using any for extended schema properties not in base type
 
   // Add contact points if available
   if (siteConfig.contact) {
@@ -43,7 +81,7 @@ export function getSchemaContext(): SchemaContext {
         telephone: siteConfig.contact.phone,
         contactType: 'customer service',
         email: siteConfig.contact.email,
-        areaServed: 'CA US IN', // Matches what you already have in seo.config.js
+        areaServed: ['US', 'CA', 'IN'],
         availableLanguage: ['English'],
       },
     ];

@@ -6,22 +6,22 @@ import Container from '@/components/ui/Container';
 import PageHeader from '@/components/sections/PageHeader';
 import JsonLd from '@/components/seo/JsonLd';
 import Button from '@/components/ui/Button';
-import { loadLocationData } from '@/lib/seo';
+import { loadLocationData, loadAllLocationData } from '@/lib/seo';
 import { generateMetadata as generatePageMetadata, generateStructuredData } from '@/lib/metadata';
 import { getSchemaContext, generateWebPageSchema, generateServiceSchema, generateSchemaGraph } from '@/lib/schema';
 
 // Import services data
 import servicesJsonData from '@/data/services.json';
 
-// Generate static parameters for all service-location combinations
+// Generate static parameters for all service-location combinations dynamically
 export async function generateStaticParams() {
   const services = Object.keys(servicesJsonData);
-  const locations = ['toronto', 'vancouver', 'montreal', 'calgary', 'ottawa', 'winnipeg', 'quebec-city'];
+  const allLocations = await loadAllLocationData();
   
   const params = [];
   for (const service of services) {
-    for (const location of locations) {
-      params.push({ service, location });
+    for (const location of allLocations) {
+      params.push({ service, location: location.slug });
     }
   }
   
@@ -52,7 +52,7 @@ export async function generateMetadata({
     description,
     location: {
       name: locationData.name,
-      region: locationData.province,
+      region: locationData.province || locationData.state,
       country: locationData.country,
     },
   });

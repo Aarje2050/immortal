@@ -9,10 +9,13 @@ const siteConfig = {
   url: 'https://www.immortalseo.com',
   ogImage: '/images/og-image.jpg',
   links: {
-    // twitter: 'https://twitter.com/immortalseo',
+    // ACTION REQUIRED: Uncomment and update URLs after creating these profiles
+    // See REAL-DATA-REQUIREMENTS.md for details
+    twitter: '', // TODO: Create X/Twitter account, then add URL like 'https://x.com/immortalseo'
     linkedin: 'https://linkedin.com/company/immortalseo',
-    // facebook: 'https://facebook.com/immortalseo',
-    // instagram: 'https://instagram.com/immortalseo',
+    facebook: 'https://www.facebook.com/ImmortalSEOs', // TODO: Create Facebook page, then add URL like 'https://facebook.com/immortalseo'
+    instagram: 'https://www.instagram.com/immortalseo', // TODO: Create Instagram account, then add URL (lower priority)
+    youtube: 'https://www.youtube.com/@immortalseo', // TODO: Create YouTube channel, then add URL (medium priority)
   },
   contact: {
     email: 'hello@immortalseo.com',
@@ -26,8 +29,11 @@ const siteConfig = {
     },
   },
   companyInfo: {
-    founded: '2023',
+    // TODO: IMPORTANT - Decide real founded year. Homepage says "Since 2008" but this says 2023.
+    // Update this AND homepage/about page to be consistent. See REAL-DATA-REQUIREMENTS.md
+    founded: '2008',
     teamSize: '10-50',
+    areaServed: ['US', 'CA', 'IN'], // Countries where you serve clients
     values: [
       'Data-driven strategies',
       'Transparency',

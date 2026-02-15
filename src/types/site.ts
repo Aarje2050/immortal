@@ -113,6 +113,7 @@ export interface LocationData {
   country: string;
   name: string;
   province?: string;
+  state?: string;
   population?: number;
   keyIndustries?: string[];
   localKeywords?: string[];

@@ -16,8 +16,8 @@ import JsonLd from '@/components/seo/JsonLd';
 const siteConfig = require('../../config/site.config') as SiteConfig;
 
 export const metadata: Metadata = generatePageMetadata({
-  title: 'Immortal SEO | Expert SEO Services for Sustainable Growth',
-  description: 'Transform your organic search visibility with our data-driven SEO services. Technical SEO, content optimization, and AI-ready strategies for sustainable growth.',
+  title: 'Immortal SEO | SEO Services & SEO Company for Sustainable Growth',
+  description: 'Immortal SEO is a data-driven SEO company offering expert SEO services for businesses in the USA and Canada. Technical SEO, content optimization, AI-ready strategies, and local search solutions.',
 });
 
 export default function Page() {
@@ -27,8 +27,8 @@ export default function Page() {
   // Generate homepage specific schema
   const webPageSchema = generateWebPageSchema({
     url: siteConfig.url,
-    title: 'Immortal SEO | Expert SEO Services for Sustainable Growth',
-    description: 'Transform your organic search visibility with our data-driven SEO services. Technical SEO, content optimization, and AI-ready strategies for sustainable growth.',
+    title: 'Immortal SEO | SEO Services & SEO Company for Sustainable Growth',
+    description: 'Immortal SEO is a data-driven SEO company offering expert SEO services for businesses in the USA and Canada. Technical SEO, content optimization, AI-ready strategies, and local search solutions.',
     datePublished: '2023-01-01T00:00:00Z', // Set actual publish date
     dateModified: new Date().toISOString(),
   });

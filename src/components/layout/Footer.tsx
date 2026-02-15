@@ -54,16 +54,26 @@ const footerData = {
     ]
   },
   locations: {
+    'United States': [
+      { name: 'New York SEO', href: '/locations/new-york' },
+      { name: 'Los Angeles SEO', href: '/locations/los-angeles' },
+      { name: 'Chicago SEO', href: '/locations/chicago' },
+      { name: 'Houston SEO', href: '/locations/houston' },
+      { name: 'San Francisco SEO', href: '/locations/san-francisco' },
+    ],
+    'More US Cities': [
+      { name: 'Dallas SEO', href: '/locations/dallas' },
+      { name: 'Seattle SEO', href: '/locations/seattle' },
+      { name: 'Miami SEO', href: '/locations/miami' },
+      { name: 'Boston SEO', href: '/locations/boston' },
+      { name: 'Phoenix SEO', href: '/locations/phoenix' },
+    ],
     'Canada': [
       { name: 'Toronto SEO', href: '/locations/toronto' },
       { name: 'Vancouver SEO', href: '/locations/vancouver' },
       { name: 'Montreal SEO', href: '/locations/montreal' },
       { name: 'Calgary SEO', href: '/locations/calgary' },
-    ],
-    'Major Cities': [
       { name: 'Ottawa SEO', href: '/locations/ottawa' },
-      { name: 'Winnipeg SEO', href: '/locations/winnipeg' },
-      { name: 'Québec City SEO', href: '/locations/quebec-city' },
     ]
   }
 };
@@ -86,7 +96,9 @@ const Footer: React.FC = () => {
                   We at Immortal SEO Agency have been delivering white-hat SEO services since 2008, helping businesses generate quality leads and achieve sustainable organic growth.
                 </p>
                 <div className="flex space-x-4">
-                  {Object.entries(siteConfig.links).map(([platform, url]) => (
+                  {Object.entries(siteConfig.links)
+                    .filter(([, url]) => url && typeof url === 'string' && url.length > 0)
+                    .map(([platform, url]) => (
                     <a
                       key={platform}
                       href={url as string}

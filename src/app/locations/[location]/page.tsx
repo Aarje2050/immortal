@@ -43,7 +43,7 @@ export async function generateMetadata({
     description: locationData.metaDescription,
     location: {
       name: locationData.name,
-      region: locationData.province,
+      region: locationData.province || locationData.state,
       country: locationData.country,
     },
   });
@@ -555,15 +555,15 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
         </Section>
       )}
       
-      {/* Related Services Section */}
+      {/* Related Services Section - Links to service+location combo pages */}
       <Section className="bg-white">
         <Container>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Comprehensive SEO Solutions
+              SEO Services Available in {locationData.name}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We provide comprehensive SEO solutions to help businesses dominate local search results.
+              Explore our specialized SEO services tailored for {locationData.name} businesses.
             </p>
           </div>
           
@@ -572,26 +572,18 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4 text-primary-main">Core SEO Services</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href="/services/technical-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Technical SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services/content-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Content SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services/local-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Local SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services/off-page-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Off-Page SEO
-                  </Link>
-                </li>
+                {[
+                  { name: 'Technical SEO', slug: 'technical-seo' },
+                  { name: 'Content SEO', slug: 'content-seo' },
+                  { name: 'Local SEO', slug: 'local-seo' },
+                  { name: 'Off-Page SEO', slug: 'off-page-seo' },
+                ].map((service) => (
+                  <li key={service.slug}>
+                    <Link href={`/services/${service.slug}/locations/${resolvedParams.location}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {service.name} in {locationData.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
             
@@ -599,33 +591,35 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-4 text-primary-main">Advanced Solutions</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href="/services/ai-enhanced-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    AI-Enhanced SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services/semantic-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Semantic SEO
-                  </Link>
-                </li>
+                {[
+                  { name: 'AI-Enhanced SEO', slug: 'ai-enhanced-seo' },
+                  { name: 'Semantic SEO', slug: 'semantic-seo' },
+                  { name: 'E-commerce SEO', slug: 'ecommerce-seo' },
+                ].map((service) => (
+                  <li key={service.slug}>
+                    <Link href={`/services/${service.slug}/locations/${resolvedParams.location}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {service.name} in {locationData.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
             
-            {/* Industry-Specific */}
+            {/* Business-Specific */}
             <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4 text-primary-main">Industry-Specific</h3>
+              <h3 className="text-xl font-semibold mb-4 text-primary-main">Business-Specific</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href="/services/small-business-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Small Business SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services/enterprise-seo" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Enterprise SEO
-                  </Link>
-                </li>
+                {[
+                  { name: 'Small Business SEO', slug: 'small-business-seo' },
+                  { name: 'Enterprise SEO', slug: 'enterprise-seo' },
+                  { name: 'SaaS & B2B SEO', slug: 'saas-seo' },
+                ].map((service) => (
+                  <li key={service.slug}>
+                    <Link href={`/services/${service.slug}/locations/${resolvedParams.location}`} className="text-gray-700 hover:text-primary-main transition-colors">
+                      {service.name} in {locationData.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
