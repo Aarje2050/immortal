@@ -15,11 +15,11 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com
 const pageUrl = `${baseUrl}/tools`;
 
 export const metadata: Metadata = {
-  title: 'Free SEO Tools | ImmortalSEO',
-  description: 'Get access to our collection of free SEO tools designed to help you optimize your website, generate critical files, and improve your search visibility.',
+  title: 'Free SEO Tools — Word Counter, SERP Preview, Readability Checker & More | ImmortalSEO',
+  description: 'Free SEO tools built by experts: word counter, SERP snippet preview, keyword density checker, readability analyzer, page size checker, schema generator, and more.',
   openGraph: {
-    title: 'Free SEO & AI Tools | ImmortalSEO',
-    description: 'Enhance your website optimization with our free SEO and AI tools. Generate robots.txt, LLMs.txt, analyze your site, and more.',
+    title: 'Free SEO Tools | ImmortalSEO',
+    description: '11+ free SEO tools: word counter, SERP preview, keyword density checker, readability analyzer, page size checker, robots.txt generator, schema markup, and more.',
     images: '/images/og-seo-tools.jpg',
   },
   alternates: {
@@ -54,43 +54,88 @@ interface ToolCategoriesType {
   }>;
 }
 
-// Define tool data (you should replace this with your actual data source)
 const toolsData: ToolData[] = [
+  // Content & Analysis Tools
   {
-    name: 'LLMs.txt Generator',
-    slug: 'llms-txt-generator',
-    description: 'Create an LLMs.txt file to help AI models better understand and navigate your website content.',
-    category: 'AI Tools',
-    isFree: true
+    name: 'Word Counter & Character Counter',
+    slug: 'word-counter',
+    description: 'Count words, characters, sentences, paragraphs, and get reading time estimates with SEO content-length insights.',
+    category: 'Content Tools',
+    isFree: true,
+  },
+  {
+    name: 'Keyword Density Checker',
+    slug: 'keyword-density-checker',
+    description: 'Analyze keyword density, frequency, and N-gram phrase distribution to optimize content without keyword stuffing.',
+    category: 'Content Tools',
+    isFree: true,
+  },
+  {
+    name: 'Content Readability Analyzer',
+    slug: 'readability-checker',
+    description: 'Check Flesch Reading Ease, Flesch-Kincaid Grade Level, and Gunning Fog Index with improvement tips.',
+    category: 'Content Tools',
+    isFree: true,
+  },
+  {
+    name: 'Google SERP Snippet Preview',
+    slug: 'serp-preview',
+    description: 'Preview how your title and meta description appear in Google search results on desktop and mobile.',
+    category: 'Content Tools',
+    isFree: true,
+  },
+  {
+    name: 'Meta Tags Generator',
+    slug: 'meta-tags-generator',
+    description: 'Create optimized title tags, meta descriptions, and Open Graph tags for better search visibility and CTR.',
+    category: 'Content Tools',
+    isFree: true,
+  },
+  // Technical SEO Tools
+  {
+    name: 'Website Page Size Checker',
+    slug: 'page-size-checker',
+    description: "Check your page's raw HTML size against Google's 2 MB crawl limit with percentile comparison.",
+    category: 'Technical SEO',
+    isFree: true,
   },
   {
     name: 'Robots.txt Generator',
     slug: 'robots-txt-generator',
     description: 'Create a properly formatted robots.txt file to control how search engines crawl your website.',
-    category: 'SEO Tools',
-    isFree: true
-  },
-  {
-    name: 'SEO Audit Checklist',
-    slug: 'seo-audit-checklist',
-    description: 'A comprehensive checklist to help you identify and fix SEO issues on your website.',
-    category: 'SEO Tools',
-    isFree: true
+    category: 'Technical SEO',
+    isFree: true,
   },
   {
     name: 'Schema Markup Generator',
     slug: 'schema-generator',
-    description: 'Generate schema markup for your website to enhance your search engine listings.',
-    category: 'SEO Tools',
-    isFree: true
+    description: 'Generate JSON-LD structured data markup for rich snippets in Google search results.',
+    category: 'Technical SEO',
+    isFree: true,
+  },
+  // Analysis Tools
+  {
+    name: 'SEO Audit Checklist',
+    slug: 'seo-audit-checklist',
+    description: 'Comprehensive interactive checklist covering technical, on-page, and content SEO best practices.',
+    category: 'Analysis Tools',
+    isFree: true,
   },
   {
     name: 'SEO Cost Calculator',
     slug: 'seo-cost-calculator',
-    description: 'Calculate the estimated cost of SEO services based on your website and business needs.',
-    category: 'SEO Tools',
-    isFree: true
-  }
+    description: 'Estimate the cost of SEO services based on your website size, industry, and business goals.',
+    category: 'Analysis Tools',
+    isFree: true,
+  },
+  // AI Tools
+  {
+    name: 'LLMs.txt Generator',
+    slug: 'llms-txt-generator',
+    description: 'Create an LLMs.txt file to help AI models better understand and navigate your website content.',
+    category: 'AI Tools',
+    isFree: true,
+  },
 ];
 
 export default function ToolsIndexPage() {

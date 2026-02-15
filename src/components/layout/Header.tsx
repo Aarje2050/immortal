@@ -36,14 +36,22 @@ const servicesData = {
   ]
 };
 
-// Tools data
-const toolsData = [
-  { name: 'llms.txt Generator', href: '/tools/llms-txt-generator' },
-  { name: 'Robots.txt Generator', href: '/tools/robots-txt-generator' },
-  { name: 'SEO Audit Checklist', href: '/tools/seo-audit-checklist' },
-  { name: 'SEO Cost Calculator', href: '/tools/seo-cost-calculator' },
-  { name: 'Schema Markup Generator', href: '/tools/schema-generator' },
-];
+// Tools data organized by category, with optional badge for highlighted items
+const toolsData: Record<string, { name: string; href: string; badge?: 'new' | 'popular' }[]> = {
+  'Content Tools': [
+    { name: 'Word Counter', href: '/tools/word-counter', badge: 'new' },
+    { name: 'SERP Snippet Preview', href: '/tools/serp-preview', badge: 'new' },
+    { name: 'Keyword Density Checker', href: '/tools/keyword-density-checker', badge: 'new' },
+    { name: 'Readability Analyzer', href: '/tools/readability-checker', badge: 'new' },
+    { name: 'Meta Tags Generator', href: '/tools/meta-tags-generator' },
+  ],
+  'Technical SEO': [
+    { name: 'Page Size Checker', href: '/tools/page-size-checker', badge: 'popular' },
+    { name: 'Schema Markup Generator', href: '/tools/schema-generator' },
+    { name: 'Robots.txt Generator', href: '/tools/robots-txt-generator' },
+    { name: 'LLMs.txt Generator', href: '/tools/llms-txt-generator' },
+  ],
+};
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -199,30 +207,48 @@ const Header: React.FC = () => {
               
               {/* Tools Dropdown Menu */}
               {activeDropdown === 'tools' && (
-                <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg overflow-hidden z-50 border border-gray-100">
+                <div className="absolute left-0 mt-2 w-72 bg-white shadow-xl rounded-lg overflow-hidden z-50 border border-gray-100">
                   <div className="p-4">
-                    <ul className="space-y-1">
-                      {toolsData.map((tool) => (
-                        <li key={tool.name}>
-                          <Link
-                            href={tool.href}
-                            className="block py-2 px-3 rounded hover:bg-gray-50 text-text-secondary hover:text-primary-main text-sm"
-                            onClick={closeMenu}
-                          >
-                            {tool.name}
-                          </Link>
-                        </li>
-                      ))}
-                      <li>
-                        <Link
-                          href="/tools"
-                          className="block py-2 px-3 rounded text-primary-main font-medium hover:text-primary-dark mt-2 pt-2 border-t border-gray-100 text-sm"
-                          onClick={closeMenu}
-                        >
-                          View All Tools
-                        </Link>
-                      </li>
-                    </ul>
+                    {Object.entries(toolsData).map(([category, tools]) => (
+                      <div key={category} className="mb-4 last:mb-0">
+                        <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2">{category}</h3>
+                        <ul className="space-y-0.5">
+                          {tools.map((tool) => (
+                            <li key={tool.name}>
+                              <Link
+                                href={tool.href}
+                                className="flex items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-50 text-text-secondary hover:text-primary-main text-sm transition-colors"
+                                onClick={closeMenu}
+                              >
+                                {tool.name}
+                                {tool.badge === 'popular' && (
+                                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-orange-100 text-orange-600">
+                                    🔥 Hot
+                                  </span>
+                                )}
+                                {tool.badge === 'new' && (
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-green-100 text-green-700">
+                                    New
+                                  </span>
+                                )}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    <div className="pt-3 mt-3 border-t border-gray-100">
+                      <Link
+                        href="/tools"
+                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
+                        onClick={closeMenu}
+                      >
+                        View All 11 Tools
+                        <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
@@ -384,28 +410,43 @@ const Header: React.FC = () => {
                 
                 {activeDropdown === 'mobile-tools' && (
                   <div className="pl-4 pb-3">
-                    <ul className="space-y-2">
-                      {toolsData.map((tool) => (
-                        <li key={tool.name}>
-                          <Link
-                            href={tool.href}
-                            className="text-text-secondary hover:text-primary-main transition-colors block py-1"
-                            onClick={closeMenu}
-                          >
-                            {tool.name}
-                          </Link>
-                        </li>
-                      ))}
-                      <li className="mt-2 pt-2 border-t border-gray-100">
-                        <Link
-                          href="/tools"
-                          className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
-                          onClick={closeMenu}
-                        >
-                          View All Tools
-                        </Link>
-                      </li>
-                    </ul>
+                    {Object.entries(toolsData).map(([category, tools]) => (
+                      <div key={category} className="mb-3">
+                        <h4 className="font-semibold text-xs uppercase tracking-wider text-text-secondary mt-3 mb-2">{category}</h4>
+                        <ul className="space-y-2">
+                          {tools.map((tool) => (
+                            <li key={tool.name}>
+                              <Link
+                                href={tool.href}
+                                className="flex items-center gap-2 text-text-secondary hover:text-primary-main transition-colors py-1"
+                                onClick={closeMenu}
+                              >
+                                {tool.name}
+                                {tool.badge === 'popular' && (
+                                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-orange-100 text-orange-600">
+                                    🔥 Hot
+                                  </span>
+                                )}
+                                {tool.badge === 'new' && (
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-green-100 text-green-700">
+                                    New
+                                  </span>
+                                )}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    <div className="mt-3 pt-2 border-t border-gray-100">
+                      <Link
+                        href="/tools"
+                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
+                        onClick={closeMenu}
+                      >
+                        View All 11 Tools
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>

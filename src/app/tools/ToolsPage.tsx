@@ -22,17 +22,102 @@ const ToolsPage: React.FC = () => {
   // State for category filtering
   const [activeCategory, setActiveCategory] = useState<string>('all');
   
-  // Tools data
+  // Tools data — all available tools first, then coming soon
   const tools: Tool[] = [
+    // Content Tools (available)
     {
-      id: 'seo-cost-calculator',
-      name: 'Free SEO Cost Calculator',
-      description: 'Free SEO Cost Calculator tool that helps users estimate their SEO costs across various industries.',
+      id: 'word-counter',
+      name: 'Word Counter & Character Counter',
+      description: 'Count words, characters, sentences, paragraphs. Get reading time estimates and SEO content-length insights.',
+      icon: '📊',
+      status: 'available',
+      category: 'content',
+      url: '/tools/word-counter'
+    },
+    {
+      id: 'keyword-density',
+      name: 'Keyword Density Checker',
+      description: 'Analyze keyword density, frequency, prominence, and N-gram phrase distribution in your content.',
+      icon: '🎯',
+      status: 'available',
+      category: 'content',
+      url: '/tools/keyword-density-checker'
+    },
+    {
+      id: 'readability',
+      name: 'Content Readability Analyzer',
+      description: 'Check Flesch Reading Ease, Flesch-Kincaid Grade Level, Gunning Fog Index, and passive voice usage.',
+      icon: '📖',
+      status: 'available',
+      category: 'content',
+      url: '/tools/readability-checker'
+    },
+    {
+      id: 'serp-preview',
+      name: 'Google SERP Snippet Preview',
+      description: 'Preview how your title tag and meta description appear in Google search results on desktop and mobile.',
+      icon: '🔍',
+      status: 'available',
+      category: 'content',
+      url: '/tools/serp-preview'
+    },
+    {
+      id: 'meta-tags',
+      name: 'Meta Tags Generator',
+      description: 'Create optimized title tags, meta descriptions, and Open Graph tags for better search visibility.',
+      icon: '🏷️',
+      status: 'available',
+      category: 'content',
+      url: '/tools/meta-tags-generator'
+    },
+    // Technical SEO Tools (available)
+    {
+      id: 'page-size-checker',
+      name: 'Website Page Size Checker',
+      description: "Check your page's raw HTML size against Google's 2 MB crawl limit with percentile comparison.",
+      icon: '📏',
+      status: 'available',
+      category: 'technical',
+      url: '/tools/page-size-checker'
+    },
+    {
+      id: 'robots-txt',
+      name: 'Robots.txt Generator',
+      description: 'Create a properly formatted robots.txt file to control how search engines crawl your website.',
       icon: '🤖',
       status: 'available',
       category: 'technical',
+      url: '/tools/robots-txt-generator'
+    },
+    {
+      id: 'schema-markup',
+      name: 'Schema Markup Generator',
+      description: 'Generate JSON-LD structured data markup for rich snippets in Google search results.',
+      icon: '📝',
+      status: 'available',
+      category: 'technical',
+      url: '/tools/schema-generator'
+    },
+    // Analysis Tools (available)
+    {
+      id: 'seo-audit',
+      name: 'SEO Audit Checklist',
+      description: 'Comprehensive interactive checklist covering technical, on-page, and content SEO best practices.',
+      icon: '📋',
+      status: 'available',
+      category: 'analysis',
+      url: '/tools/seo-audit-checklist'
+    },
+    {
+      id: 'seo-cost-calculator',
+      name: 'SEO Cost Calculator',
+      description: 'Estimate the cost of SEO services based on your website size, industry, and business goals.',
+      icon: '💰',
+      status: 'available',
+      category: 'analysis',
       url: '/tools/seo-cost-calculator'
     },
+    // AI Tools (available)
     {
       id: 'llms-txt',
       name: 'LLMs.txt Generator',
@@ -42,114 +127,34 @@ const ToolsPage: React.FC = () => {
       category: 'ai',
       url: '/tools/llms-txt-generator'
     },
+    // Coming Soon
     {
-      id: 'robots-txt',
-      name: 'Robots.txt Generator',
-      description: 'Create a properly formatted robots.txt file customized for your website needs with our easy-to-use generator.',
-      icon: '🤖',
-      status: 'available',
-      category: 'technical',
-      url: '/tools/robots-txt-generator'
-    },
-    {
-      id: 'schema-markup',
-      name: 'Schema Markup Generator',
-      description: 'Generate structured data markup (JSON-LD) for better search engine understanding of your content.',
-      icon: '📝',
-      status: 'available',
-      category: 'technical',
-      url: '/tools/schema-generator'
-    },
-    {
-      id: 'meta-tags',
-      name: 'Meta Tags Generator',
-      description: 'Create optimized title tags and meta descriptions for better click-through rates from search results.',
-      icon: '🏷️',
-      status: 'available',
-      category: 'content',
-      url: '/tools/meta-tags-generator'
-    },
-    {
-      id: 'keyword-research',
-      name: 'Keyword Research Tool',
-      description: 'Discover valuable keywords for your content with search volume estimates and difficulty scores.',
-      icon: '🔍',
+      id: 'og-preview',
+      name: 'Open Graph & Social Preview',
+      description: 'Preview how your URL appears when shared on Facebook, Twitter/X, LinkedIn, and WhatsApp.',
+      icon: '🌐',
       status: 'coming-soon',
       category: 'content',
-      url: '/tools/keyword-research'
+      url: '/tools/og-preview'
     },
     {
-      id: 'content-analyzer',
-      name: 'AI Content Analyzer',
-      description: 'Analyze your content for AI search optimization opportunities and get recommendations for improvement.',
-      icon: '🧠',
-      status: 'coming-soon',
-      category: 'ai',
-      url: '/tools/content-analyzer'
-    },
-    {
-      id: 'seo-audit',
-      name: 'SEO Audit Checklist',
-      description: 'Comprehensive checklist to audit your website for common SEO issues and improvement opportunities.',
-      icon: '📋',
-      status: 'available',
-      category: 'analysis',
-      url: '/tools/seo-audit-checklist'
-    },
-    {
-      id: 'image-optimizer',
-      name: 'Image SEO Optimizer',
-      description: 'Optimize your image alt text and filenames for better search engine visibility.',
-      icon: '🖼️',
-      status: 'coming-soon',
-      category: 'content',
-      url: '/tools/image-optimizer'
-    },
-    {
-      id: 'citation-generator',
-      name: 'Local Citation Generator',
-      description: 'Generate consistent NAP (Name, Address, Phone) information for local business listings.',
-      icon: '📍',
+      id: 'heading-analyzer',
+      name: 'Heading Structure Analyzer',
+      description: 'Check your H1-H6 heading hierarchy, find missing levels, and analyze heading keyword usage.',
+      icon: '🔤',
       status: 'coming-soon',
       category: 'technical',
-      url: '/tools/citation-generator'
+      url: '/tools/heading-analyzer'
     },
     {
-      id: 'ai-prompt-generator',
-      name: 'AI Prompt Generator',
-      description: 'Create effective prompts for AI platforms to ensure your content gets properly cited and referenced.',
-      icon: '💬',
-      status: 'coming-soon',
-      category: 'ai',
-      url: '/tools/ai-prompt-generator'
-    },
-    {
-      id: 'title-generator',
-      name: 'Blog Title Generator',
-      description: 'Generate engaging, SEO-friendly blog titles that attract both readers and search engines.',
-      icon: '✏️',
-      status: 'coming-soon',
-      category: 'content',
-      url: '/tools/title-generator'
-    },
-    {
-      id: 'text-readability',
-      name: 'Readability Analyzer',
-      description: 'Check the readability score of your content and get suggestions for improvement.',
-      icon: '📖',
-      status: 'coming-soon',
-      category: 'content',
-      url: '/tools/readability'
-    },
-    {
-      id: 'sitemap-generator',
-      name: 'XML Sitemap Generator',
-      description: 'Create a comprehensive XML sitemap for your website to improve search engine crawling.',
-      icon: '🗺️',
+      id: 'hreflang-generator',
+      name: 'Hreflang Tag Generator',
+      description: 'Generate hreflang tags for multi-language and multi-region websites in HTML, XML, and HTTP header format.',
+      icon: '🌍',
       status: 'coming-soon',
       category: 'technical',
-      url: '/tools/sitemap-generator'
-    }
+      url: '/tools/hreflang-generator'
+    },
   ];
 
   // Filter tools based on active category
@@ -185,10 +190,10 @@ const ToolsPage: React.FC = () => {
                 Free SEO Resources
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                ImmortalSEO <span className="text-yellow-300">Toolbox</span>
+                Free SEO <span className="text-yellow-300">Tools</span>
               </h1>
               <p className="text-xl mb-8 opacity-90">
-                Free tools to help you optimize your website for both traditional search engines and AI platforms.
+                {availableToolsCount} free tools built by SEO experts to help you analyze, optimize, and improve your website&apos;s search performance.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button

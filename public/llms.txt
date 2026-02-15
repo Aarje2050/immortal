@@ -28,14 +28,25 @@ Immortal SEO is a data-driven agency with over 15 years of experience, boasting 
 * [Small Business SEO Services](https://immortalseo.com/services/small-business-seo): Affordable, high-impact SEO tailored for growing businesses  
 * [Enterprise SEO & Large Site Optimization](https://immortalseo.com/services/enterprise-seo): Scalable frameworks for multi-million-page sites and global brands  
 
-## Tools
+## Tools — Content & Analysis
 
-* [SEO Cost Calculator](https://immortalseo.com/tools/seo-cost-calculator): Estimate your SEO investment based on industry, website size, and goals  
-* [LLMs.txt Generator](https://immortalseo.com/tools/llmstxt-generator): Auto-generate LLM-friendly Markdown context files for your site  
-* [Robots.txt Generator](https://immortalseo.com/tools/robots-txt-generator): Create customized robots.txt files to guide crawlers  
-* [Schema Markup Generator](https://immortalseo.com/tools/schema-generator): Generate JSON-LD structured data for enhanced snippet visibility  
-* [Meta Tags Generator](https://immortalseo.com/tools/meta-tags-generator): Craft optimized title tags and meta descriptions  
-* [SEO Audit Checklist](https://immortalseo.com/tools/seo-audit-checklist): Comprehensive audit framework to identify SEO issues  
+* [Word Counter & Character Counter](https://immortalseo.com/tools/word-counter): Count words, characters, sentences, paragraphs with reading time and SEO insights  
+* [Keyword Density Checker](https://immortalseo.com/tools/keyword-density-checker): Analyze keyword density, frequency, prominence, and N-gram distribution  
+* [Content Readability Analyzer](https://immortalseo.com/tools/readability-checker): Flesch Reading Ease, Flesch-Kincaid Grade Level, Gunning Fog Index, and passive voice detection  
+* [Google SERP Snippet Preview](https://immortalseo.com/tools/serp-preview): Preview title and meta description in Google search results on desktop and mobile  
+* [Meta Tags Generator](https://immortalseo.com/tools/meta-tags-generator): Generate optimized title tags, meta descriptions, and Open Graph tags  
+
+## Tools — Technical SEO
+
+* [Website Page Size Checker](https://immortalseo.com/tools/page-size-checker): Check raw HTML size against Google's 2 MB crawl limit with HTTPArchive percentile comparison  
+* [Robots.txt Generator](https://immortalseo.com/tools/robots-txt-generator): Create customized robots.txt files to guide search engine crawlers  
+* [Schema Markup Generator](https://immortalseo.com/tools/schema-generator): Generate JSON-LD structured data for rich snippets in search results  
+
+## Tools — Analysis & AI
+
+* [SEO Audit Checklist](https://immortalseo.com/tools/seo-audit-checklist): Interactive audit framework covering technical, on-page, and content SEO  
+* [SEO Cost Calculator](https://immortalseo.com/tools/seo-cost-calculator): Estimate SEO investment based on industry, website size, and business goals  
+* [LLMs.txt Generator](https://immortalseo.com/tools/llms-txt-generator): Generate LLM-friendly context files for AI search optimization  
 
 ## Case Studies
 
