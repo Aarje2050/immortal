@@ -1,4 +1,5 @@
 // src/app/services/[service]/page.tsx
+// Service detail page — server component for full SEO & LLM indexing
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -9,11 +10,7 @@ import Section from '@/components/ui/Section';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import JsonLd from '@/components/seo/JsonLd';
-import ContextualLinks from '@/components/seo/ContextualLinks';
-import { DefinitionBox, ListBox, ComparisonTable, StepByStep, PeopleAlsoAsk } from '@/components/seo/FeaturedSnippet';
-import { EntityRichContent, SemanticRelationship, ContextBlock } from '@/components/seo/EntityRichContent';
-import TopicClusterNav from '@/components/seo/TopicClusterNav';
-import { getTopicClusterForPage, getSupportingContent } from '@/lib/topics/topicClusters';
+import { StepByStep } from '@/components/seo/FeaturedSnippet';
 import LeadCaptureForm from '@/components/forms/LeadCaptureForm';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
 import { 
@@ -31,57 +28,43 @@ import { ServiceData } from '@/types/service';
 import fs from 'fs';
 import path from 'path';
 
-// Generate static paths for all services
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════════════════════════════════════
+
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const servicesData = JSON.parse(fileContent);
-  
-  return Object.keys(servicesData).map(service => ({
-    service
-  }));
+  return Object.keys(servicesData).map(service => ({ service }));
 }
 
-// Generate metadata for each service page
 export async function generateMetadata({
   params: paramsPromise,
 }: {
   params: Promise<{ service: string }>;
 }): Promise<Metadata> {
-  // Wait for params to resolve
   const params = await paramsPromise;
   const service = params.service;
-  
-  // Get service data
   const serviceData = await getServiceData(service);
   
   if (!serviceData) {
     return {
       title: 'Service Not Found',
-      alternates: {
-        canonical: 'https://www.immortalseo.com/services',
-      },
+      alternates: { canonical: 'https://www.immortalseo.com/services' },
     };
   }
   
-  // Define base URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
-  
-  // Generate canonical URL
   const canonicalUrl = `${baseUrl}/services/${service}`;
-  
-  // Get base metadata and add canonical
   const baseMetadata = generatePageMetadata({
     title: serviceData.metaTitle,
     description: serviceData.metaDescription,
   });
   
-  // Enhanced metadata for better SERP CTR
   return {
     ...baseMetadata,
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       ...(baseMetadata.openGraph || {}),
       url: canonicalUrl,
@@ -90,30 +73,27 @@ export async function generateMetadata({
       description: serviceData.metaDescription,
       images: [
         {
-          url: `${baseUrl}/images/services/${service}-og.jpg`, // Service-specific OG image
+          url: `${baseUrl}/images/services/${service}-og.jpg`,
           width: 1200,
           height: 630,
           alt: serviceData.name,
-        }
+        },
       ],
     },
-    // Add Twitter card
     twitter: {
       card: 'summary_large_image',
       title: serviceData.metaTitle,
       description: serviceData.metaDescription,
       images: [`${baseUrl}/images/services/${service}-og.jpg`],
-    }
+    },
   };
 }
 
-// Get service data
 async function getServiceData(slug: string): Promise<ServiceData | null> {
   try {
     const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const servicesData = JSON.parse(fileContent);
-    
     return servicesData[slug] || null;
   } catch (error) {
     console.error(`Error loading service data for ${slug}:`, error);
@@ -121,37 +101,14 @@ async function getServiceData(slug: string): Promise<ServiceData | null> {
   }
 }
 
-// Helper function for icon display
-function getIconElement(iconName: string) {
-  // Same implementation as before
-  switch (iconName) {
-    case 'GearIcon':
-      return (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      );
-    // Add other cases
-    default:
-      return (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      );
-  }
-}
-
-// Find related services
 async function getRelatedServices(currentSlug: string, currentCategory: string) {
-  // Same implementation as before
   const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const servicesData = JSON.parse(fileContent);
   
-  // First get services in the same category
   const sameCategory = Object.entries(servicesData)
-    .filter(([slug, service]: [string, any]) => 
+    .filter(
+      ([slug, service]: [string, any]) =>
       slug !== currentSlug && service.category === currentCategory
     )
     .slice(0, 2)
@@ -159,13 +116,13 @@ async function getRelatedServices(currentSlug: string, currentCategory: string) 
       slug,
       name: service.name,
       shortDescription: service.shortDescription,
-      icon: service.icon
+      icon: service.icon,
     }));
   
-  // If we need more, get from other categories
   if (sameCategory.length < 3) {
     const otherCategories = Object.entries(servicesData)
-      .filter(([slug, service]: [string, any]) => 
+      .filter(
+        ([slug, service]: [string, any]) =>
         slug !== currentSlug && service.category !== currentCategory
       )
       .slice(0, 3 - sameCategory.length)
@@ -173,46 +130,46 @@ async function getRelatedServices(currentSlug: string, currentCategory: string) 
         slug,
         name: service.name,
         shortDescription: service.shortDescription,
-        icon: service.icon
+        icon: service.icon,
       }));
-    
     return [...sameCategory, ...otherCategories];
   }
-  
   return sameCategory;
 }
 
-export default async function ServiceDetailPage({ params: paramsPromise }: { params: Promise<{ service: string }> }) {
-  // Wait for params to resolve
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN PAGE COMPONENT
+// ═══════════════════════════════════════════════════════════════════════════
+
+export default async function ServiceDetailPage({
+  params: paramsPromise,
+}: {
+  params: Promise<{ service: string }>;
+}) {
   const params = await paramsPromise;
   const service = params.service;
-  
   const serviceData = await getServiceData(service);
   
   if (!serviceData) {
     notFound();
   }
   
-  // Base URL for canonical and structured data
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.immortalseo.com';
   const canonicalUrl = `${baseUrl}/services/${service}`;
-  
-  // Get schema context
   const context = getSchemaContext();
-  
-  // Get related services
-  const relatedServicesList = await getRelatedServices(params.service, serviceData.category);
-  
-  
-  
-  // Generate WebPage schema
+  const relatedServicesList = await getRelatedServices(
+    params.service,
+    serviceData.category
+  );
+
+  // ─── Schema generation ─────────────────────────────────────────────────
   const webPageSchema = generateWebPageSchema({
     url: canonicalUrl,
     title: serviceData.metaTitle || `${serviceData.name} | ImmortalSEO`,
     description: serviceData.metaDescription || serviceData.shortDescription,
     datePublished: serviceData.publishedDate || '2023-01-01T00:00:00Z',
     dateModified: serviceData.updatedDate || new Date().toISOString(),
-    // Add breadcrumbs for semantic navigation
     breadcrumbs: [
       { name: 'Home', url: baseUrl },
       { name: 'Services', url: `${baseUrl}/services` },
@@ -220,41 +177,35 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     ],
   });
   
-  // Generate Service schema with entity relationships
   const serviceSchema = generateServiceSchema({
     url: canonicalUrl,
     name: serviceData.name,
     description: serviceData.longDescription || serviceData.shortDescription,
     serviceType: serviceData.category || 'SEO Service',
-    // Add service-specific details
     offers: {
       price: serviceData.price,
       priceCurrency: 'USD',
-      description: `${serviceData.name} starting at ${serviceData.price || '$X,XXX'}`
+      description: `${serviceData.name} starting at ${serviceData.price || '$X,XXX'}`,
     },
-    // Add provider details
     provider: {
       '@type': 'Organization',
       name: 'ImmortalSEO',
       url: baseUrl,
     },
-    // Add area served
-    areaServed: 'Worldwide',
-    // Add same as references if available
+    areaServed: 'United States, Canada',
     sameAs: serviceData.sameAs || [],
   });
 
-  // Enhance service schema with entity relationships
-  // Add related services via sameAs
   if (relatedServicesList.length > 0) {
-    (serviceSchema as any).relatedService = relatedServicesList.map((relService: any) => ({
+    (serviceSchema as any).relatedService = relatedServicesList.map(
+      (r: any) => ({
       '@type': 'Service',
-      name: relService.name,
-      url: `${baseUrl}/services/${relService.slug}`,
-    }));
+        name: r.name,
+        url: `${baseUrl}/services/${r.slug}`,
+      })
+    );
   }
-  
-  // Initialize schemas array with existing schemas
+
   const schemas: BaseSchema[] = [
     context.organization,
     context.website,
@@ -262,155 +213,155 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
     serviceSchema,
   ];
   
-  // Add FAQ schema if FAQs exist
   if (serviceData.faq && serviceData.faq.length > 0) {
-    // Transform data format for our generator function
-    const faqs = serviceData.faq.map((item: { question: string; answer: string }) => ({
-      question: item.question,
-      answer: item.answer
-    }));
-    
-    schemas.push(generateFAQPageSchema(faqs));
+    schemas.push(
+      generateFAQPageSchema(
+        serviceData.faq.map((i: { question: string; answer: string }) => ({
+          question: i.question,
+          answer: i.answer,
+        }))
+      )
+    );
   }
 
-  // Add Review schemas for testimonials
   if (serviceData.testimonials && serviceData.testimonials.length > 0) {
-    serviceData.testimonials.forEach((testimonial: any) => {
-      const reviewSchema = generateTestimonialSchema({
-        author: testimonial.author || 'Client',
-        reviewBody: testimonial.quote,
-        datePublished: new Date().toISOString(), // Use current date or add datePublished to testimonials
+    serviceData.testimonials.forEach((t: any) => {
+      schemas.push(
+        generateTestimonialSchema({
+          author: t.author || 'Client',
+          reviewBody: t.quote,
+          datePublished: new Date().toISOString(),
         itemReviewed: {
           '@type': 'Service',
           name: serviceData.name,
           url: canonicalUrl,
         },
-        ratingValue: 5, // Default to 5 stars, can be made configurable
+          ratingValue: 5,
+        })
+      );
       });
-      schemas.push(reviewSchema);
-    });
-
-    // Add AggregateRating if we have multiple reviews
     if (serviceData.testimonials.length > 1) {
-      const aggregateRating = generateAggregateRatingFromReviews(
+      const agg = generateAggregateRatingFromReviews(
         serviceData.testimonials.map(() => ({ ratingValue: 5 }))
       );
-      if (aggregateRating) {
-        schemas.push(aggregateRating);
-      }
+      if (agg) schemas.push(agg);
     }
   }
 
-  // Add Person schemas for team members who specialize in this service
-  // Link to team members based on service expertise
+  // Person schemas for founders who specialize in this service
   const teamMembers = [
     {
       name: 'Rajesh Jat',
       jobTitle: 'Co-Founder & SEO Strategist',
       url: `${baseUrl}/about#rajesh-jat`,
-      specializesIn: ['technical-seo', 'semantic-seo', 'ai-enhanced-seo', 'llm-content-strategy'],
+      specializesIn: [
+        'technical-seo',
+        'semantic-seo',
+        'ai-enhanced-seo',
+        'llm-content-strategy',
+        'content-seo',
+      ],
     },
     {
       name: 'Manish Lamrod',
       jobTitle: 'Co-Founder & Off-Page SEO Expert',
       url: `${baseUrl}/about#manish-lamrod`,
-      specializesIn: ['off-page-seo', 'local-seo'],
+      specializesIn: [
+        'off-page-seo',
+        'local-seo',
+        'small-business-seo',
+        'enterprise-seo',
+      ],
     },
   ];
 
-  teamMembers.forEach(member => {
+  teamMembers.forEach((member) => {
     if (member.specializesIn.includes(service)) {
-      const personSchema = {
+      schemas.push({
         '@context': 'https://schema.org',
         '@type': 'Person',
         '@id': `${member.url}#person`,
         name: member.name,
         jobTitle: member.jobTitle,
         url: member.url,
-        worksFor: {
-          '@id': `${baseUrl}/#organization`,
-        },
+        worksFor: { '@id': `${baseUrl}/#organization` },
         knowsAbout: serviceData.name,
-      };
-      schemas.push(personSchema);
+      });
     }
   });
 
-  // Add HowTo schema for service process if process steps exist
   if (serviceData.process && serviceData.process.length > 0) {
-    const howToSchema = generateHowToSchema({
+    schemas.push(
+      generateHowToSchema({
       name: `How to Get ${serviceData.name}`,
       description: `Step-by-step process for getting ${serviceData.name} services`,
       steps: serviceData.process.map((step: any, index: number) => ({
         name: step.title || `Step ${index + 1}`,
         text: step.description || step.content || '',
-        image: step.image || undefined
-      })),
-      totalTime: 'PT2H', // Estimated 2 hours for consultation
-      image: `${baseUrl}/images/services/${service}.jpg`
-    });
-    
-    schemas.push(howToSchema);
+          image: step.image || undefined,
+        })),
+        totalTime: 'PT2H',
+        image: `${baseUrl}/images/services/${service}.jpg`,
+      })
+    );
   }
-  
-  // Add local business if available
-  if (context.localBusiness) {
-    schemas.push(context.localBusiness);
-  }
-  
-  // Create schema graph with all schemas
+
+  if (context.localBusiness) schemas.push(context.localBusiness);
+
   const schemaGraph = generateSchemaGraph(schemas.filter(Boolean));
   
-  // Create table of contents for better UX and crawlability
+  // ─── Table of contents ─────────────────────────────────────────────────
   const tableOfContents = [
     { id: 'overview', label: 'Service Overview' },
-    { id: 'benefits', label: 'Key Benefits' },
-    { id: 'approach', label: 'Our Approach' },
   ];
-  
-  // Add conditional TOC entries based on available sections
+  if (
+    serviceData.serviceExamples &&
+    serviceData.serviceExamples.length > 0
+  ) {
+    tableOfContents.push({ id: 'included', label: "What's Included" });
+  }
+  tableOfContents.push({ id: 'benefits', label: 'Key Benefits' });
+  if (serviceData.process && serviceData.process.length > 0) {
+    tableOfContents.push({ id: 'process', label: 'Our Process' });
+  }
   if (serviceData.caseStudies && serviceData.caseStudies.length > 0) {
     tableOfContents.push({ id: 'case-studies', label: 'Success Stories' });
   }
-  
-  
   if (serviceData.faq && serviceData.faq.length > 0) {
-    tableOfContents.push({ id: 'faq', label: 'Frequently Asked Questions' });
+    tableOfContents.push({ id: 'faq', label: 'FAQ' });
   }
-  
-  // Helper to determine if a section should be displayed
-  const shouldDisplaySection = (sectionName: string): boolean => {
-    if (!serviceData.displaySections) return true;
-    return serviceData.displaySections[sectionName as keyof typeof serviceData.displaySections] !== false;
-  };
 
-  // Define breadcrumbs
+  // Breadcrumbs
   const breadcrumbs = [
     { name: 'Services', href: '/services' },
-    { name: serviceData.name, href: `/services/${service}` }
+    { name: serviceData.name, href: `/services/${service}` },
   ];
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // RENDER
+  // ═══════════════════════════════════════════════════════════════════════
 
   return (
     <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
       
-      {/* Hero Section with Centered Format */}
-      <section className="relative bg-gradient-to-r from-primary-dark to-primary-main text-white overflow-hidden">
-        {/* Background Pattern */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 1. HERO                                                           */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      <section className="relative bg-gradient-to-br from-primary-dark via-primary-main to-primary-dark text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/grid-pattern.svg')] bg-repeat"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/grid-pattern.svg')] bg-repeat" />
         </div>
-        
         <Container>
-          <div className="py-20 md:py-28 relative z-10">
+          <div className="py-16 md:py-24 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block px-4 py-2 rounded-full bg-white/10 text-sm font-medium mb-4 backdrop-blur-sm">
+              <span className="inline-block px-4 py-2 rounded-full bg-white/10 text-sm font-medium mb-6 backdrop-blur-sm">
                 {serviceData.category}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 {serviceData.name}
               </h1>
-              <p className="text-xl mb-8 opacity-90">
+              <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
                 {serviceData.shortDescription}
               </p>
               <div className="flex flex-wrap justify-center gap-4">
@@ -434,24 +385,62 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
         </Container>
       </section>
 
-      {/* Main Content Section */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 2. TRUST METRICS BAR                                              */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      <div className="bg-white border-b border-gray-100">
+        <Container>
+          <div className="py-4 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-text-secondary">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-primary-main" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+              <span>SEO Experts Since 2008</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span>4.9/5 Client Rating</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-primary-main" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+              </svg>
+              <span>250+ Businesses Served</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-primary-main" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              <span>94% Client Retention</span>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 3. MAIN CONTENT + SIDEBAR                                         */}
+      {/* ────────────────────────────────────────────────────────────────── */}
       <Section>
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Main Content Column - 8 columns on desktop */}
+            {/* ── Main Content (8/12) ── */}
             <div className="lg:col-span-8">
-              {/* Enhanced Table of Contents */}
-              <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border-l-4 border-primary-main">
-                <h2 className="text-xl font-semibold mb-4">On This Page</h2>
-                <nav aria-label="Table of Contents">
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {/* Table of Contents */}
+              <nav
+                aria-label="Table of Contents"
+                className="bg-white rounded-xl shadow-sm p-6 mb-8 border-l-4 border-primary-main"
+              >
+                <h2 className="text-lg font-semibold mb-3">On This Page</h2>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {tableOfContents.map((item) => (
                       <li key={item.id}>
                         <a 
                           href={`#${item.id}`} 
-                          className="flex items-center text-primary-main hover:text-primary-dark"
+                        className="flex items-center text-primary-main hover:text-primary-dark text-sm"
                         >
-                          <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-3.5 h-3.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                           {item.label}
@@ -460,334 +449,286 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                     ))}
                   </ul>
                 </nav>
-              </div>
               
-              {/* Service Overview with Schema-Friendly Markup */}
               <article>
-                <div id="overview" className="scroll-mt-24">
-                  <div className="flex items-center mb-6">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary-main/10 text-primary-main flex items-center justify-center mr-4">
-                      {getIconElement(serviceData.icon)}
-                    </div>
-                    <h2 className="text-3xl font-bold">{serviceData.name}</h2>
+                {/* ── Service Overview ── */}
+                <section id="overview" className="scroll-mt-24 mb-10">
+                  <h2 className="text-3xl font-bold mb-6">{serviceData.name}</h2>
+                  <div className="prose prose-lg max-w-none text-text-secondary">
+                    <p>{serviceData.longDescription}</p>
                   </div>
                   
-                  <div className="prose max-w-none mb-8">
-                    <p className="text-lg text-text-secondary">{serviceData.longDescription}</p>
+                  {/* Supplementary content — why this service matters */}
+                  {serviceData.supplementaryContent && (
+                    <div className="mt-8 space-y-6">
+                      {serviceData.supplementaryContent.importance && (
+                        <div className="bg-primary-main/5 border-l-4 border-primary-main p-6 rounded-r-lg">
+                          <h3 className="text-xl font-semibold mb-3">
+                            Why {serviceData.name} Matters
+                          </h3>
+                          <p className="text-text-secondary leading-relaxed">
+                            {serviceData.supplementaryContent.importance}
+                          </p>
                   </div>
+                      )}
 
-                  {/* Definition Box for "What is X?" queries - Using short description to avoid repetition */}
-                  <DefinitionBox
-                    term={serviceData.name}
-                    definition={serviceData.shortDescription || serviceData.longDescription?.substring(0, 200) || ''}
-                    className="mb-8"
-                  />
-
-                  {/* Semantic Relationship Block - Made unique per service */}
-                  {(() => {
-                    // Generate unique relationships based on service type and related services
-                    const relationships = [];
-                    
-                    // Add relationship to first related service if available
-                    if (relatedServicesList.length > 0) {
-                      relationships.push({
-                        from: 'This service',
-                        relationship: 'complements',
-                        to: relatedServicesList[0].name,
-                        description: 'Often implemented together for maximum impact',
-                      });
-                    }
-                    
-                    // Add service-specific relationships based on category
-                    if (serviceData.category?.includes('Technical')) {
-                      relationships.push({
-                        from: 'Technical foundation',
-                        relationship: 'enables',
-                        to: 'Content and off-page strategies',
-                        description: 'Creates the infrastructure for other SEO efforts',
-                      });
-                    } else if (serviceData.category?.includes('Content')) {
-                      relationships.push({
-                        from: 'Strategic content',
-                        relationship: 'drives',
-                        to: 'Organic traffic and conversions',
-                        description: 'Addresses user intent throughout the customer journey',
-                      });
-                    } else if (serviceData.category?.includes('Local')) {
-                      relationships.push({
-                        from: 'Local optimization',
-                        relationship: 'targets',
-                        to: 'Geographic search queries',
-                        description: 'Connects businesses with nearby customers',
-                      });
-                    } else if (serviceData.name?.includes('AI') || serviceData.name?.includes('LLM')) {
-                      relationships.push({
-                        from: 'AI optimization',
-                        relationship: 'ensures visibility in',
-                        to: 'ChatGPT, Perplexity, and SGE',
-                        description: 'Future-proofs content for AI-powered search',
-                      });
-                    } else {
-                      // Generic fallback
-                      relationships.push({
-                        from: 'SEO strategy',
-                        relationship: 'improves',
-                        to: 'Search visibility and rankings',
-                        description: 'Delivers measurable organic growth',
-                      });
-                    }
-                    
-                    // Add one more unique relationship based on primary keywords
-                    if (serviceData.primaryKeywords && serviceData.primaryKeywords.length > 0) {
-                      const mainKeyword = serviceData.primaryKeywords[0];
-                      relationships.push({
-                        from: mainKeyword,
-                        relationship: 'enhances',
-                        to: 'Overall digital presence',
-                        description: 'Integrates with broader marketing efforts',
-                      });
-                    }
-                    
-                    return relationships.length > 0 ? (
-                      <SemanticRelationship
-                        title="Strategic Connections"
-                        relationships={relationships}
-                        className="mb-8"
-                      />
-                    ) : null;
-                  })()}
-
-                  {/* Primary Keywords Section - Enhanced for Entity Optimization */}
-                  {serviceData.primaryKeywords && (
-                    <div className="mb-8">
-                      <h3 className="text-lg font-medium text-text-secondary mb-3">Key Topics & Services:</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {serviceData.primaryKeywords.map((keyword: string, index: number) => (
-                          <span 
-                            key={index} 
-                            className="px-3 py-1 bg-primary-main/10 text-primary-main rounded-full text-sm"
-                            itemProp="keywords"
-                          >
-                            {keyword}
-                          </span>
-                        ))}
+                      {serviceData.supplementaryContent.challenges &&
+                        serviceData.supplementaryContent.challenges.length >
+                          0 && (
+                          <div>
+                            <h3 className="text-xl font-semibold mb-4">
+                              Common Challenges We Solve
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {serviceData.supplementaryContent.challenges.map(
+                                (
+                                  challenge: {
+                                    title: string;
+                                    description: string;
+                                  },
+                                  i: number
+                                ) => (
+                                  <div
+                                    key={i}
+                                    className="bg-white rounded-lg p-4 border border-gray-100"
+                                  >
+                                    <h4 className="font-semibold text-text-primary mb-1">
+                                      {challenge.title}
+                                    </h4>
+                                    <p className="text-sm text-text-secondary">
+                                      {challenge.description}
+                                    </p>
+                                  </div>
+                                )
+                              )}
                       </div>
                     </div>
                   )}
                   
-                  {/* Supplementary Content Section for Entity Relevance */}
-                  {shouldDisplaySection('supplementaryContent') && serviceData.supplementaryContent && (
-                    <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                      <h3 className="text-2xl font-bold mb-4">Why {serviceData.name} Is Important</h3>
-                      
-                      <div className="prose max-w-none">
-                        {serviceData.supplementaryContent.importance && (
-                          <p className="mb-4">{serviceData.supplementaryContent.importance}</p>
-                        )}
-                        
-                        {serviceData.supplementaryContent.challenges && serviceData.supplementaryContent.challenges.length > 0 && (
-                          <>
-                            <h4 className="text-xl font-semibold mt-6 mb-3">Challenges with {serviceData.name}</h4>
-                            <ul className="list-disc pl-6 mb-6">
-                              {serviceData.supplementaryContent.challenges.map((challenge, index) => (
-                                <li key={index}><strong>{challenge.title}</strong> - {challenge.description}</li>
+                      {serviceData.supplementaryContent.differences && (
+                        <div>
+                          <h3 className="text-xl font-semibold mb-3">
+                            What Sets Our Approach Apart
+                          </h3>
+                          <p className="text-text-secondary leading-relaxed">
+                            {serviceData.supplementaryContent.differences}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </section>
+
+                {/* ── What's Included ── */}
+                {serviceData.serviceExamples &&
+                  serviceData.serviceExamples.length > 0 && (
+                    <section
+                      id="included"
+                      className="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-10 scroll-mt-24"
+                    >
+                      <h2 className="text-2xl font-bold mb-6">
+                        What&apos;s Included
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {serviceData.serviceExamples.map(
+                          (
+                            example: { category: string; items: string[] },
+                            i: number
+                          ) => (
+                            <div
+                              key={i}
+                              className="border border-gray-100 rounded-lg p-5"
+                            >
+                              <h3 className="text-lg font-semibold mb-3 text-primary-main">
+                                {example.category}
+                              </h3>
+                              <ul className="space-y-2">
+                                {example.items.map((item: string, j: number) => (
+                                  <li
+                                    key={j}
+                                    className="flex items-start text-sm text-text-secondary"
+                                  >
+                                    <svg className="w-4 h-4 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {item}
+                                  </li>
                               ))}
                             </ul>
-                          </>
-                        )}
-                        
-                        {serviceData.supplementaryContent.differences && (
-                          <>
-                            <h4 className="text-xl font-semibold mt-6 mb-3">How {serviceData.name} Differs</h4>
-                            <p>{serviceData.supplementaryContent.differences}</p>
-                          </>
-                        )}
                       </div>
-                    </div>
+                          )
                   )}
                 </div>
-                
-                {/* Benefits Section with List Box for Featured Snippets */}
-                <section id="benefits" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
-                  <h2 className="text-2xl font-bold mb-6">Key Benefits of Our {serviceData.name}</h2>
-                  
-                  {/* List Box for Featured Snippet Optimization */}
-                  <ListBox
-                    title="What You'll Achieve"
-                    items={serviceData.benefits}
-                    ordered={false}
-                    className="mb-6"
-                  />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {serviceData.benefits.map((benefit: string, index: number) => (
-                      <div key={index} className="flex items-start" itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                    </section>
+                  )}
+
+                {/* ── Key Benefits ── */}
+                <section
+                  id="benefits"
+                  className="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-10 scroll-mt-24"
+                >
+                  <h2 className="text-2xl font-bold mb-6">
+                    Key Benefits of Our {serviceData.name}
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {serviceData.benefits.map(
+                      (benefit: string, i: number) => (
+                        <div key={i} className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-main/10 text-primary-main flex items-center justify-center mr-3 mt-0.5">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <p className="text-text-secondary" itemProp="description">{benefit}</p>
+                          <p className="text-text-secondary text-sm leading-relaxed">
+                            {benefit}
+                          </p>
                       </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 </section>
                 
-                {/* Our Process Section with Step-by-Step for Featured Snippets */}
-                <section id="approach" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
-                  <h2 className="text-2xl font-bold mb-6">Our Approach</h2>
-                  
-                  {/* Step-by-Step Component for Featured Snippets - Single display to avoid duplication */}
+                {/* ── Our Process ── */}
                   {serviceData.process && serviceData.process.length > 0 && (
-                    <div itemScope itemType="https://schema.org/HowTo">
+                  <section
+                    id="process"
+                    className="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-10 scroll-mt-24"
+                  >
+                    <h2 className="text-2xl font-bold mb-6">Our Process</h2>
                       <StepByStep
-                        title="Our Process"
-                        steps={serviceData.process.map((step: { title: string; description: string }, index: number) => ({
-                          number: index + 1,
+                      title=""
+                      steps={serviceData.process.map(
+                        (
+                          step: { title: string; description: string },
+                          i: number
+                        ) => ({
+                          number: i + 1,
                           title: step.title,
                           description: step.description,
-                        }))}
-                      />
-                    </div>
-                  )}
-                </section>
-                
-                {/* Service Examples Section */}
-                {shouldDisplaySection('serviceExamples') && serviceData.serviceExamples && serviceData.serviceExamples.length > 0 && (
-                  <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                    <h2 className="text-2xl font-bold mb-6">What's Included</h2>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {serviceData.serviceExamples.map((example, index) => (
-                        <div key={index} className="border border-gray-100 rounded-lg p-6 hover:shadow-md transition-shadow">
-                          <h3 className="text-xl font-semibold mb-3">{example.category}</h3>
-                          <ul className="space-y-2 text-text-secondary">
-                            {example.items.map((item, idx) => (
-                              <li key={idx} className="flex items-start">
-                                <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
+                        })
+                      )}
+                    />
                   </section>
                 )}
                 
-                {/* Case Studies Section */}
-                {serviceData.caseStudies && serviceData.caseStudies.length > 0 && (
-                  <section id="case-studies" className="bg-white rounded-xl shadow-sm p-8 mb-8 scroll-mt-24">
-                    <h2 className="text-2xl font-bold mb-6">Success Stories</h2>
+                {/* ── Case Studies / Success Stories ── */}
+                {serviceData.caseStudies &&
+                  serviceData.caseStudies.length > 0 && (
+                    <section
+                      id="case-studies"
+                      className="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-10 scroll-mt-24"
+                    >
+                      <h2 className="text-2xl font-bold mb-6">
+                        Success Stories
+                      </h2>
                     <div className="space-y-8">
-                      {serviceData.caseStudies.map((caseStudy: { title: string; description: string; results: string[] }, index: number) => (
-                        <div 
-                          key={index} 
-                          className="border-l-4 border-primary-main pl-4 py-2"
-                          itemScope 
-                          itemType="http://schema.org/Review"
-                        >
-                          <meta itemProp="itemReviewed" content={serviceData.name} />
-                          
-                          <h3 className="text-xl font-semibold mb-2" itemProp="name">{caseStudy.title}</h3>
-                          <p className="text-text-secondary mb-4" itemProp="reviewBody">{caseStudy.description}</p>
-                          
-                          <h4 className="text-lg font-medium mb-3">Results Achieved:</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {caseStudy.results.map((result, idx) => (
-                              <div key={idx} className="flex items-start">
-                                <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {serviceData.caseStudies.map(
+                          (
+                            cs: {
+                              title: string;
+                              description: string;
+                              results: string[];
+                            },
+                            i: number
+                          ) => (
+                            <div
+                              key={i}
+                              className="border-l-4 border-primary-main pl-5 py-2"
+                            >
+                              <h3 className="text-xl font-semibold mb-2">
+                                {cs.title}
+                              </h3>
+                              <p className="text-text-secondary mb-4">
+                                {cs.description}
+                              </p>
+                              <h4 className="text-sm font-semibold uppercase tracking-wider text-text-secondary mb-3">
+                                Results Achieved
+                              </h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {cs.results.map(
+                                  (result: string, j: number) => (
+                                    <div
+                                      key={j}
+                                      className="flex items-start"
+                                    >
+                                      <svg className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span className="text-sm">{result}</span>
+                                      <span className="text-sm">
+                                        {result}
+                                      </span>
                               </div>
-                            ))}
+                                  )
+                                )}
                           </div>
                         </div>
-                      ))}
+                          )
+                        )}
+                      </div>
+                      <div className="mt-6">
+                        <Link
+                          href="/case-studies"
+                          className="inline-flex items-center text-primary-main font-medium hover:text-primary-dark text-sm"
+                        >
+                          View All Case Studies
+                          <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </Link>
                     </div>
                   </section>
                 )}
                 
-                
-                {/* Entity-Rich Content Section - Made more unique */}
-                <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                  <EntityRichContent
-                    title="Related Services & Topics"
-                    entities={[
-                      ...relatedServicesList.slice(0, 3).map((relService: any) => ({
-                        entity: relService.name,
-                        description: relService.shortDescription,
-                        url: `/services/${relService.slug}`,
-                        type: 'service' as const,
-                      })),
-                      ...(serviceData.primaryKeywords?.slice(0, 2).map((keyword: string) => ({
-                        entity: keyword,
-                        description: `Essential component of modern SEO strategy`,
-                        type: 'concept' as const,
-                      })) || []),
-                    ]}
-                  />
-                </section>
-
-                {/* FAQ Section - People Also Ask removed to avoid duplication */}
+                {/* ── FAQ ── */}
                 {serviceData.faq && serviceData.faq.length > 0 && (
-                  <section id="faq" className="bg-white rounded-xl shadow-sm p-8 scroll-mt-24">
-                    <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-                    
-                    {/* Context Block for AI Understanding - Made unique per service */}
-                    <ContextBlock
-                      title="Why This Matters for Your Business"
-                      content={(() => {
-                        // Generate unique context based on service category and keywords
-                        const category = serviceData.category || 'SEO Services';
-                        const keywords = serviceData.primaryKeywords?.slice(0, 3).join(', ') || '';
-                        return `Effective ${category.toLowerCase()} requires understanding both traditional search behavior and emerging AI-powered discovery. Our approach integrates ${keywords} to ensure visibility across all platforms where your audience searches.`;
-                      })()}
-                      relatedEntities={serviceData.primaryKeywords?.slice(0, 5) || []}
-                      className="mb-8"
-                    />
-                    
-                    <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
-                      {serviceData.faq.map((item: { question: string; answer: string }, index: number) => (
-                        <div 
-                          key={index} 
-                          className="border border-gray-100 rounded-lg"
-                          itemScope 
-                          itemProp="mainEntity" 
-                          itemType="https://schema.org/Question"
-                        >
-                          <details className="group">
-                            <summary className="flex justify-between items-center p-4 cursor-pointer list-none">
-                              <h3 className="font-semibold text-lg" itemProp="name">{item.question}</h3>
-                              <svg className="w-5 h-5 text-primary-main transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <section
+                    id="faq"
+                    className="bg-white rounded-xl shadow-sm p-6 md:p-8 scroll-mt-24"
+                  >
+                    <h2 className="text-2xl font-bold mb-6">
+                      Frequently Asked Questions
+                    </h2>
+                    <div className="space-y-3">
+                      {serviceData.faq.map(
+                        (
+                          item: { question: string; answer: string },
+                          i: number
+                        ) => (
+                          <details
+                            key={i}
+                            className="group border border-gray-100 rounded-lg"
+                          >
+                            <summary className="flex justify-between items-center p-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                              <h3 className="font-semibold text-base pr-4">
+                                {item.question}
+                              </h3>
+                              <svg className="w-5 h-5 text-primary-main flex-shrink-0 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             </summary>
-                            <div 
-                              className="p-4 pt-0"
-                              itemScope 
-                              itemProp="acceptedAnswer" 
-                              itemType="https://schema.org/Answer"
-                            >
-                              <div itemProp="text">
-                                <p className="text-text-secondary">{item.answer}</p>
-                              </div>
+                            <div className="px-4 pb-4">
+                              <p className="text-text-secondary leading-relaxed">
+                                {item.answer}
+                              </p>
                             </div>
                           </details>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                     
-                    {/* Have a Question CTA */}
-                    <div className="mt-8 bg-gray-50 p-6 rounded-lg">
-                      <h3 className="text-xl font-semibold mb-2">Have a question not answered here?</h3>
-                      <p className="text-text-secondary mb-4">Our SEO experts are ready to help with any specific questions about our {serviceData.name}.</p>
+                    {/* CTA below FAQ */}
+                    <div className="mt-8 bg-gray-50 p-5 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div>
+                        <p className="font-semibold">
+                          Have a specific question?
+                        </p>
+                        <p className="text-sm text-text-secondary">
+                          Our SEO experts are ready to help.
+                        </p>
+                      </div>
                       <Link 
                         href="/contact"
-                        className="inline-flex items-center bg-primary-main text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
+                        className="inline-flex items-center bg-primary-main text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium flex-shrink-0"
                       >
                         Ask Your Question
                         <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -800,10 +741,10 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
               </article>
             </div>
             
-            {/* Sidebar Column - 4 columns on desktop */}
-            <div className="lg:col-span-4">
+            {/* ── Sidebar (4/12) ── */}
+            <aside className="lg:col-span-4">
               <div className="lg:sticky lg:top-24 space-y-6">
-                {/* Lead Capture Component */}
+                {/* Lead Capture Form */}
                 <LeadCaptureForm 
                   title={`Get Started with ${serviceData.name}`}
                   description="Schedule a free consultation with our SEO experts"
@@ -812,376 +753,185 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   buttonText="Request Free Consultation"
                 />
                 
-                {/* Recent Results Widget */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                  <div className="bg-primary-main text-white p-4">
-                    <h3 className="text-lg font-semibold">Recent Results</h3>
-                  </div>
-                  <div className="p-4">
-                    {serviceData.caseStudies && serviceData.caseStudies.length > 0 && (
-                      <div className="space-y-4">
-                        {serviceData.caseStudies[0].results.slice(0, 4).map((result, index) => {
-                          // Extract number and text from result (e.g. "156% increase in organic traffic")
-                          const matches = result.match(/^([+]?\d+%?|\d+[.x]?\d*) (.+)$/i);
-                          
-                          if (matches && matches.length >= 3) {
-                            return (
-                              <div key={index} className="flex items-center justify-between border-b pb-3">
-                                <span className="font-medium">{matches[2]}</span>
-                                <span className="text-green-600 font-bold">{matches[1]}</span>
-                              </div>
-                            );
-                          }
-                          
-                          return (
-                            <div key={index} className="flex items-center justify-between border-b pb-3">
-                              <span className="font-medium">{result}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                    <div className="mt-4 text-sm text-text-secondary">
-                      <p>Results vary based on industry, competition, and timeline. Contact us for an estimate specific to your business.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Related Services */}
-                {relatedServicesList.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold mb-4">Related SEO Services</h3>
-                      <div className="space-y-4">
-                        {relatedServicesList.map((service: any) => (
-                          <Link
-                            key={service.slug}
-                            href={`/services/${service.slug}`}
-                            className="block p-4 bg-gray-50 rounded-lg hover:bg-primary-main/5 transition-colors"
-                          >
-                            <div className="flex items-center">
-                              <div className="flex-shrink-0 w-8 h-8 bg-primary-main/10 text-primary-main rounded-lg flex items-center justify-center mr-3">
-                                {getIconElement(service.icon)}
-                              </div>
-                              <div>
-                                <h4 className="font-semibold">{service.name}</h4>
-                                <p className="text-sm text-text-secondary line-clamp-2 mt-1">{service.shortDescription}</p>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="mt-4 text-center">
+                {/* Why Choose ImmortalSEO */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h3 className="text-lg font-bold mb-4">
+                    Why Choose ImmortalSEO
+                  </h3>
+                  <ul className="space-y-3 text-sm">
+                    {[
+                      '15+ years of SEO expertise',
+                      '94% client retention rate',
+                      'AI-enhanced SEO strategies',
+                      'Tailored strategies, not templates',
+                      'Serving USA & Canada',
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start">
+                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-4">
                         <Link
-                          href="/services"
-                          className="inline-flex items-center text-primary-main text-sm font-medium hover:text-primary-dark"
+                      href="/about"
+                      className="text-primary-main text-sm font-medium hover:text-primary-dark inline-flex items-center"
                         >
-                          View All SEO Services
+                      Learn About Our Team
                           <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
                         </Link>
                       </div>
                     </div>
-                  </div>
-                )}
 
-                {/* Topic Cluster Navigation */}
-                {(() => {
-                  const cluster = getTopicClusterForPage(service, 'service');
-                  if (cluster && cluster.supportingContent.length > 0) {
-                    return (
-                      <TopicClusterNav
-                        pillarSlug={service}
-                        currentPageType="service"
-                        className="mb-6"
-                      />
-                    );
-                  }
-                  return null;
-                })()}
-
-                {/* Contextual Links - Related Industries */}
-                {(() => {
-                  // Find industries that use this service
-                  try {
-                    const industriesPath = path.join(process.cwd(), 'src', 'data', 'industries');
-                    const industryFiles = fs.readdirSync(industriesPath).filter((f: string) => f.endsWith('.json'));
-                    const relevantIndustries = industryFiles
-                      .map((file: string) => {
-                        const filePath = path.join(industriesPath, file);
-                        const industryData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-                        const relatedServices = industryData.relatedServices || [];
-                        const serviceName = serviceData.name.toLowerCase();
-                        const matches = relatedServices.some((rs: string) => 
-                          rs.toLowerCase().includes(serviceName) || 
-                          serviceName.includes(rs.toLowerCase())
-                        );
-                        if (matches) {
-                          return {
-                            url: `/industries/${file.replace('.json', '')}`,
-                            text: industryData.name,
-                            title: `${industryData.name} SEO`,
-                            description: industryData.metaDescription?.substring(0, 100),
-                            relationship: 'Industry we serve',
-                          };
-                        }
-                        return null;
-                      })
-                      .filter((item): item is { url: string; text: string; title: string; description: string; relationship: string } => item !== null)
-                      .slice(0, 3);
-                    
-                    if (relevantIndustries.length > 0) {
-                      return (
-                        <ContextualLinks
-                          links={relevantIndustries}
-                          title="Industries We Serve"
-                          maxLinks={3}
-                        />
-                      );
-                    }
-                  } catch (error) {
-                    // Silently fail if industries can't be loaded
-                  }
-                  return null;
-                })()}
-                
-                {/* Testimonial */}
-                {shouldDisplaySection('testimonials') && serviceData.testimonials && serviceData.testimonials.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="p-6">
-                      <div className="flex items-center mb-4">
+                {/* Client Testimonial */}
+                {serviceData.testimonials &&
+                  serviceData.testimonials.length > 0 && (
+                    <div className="bg-white rounded-xl shadow-sm p-6">
+                      <div className="flex mb-3">
                         {[1, 2, 3, 4, 5].map((_, i) => (
-                          <svg key={i} className="text-yellow-400 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <svg key={i} className="text-yellow-400 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         ))}
                       </div>
-                      
-                      <blockquote className="italic text-text-secondary mb-4">
-                        {serviceData.testimonials[0].quote}
+                      <blockquote className="text-text-secondary text-sm italic leading-relaxed mb-4">
+                        &ldquo;{serviceData.testimonials[0].quote}&rdquo;
                       </blockquote>
-                      
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                          {serviceData.testimonials[0].avatar ? (
-                            <Image 
-                              src={serviceData.testimonials[0].avatar} 
-                              alt={serviceData.testimonials[0].author}
-                              width={40}
-                              height={40}
-                              className="object-cover"
-                            />
-                          ) : (
-                            <svg className="w-full h-full text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                            </svg>
-                          )}
+                        <div className="w-9 h-9 bg-primary-main/10 rounded-full flex items-center justify-center text-primary-main font-bold text-sm mr-3 flex-shrink-0">
+                          {serviceData.testimonials[0].author
+                            ? serviceData.testimonials[0].author.charAt(0)
+                            : 'C'}
                         </div>
-                        <div className="ml-3">
-                          <p className="font-medium">{serviceData.testimonials[0].author}</p>
-                          <p className="text-sm text-gray-500">{serviceData.testimonials[0].position}</p>
+                        <div>
+                          <p className="font-medium text-sm">
+                            {serviceData.testimonials[0].author}
+                          </p>
+                          <p className="text-xs text-text-secondary">
+                            {serviceData.testimonials[0].position}
+                          </p>
                         </div>
                       </div>
+                      <div className="mt-3 pt-3 border-t border-gray-100">
+                        <Link
+                          href="/testimonials"
+                          className="text-primary-main text-xs font-medium hover:text-primary-dark"
+                        >
+                          Read more testimonials →
+                        </Link>
                     </div>
                   </div>
                 )}
                 
-                {/* Why Choose Us Box */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Why Choose ImmortalSEO</h3>
-                    <ul className="space-y-3">
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>15+ years of SEO expertise</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>94% client retention rate</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>AI-enhanced SEO strategies</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-primary-main mr-2 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Tailored strategies, not templates</span>
-                      </li>
-                    </ul>
-                    <div className="mt-4">
+                {/* Related Services */}
+                {relatedServicesList.length > 0 && (
+                  <div className="bg-white rounded-xl shadow-sm p-6">
+                    <h3 className="text-lg font-bold mb-4">
+                      Related SEO Services
+                    </h3>
+                    <div className="space-y-3">
+                      {relatedServicesList.map((rel: any) => (
                       <Link
-                        href="/about"
-                        className="text-primary-main text-sm font-medium hover:text-primary-dark inline-flex items-center"
+                          key={rel.slug}
+                          href={`/services/${rel.slug}`}
+                          className="block p-3 bg-gray-50 rounded-lg hover:bg-primary-main/5 transition-colors"
+                        >
+                          <h4 className="font-semibold text-sm">
+                            {rel.name}
+                          </h4>
+                          <p className="text-xs text-text-secondary mt-1 line-clamp-2">
+                            {rel.shortDescription}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="mt-4 text-center">
+                      <Link
+                        href="/services"
+                        className="inline-flex items-center text-primary-main text-sm font-medium hover:text-primary-dark"
                       >
-                        Learn More About Us
+                        View All Services
                         <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </Link>
                     </div>
                   </div>
+                )}
                 </div>
-              </div>
-            </div>
+            </aside>
           </div>
         </Container>
       </Section>
       
-      {/* Related Resources Section */}
-      {shouldDisplaySection('resources') && serviceData.resources && serviceData.resources.length > 0 && (
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 4. RELATED INDUSTRIES                                             */}
+      {/* ────────────────────────────────────────────────────────────────── */}
         <Section background="light">
           <Container>
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold mb-2">Related Resources</h2>
-              <p className="text-lg text-text-secondary max-w-3xl mx-auto">
-                Explore our guides and articles about {serviceData.name}
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              Industries We Serve with {serviceData.name}
+            </h2>
+            <p className="text-text-secondary max-w-2xl mx-auto">
+              Our {serviceData.name.toLowerCase()} expertise spans across
+              various industries, delivering tailored strategies for each
+              sector.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {serviceData.resources.map((resource, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                  <div className="h-40 bg-gray-200 relative">
-                    <div className="absolute inset-0 flex items-center justify-center bg-primary-main/10 text-primary-main">
-                      {getIconElement(resource.icon)}
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">{resource.title}</h3>
-                    <p className="text-text-secondary mb-4 line-clamp-2">
-                      {resource.description}
-                    </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[
+              { name: 'Dermatologist SEO', href: '/industries/dermatologist' },
+              { name: 'IVF Hospitals SEO', href: '/industries/ivf-hospitals' },
+              { name: 'Plumbing SEO', href: '/industries/plumbing-service' },
+              { name: 'House Cleaning SEO', href: '/industries/house-cleaning' },
+              { name: 'Towing Service SEO', href: '/industries/towing-service' },
+              { name: 'Taxi Service SEO', href: '/industries/taxi-service' },
+              { name: 'Restaurant SEO', href: '/industries/restaurants' },
+              { name: 'E-commerce SEO', href: '/industries/e-commerce' },
+              { name: 'Tattoo Shop SEO', href: '/industries/tattoo-shops' },
+              { name: 'Garage Door SEO', href: '/industries/garage-door' },
+              { name: 'Roofing Services SEO', href: '/industries/roofing-services' },
+              { name: 'Dry Cleaning SEO', href: '/industries/dry-cleaning' },
+            ].map((ind) => (
                     <Link 
-                      href={resource.url}
-                      className="inline-flex items-center text-primary-main hover:text-primary-dark"
+                key={ind.href}
+                href={ind.href}
+                className="bg-white p-3 rounded-lg text-sm text-text-secondary hover:text-primary-main hover:shadow-sm transition-all text-center"
                     >
-                      Read More
-                      <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
+                {ind.name}
                     </Link>
-                  </div>
-                </div>
               ))}
-            </div>
-            
-            <div className="text-center mt-8">
-              <Link
-                href="/blog"
-                className="inline-flex items-center bg-primary-main text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors"
-              >
-                Explore All Resources
-                <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
             </div>
           </Container>
         </Section>
-      )}
-      
-      {/* Related Industries Section */}
-      <Section className="bg-white">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Industries We Serve with {serviceData.name}
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our {serviceData.name.toLowerCase()} expertise spans across various industries, delivering tailored strategies for each sector.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Healthcare Industries */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4 text-primary-main">Healthcare</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/industries/dermatologist" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Dermatologist SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/industries/ivf-hospitals" className="text-gray-700 hover:text-primary-main transition-colors">
-                    IVF Hospitals SEO
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            
-            {/* Service Industries */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4 text-primary-main">Services</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/industries/plumbing-service" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Plumbing SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/industries/house-cleaning" className="text-gray-700 hover:text-primary-main transition-colors">
-                    House Cleaning SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/industries/towing-service" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Towing Service SEO
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            
-            {/* Retail & Food */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4 text-primary-main">Retail & Food</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/industries/restaurants" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Restaurant SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/industries/e-commerce" className="text-gray-700 hover:text-primary-main transition-colors">
-                    E-commerce SEO
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/industries/tattoo-shops" className="text-gray-700 hover:text-primary-main transition-colors">
-                    Tattoo Shop SEO
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </Container>
-      </Section>
 
-      {/* Related Locations Section */}
-      <Section className="bg-gray-50">
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 5. RELATED LOCATIONS                                              */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      <Section>
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {serviceData.name} Services by Location
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              {serviceData.name} by Location
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We provide {serviceData.name.toLowerCase()} services to businesses across the United States and Canada.
+            <p className="text-text-secondary max-w-2xl mx-auto">
+              We provide {serviceData.name.toLowerCase()} services to businesses
+              across the United States and Canada.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* USA Major Cities */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3 text-primary-main">United States</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-4">
+                United States
+              </h3>
               <ul className="space-y-2">
                 {[
                   { name: 'New York', slug: 'new-york' },
@@ -1191,17 +941,22 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   { name: 'San Francisco', slug: 'san-francisco' },
                 ].map((city) => (
                   <li key={city.slug}>
-                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
-                      {serviceData.name} {city.name}
-                    </Link>
-                  </li>
+                    <Link
+                      href={`/services/${service}/locations/${city.slug}`}
+                      className="text-text-secondary hover:text-primary-main transition-colors text-sm"
+                    >
+                      {serviceData.name} in {city.name}
+                  </Link>
+                </li>
                 ))}
               </ul>
             </div>
-
-            {/* More USA Cities */}
+            
+            {/* More US Cities */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3 text-primary-main">More US Cities</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-4">
+                More US Cities
+              </h3>
               <ul className="space-y-2">
                 {[
                   { name: 'Dallas', slug: 'dallas' },
@@ -1211,17 +966,22 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   { name: 'Phoenix', slug: 'phoenix' },
                 ].map((city) => (
                   <li key={city.slug}>
-                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
-                      {serviceData.name} {city.name}
-                    </Link>
-                  </li>
+                    <Link
+                      href={`/services/${service}/locations/${city.slug}`}
+                      className="text-text-secondary hover:text-primary-main transition-colors text-sm"
+                    >
+                      {serviceData.name} in {city.name}
+                  </Link>
+                </li>
                 ))}
               </ul>
             </div>
             
-            {/* Canada Cities */}
+            {/* Canada */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3 text-primary-main">Canada</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-4">
+                Canada
+              </h3>
               <ul className="space-y-2">
                 {[
                   { name: 'Toronto', slug: 'toronto' },
@@ -1231,10 +991,13 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
                   { name: 'Ottawa', slug: 'ottawa' },
                 ].map((city) => (
                   <li key={city.slug}>
-                    <Link href={`/services/${params.service}/locations/${city.slug}`} className="text-gray-700 hover:text-primary-main transition-colors">
-                      {serviceData.name} {city.name}
-                    </Link>
-                  </li>
+                    <Link
+                      href={`/services/${service}/locations/${city.slug}`}
+                      className="text-text-secondary hover:text-primary-main transition-colors text-sm"
+                    >
+                      {serviceData.name} in {city.name}
+                  </Link>
+                </li>
                 ))}
               </ul>
             </div>
@@ -1242,44 +1005,42 @@ export default async function ServiceDetailPage({ params: paramsPromise }: { par
         </Container>
       </Section>
 
-      {/* CTA Section */}
+      {/* ────────────────────────────────────────────────────────────────── */}
+      {/* 6. FINAL CTA                                                      */}
+      {/* ────────────────────────────────────────────────────────────────── */}
       <Section background="primary">
         <Container>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 md:p-12">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-2/3 mb-8 md:mb-0">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="md:w-2/3">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Ready to Improve Your {serviceData.name.split(' ')[0]} Strategy?
+                  Ready to Improve Your{' '}
+                  {serviceData.name.split(' ')[0]} Strategy?
                 </h2>
                 <p className="text-xl opacity-90 max-w-2xl">
-                  Get a free consultation and personalized {serviceData.name} strategy for your business.
+                  Get a free consultation and personalized{' '}
+                  {serviceData.name} strategy for your business.
                 </p>
-                
-                {/* Trust Indicators */}
-                <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-6">
-                  <div className="flex items-center">
-                    <svg className="w-5 h-5 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+
+                {/* Trust indicators */}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-6">
+                  <div className="flex items-center gap-1.5 text-sm font-medium">
+                    <svg className="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
-                    <span className="text-sm font-medium">4.9/5 Rating</span>
+                    4.9/5 Rating
                   </div>
-                  <div className="flex items-center">
-                    <svg className="w-5 h-5 text-white mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <div className="flex items-center gap-1.5 text-sm font-medium">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-sm font-medium">100% Satisfaction Guarantee</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-5 h-5 text-white mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-sm font-medium">Response Within 24 Hours</span>
+                    Response Within 24 Hours
                   </div>
                 </div>
               </div>
               <div className="md:w-1/3 md:text-right">
                 <Button 
-                  href={`/contact?service=${params.service}`}
+                  href={`/contact?service=${service}`}
                   variant="secondary" 
                   size="lg"
                   className="font-semibold text-primary-main px-8 hover:scale-105 transition-transform"

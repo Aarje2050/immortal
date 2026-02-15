@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../ui/Container';
@@ -43,13 +43,13 @@ const toolsData = [
   { name: 'SEO Audit Checklist', href: '/tools/seo-audit-checklist' },
   { name: 'SEO Cost Calculator', href: '/tools/seo-cost-calculator' },
   { name: 'Schema Markup Generator', href: '/tools/schema-generator' },
-  { name: 'View All Tools', href: '/tools' },
 ];
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   
   // Track scroll position for styling
   useEffect(() => {
@@ -61,6 +61,29 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close dropdowns on outside click and Escape key
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveDropdown(null);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
+
   const toggleDropdown = (name: string) => {
     setActiveDropdown(prevState => prevState === name ? null : name);
   };
@@ -70,20 +93,12 @@ const Header: React.FC = () => {
     setActiveDropdown(null);
   };
 
-  // Function to handle mobile submenu link clicks
-  const handleMobileLinkClick = (href: string) => {
-    // Close the menu
-    closeMenu();
-    // Navigate programmatically
-    window.location.href = href;
-  };
-
   const headerClass = `sticky top-0 z-50 transition-all duration-200 ${
     isScrolled ? 'bg-white shadow-md py-2' : 'bg-white py-4'
   }`;
 
   return (
-    <header className={headerClass}>
+    <header className={headerClass} ref={navRef}>
       <Container>
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -100,7 +115,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
+          <nav className="hidden lg:flex items-center space-x-5">
             {/* Home and About links */}
             <Link
               href="/"
@@ -131,19 +146,17 @@ const Header: React.FC = () => {
               
               {/* Services Dropdown Menu */}
               {activeDropdown === 'services' && (
-                <div 
-                  className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg overflow-hidden z-50"
-                >
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg overflow-hidden z-50 border border-gray-100">
                   <div className="p-4">
                     {Object.entries(servicesData).map(([category, services]) => (
-                      <div key={category} className="mb-4">
-                        <h3 className="text-sm font-bold text-text-primary mb-2">{category}</h3>
+                      <div key={category} className="mb-4 last:mb-0">
+                        <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2">{category}</h3>
                         <ul className="space-y-1">
                           {services.map((service) => (
                             <li key={service.name}>
                               <Link
                                 href={service.href}
-                                className="block py-1 text-text-secondary hover:text-primary-main transition-colors"
+                                className="block py-1.5 text-text-secondary hover:text-primary-main transition-colors text-sm"
                                 onClick={closeMenu}
                               >
                                 {service.name}
@@ -156,7 +169,7 @@ const Header: React.FC = () => {
                     <div className="pt-3 mt-3 border-t border-gray-100">
                       <Link
                         href="/services"
-                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center"
+                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
                         onClick={closeMenu}
                       >
                         View All Services
@@ -186,16 +199,14 @@ const Header: React.FC = () => {
               
               {/* Tools Dropdown Menu */}
               {activeDropdown === 'tools' && (
-                <div 
-                  className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg overflow-hidden z-50"
-                >
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-xl rounded-lg overflow-hidden z-50 border border-gray-100">
                   <div className="p-4">
-                    <ul className="space-y-2">
-                      {toolsData.slice(0, -1).map((tool) => (
+                    <ul className="space-y-1">
+                      {toolsData.map((tool) => (
                         <li key={tool.name}>
                           <Link
                             href={tool.href}
-                            className="block py-2 px-3 rounded hover:bg-gray-50 text-text-secondary hover:text-primary-main"
+                            className="block py-2 px-3 rounded hover:bg-gray-50 text-text-secondary hover:text-primary-main text-sm"
                             onClick={closeMenu}
                           >
                             {tool.name}
@@ -205,7 +216,7 @@ const Header: React.FC = () => {
                       <li>
                         <Link
                           href="/tools"
-                          className="block py-2 px-3 rounded text-primary-main font-medium hover:text-primary-dark mt-2 pt-2 border-t border-gray-100"
+                          className="block py-2 px-3 rounded text-primary-main font-medium hover:text-primary-dark mt-2 pt-2 border-t border-gray-100 text-sm"
                           onClick={closeMenu}
                         >
                           View All Tools
@@ -225,20 +236,18 @@ const Header: React.FC = () => {
               Case Studies
             </Link>
             <Link
-              href="/blog"
-              className="text-text-secondary hover:text-primary-main transition-colors font-medium px-2 py-2"
-            >
-              Blog
-            </Link>
-            <Link
               href="/pricing"
               className="text-text-secondary hover:text-primary-main transition-colors font-medium px-2 py-2"
             >
               Pricing
             </Link>
-            
-            {/* CTA Button */}
-            <Button href="/contact" size="sm">
+
+            {/* CTA Button — primary conversion action */}
+            <Button
+              href="/contact"
+              size="sm"
+              className="!bg-primary-main hover:!bg-primary-dark text-white font-semibold px-5 shadow-sm hover:shadow-md transition-all"
+            >
               Free SEO Audit
             </Button>
           </nav>
@@ -277,32 +286,27 @@ const Header: React.FC = () => {
         </div>
       </Container>
 
-      {/* Mobile Navigation - Completely restructured */}
+      {/* ─── Mobile Navigation ─── */}
+      {/* Uses proper Next.js <Link> components for SPA navigation (no full page reloads) */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-white border-t overflow-y-auto max-h-[80vh]">
           <Container>
             <nav className="flex flex-col py-4">
-              {/* Home and About links */}
-              <a
+              {/* Main links */}
+              <Link
                 href="/"
                 className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMobileLinkClick('/');
-                }}
+                onClick={closeMenu}
               >
                 Home
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/about"
                 className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMobileLinkClick('/about');
-                }}
+                onClick={closeMenu}
               >
                 About
-              </a>
+              </Link>
               
               {/* Mobile Services Accordion */}
               <div className="border-b border-gray-100">
@@ -327,40 +331,33 @@ const Header: React.FC = () => {
                   <div className="pl-4 pb-3">
                     {Object.entries(servicesData).map(([category, services]) => (
                       <div key={category} className="mb-3">
-                        <h4 className="font-semibold text-sm uppercase text-text-secondary mt-3 mb-2">{category}</h4>
+                        <h4 className="font-semibold text-xs uppercase tracking-wider text-text-secondary mt-3 mb-2">{category}</h4>
                         <ul className="space-y-2">
                           {services.map((service) => (
                             <li key={service.name}>
-                              <a
+                              <Link
                                 href={service.href}
                                 className="text-text-secondary hover:text-primary-main transition-colors block py-1"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleMobileLinkClick(service.href);
-                                }}
+                                onClick={closeMenu}
                               >
                                 {service.name}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
                       </div>
                     ))}
-                    
                     <div className="mt-3">
-                      <a
+                      <Link
                         href="/services"
-                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleMobileLinkClick('/services');
-                        }}
+                        className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
+                        onClick={closeMenu}
                       >
                         View All Services
                         <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -388,34 +385,25 @@ const Header: React.FC = () => {
                 {activeDropdown === 'mobile-tools' && (
                   <div className="pl-4 pb-3">
                     <ul className="space-y-2">
-                      {toolsData.slice(0, -1).map((tool) => (
+                      {toolsData.map((tool) => (
                         <li key={tool.name}>
-                          <a
+                          <Link
                             href={tool.href}
                             className="text-text-secondary hover:text-primary-main transition-colors block py-1"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleMobileLinkClick(tool.href);
-                            }}
+                            onClick={closeMenu}
                           >
                             {tool.name}
-                          </a>
+                          </Link>
                         </li>
                       ))}
-                      <li>
-                        <a
+                      <li className="mt-2 pt-2 border-t border-gray-100">
+                        <Link
                           href="/tools"
-                          className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center mt-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleMobileLinkClick('/tools');
-                          }}
+                          className="text-primary-main font-medium hover:text-primary-dark inline-flex items-center text-sm"
+                          onClick={closeMenu}
                         >
                           View All Tools
-                          <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -423,43 +411,44 @@ const Header: React.FC = () => {
               </div>
               
               {/* Case Studies and Pricing links */}
-              <a
+              <Link
                 href="/case-studies"
                 className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMobileLinkClick('/case-studies');
-                }}
+                onClick={closeMenu}
               >
                 Case Studies
-              </a>
-              <a
-                href="/blog"
-                className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMobileLinkClick('/blog');
-                }}
-              >
-                Blog
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/pricing"
                 className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMobileLinkClick('/pricing');
-                }}
+                onClick={closeMenu}
               >
                 Pricing
-              </a>
-              
-              <div className="mt-4">
+              </Link>
+              <Link
+                href="/testimonials"
+                className="text-text-secondary hover:text-primary-main transition-colors font-medium py-3 border-b border-gray-100"
+                onClick={closeMenu}
+              >
+                Testimonials
+              </Link>
+
+              {/* Mobile CTA area */}
+              <div className="mt-4 space-y-3">
+                <a
+                  href="mailto:hello@immortalseo.com"
+                  className="flex items-center justify-center gap-2 w-full py-3 border border-primary-main text-primary-main rounded-lg font-medium hover:bg-primary-main/5 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                  hello@immortalseo.com
+                </a>
                 <Button
                   href="/contact"
                   size="sm"
                   fullWidth
-                  onClick={() => handleMobileLinkClick('/contact')}
+                  onClick={closeMenu}
                 >
                   Get Your Free SEO Audit
                 </Button>
