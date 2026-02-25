@@ -607,7 +607,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link href="/case-studies/omgs-in" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
+            <Link href="/case-studies/omgs-in-organic-traffic-growth" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-text-secondary">E-commerce</span>
                 <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -628,7 +628,7 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/case-studies/zencoder-ai" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
+            <Link href="/case-studies/zencoder-ai-lead-generation" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-text-secondary">AI / SaaS</span>
                 <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -649,7 +649,7 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="/case-studies/cbd-brand" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
+            <Link href="/case-studies/cbd-canada-seo-case-study" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all group block">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-text-secondary">CBD Industry</span>
                 <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
