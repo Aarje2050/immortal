@@ -138,7 +138,7 @@ export default function BlogPost({ post }: BlogPostProps) {
                 <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm post-content-wrapper">
                   {/* Post content */}
                   <div 
-                    className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-primary-main prose-a:font-medium prose-img:rounded-xl prose-blockquote:border-primary-main prose-blockquote:bg-primary-main/5 prose-blockquote:p-4 prose-blockquote:rounded-r-lg prose-figcaption:text-text-secondary prose-strong:text-text-primary"
+                    className="post-content-wrapper prose prose-lg max-w-none prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-primary-main prose-a:font-medium prose-img:rounded-xl prose-blockquote:border-primary-main prose-blockquote:bg-primary-main/5 prose-blockquote:p-4 prose-blockquote:rounded-r-lg prose-figcaption:text-text-secondary prose-strong:text-text-primary"
                     dangerouslySetInnerHTML={{ __html: post.content.rendered }}
                   />
                   

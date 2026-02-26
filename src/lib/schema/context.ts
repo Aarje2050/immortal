@@ -53,6 +53,9 @@ export function getSchemaContext(): SchemaContext {
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SaaS & B2B SEO', url: `${baseUrl}/services/saas-seo` } },
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Small Business SEO', url: `${baseUrl}/services/small-business-seo` } },
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Enterprise SEO', url: `${baseUrl}/services/enterprise-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'WordPress SEO', url: `${baseUrl}/services/wordpress-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Shopify SEO', url: `${baseUrl}/services/shopify-seo` } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'HubSpot SEO', url: `${baseUrl}/services/hubspot-seo-services` } },
       ],
     },
     // Founders

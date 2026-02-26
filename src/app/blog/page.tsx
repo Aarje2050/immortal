@@ -1,6 +1,6 @@
 // app/blog/page.tsx (Server Component)
 import { Metadata } from 'next';
-import { getAllPosts, Post } from '@/lib/blog/wp-api'; // Import Post type
+import { getAllPosts, searchPosts, Post } from '@/lib/blog/wp-api'; // Import Post type
 import BlogList from '@/components/blog/BlogList';
 import Layout from '@/components/layout/Layout';
 import JsonLd from '@/components/seo/JsonLd';
@@ -29,15 +29,17 @@ const POSTS_PER_PAGE = 10; // Adjust if your API uses a different value
 
 // In Next.js 15, we need to properly handle dynamic props
 export default async function BlogPage(props: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; search?: string }>;
 }) {
   // Next.js 15 requires we await the searchParams
   const searchParams = await props.searchParams;
   
-  // Now we can safely access properties
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
+  const page = searchParams?.page ? parseInt(searchParams.page, 10) : 1;
+  const searchQuery = typeof searchParams?.search === 'string' ? searchParams.search.trim() : '';
   
-  const { posts, pagination } = await getAllPosts(page);
+  const { posts, pagination } = searchQuery
+    ? await searchPosts(searchQuery, page, POSTS_PER_PAGE)
+    : await getAllPosts(page, POSTS_PER_PAGE);
   
   // Get schema context
   const context = getSchemaContext();
@@ -139,7 +141,7 @@ export default async function BlogPage(props: {
   return (
     <Layout breadcrumbs={breadcrumbs}>
       <JsonLd data={schemaGraph} />
-      <BlogList posts={posts} pagination={pagination} />
+      <BlogList posts={posts} pagination={pagination} searchQuery={searchQuery || undefined} />
     </Layout>
   );
 }

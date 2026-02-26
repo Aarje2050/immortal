@@ -134,6 +134,48 @@ export async function getAllPosts(page = 1, perPage = 10) {
   }
 }
 
+// Function to search posts via WordPress REST API (searches title, content, excerpt)
+export async function searchPosts(query: string, page = 1, perPage = 10) {
+  if (!query || typeof query !== 'string' || query.trim() === '') {
+    return getAllPosts(page, perPage);
+  }
+  try {
+    const search = encodeURIComponent(query.trim());
+    const res = await fetch(
+      `${API_URL}/posts?search=${search}&page=${page}&per_page=${perPage}&_embed`,
+      { next: { revalidate: 3600 } } // Cache for 1 hour
+    );
+    
+    if (!res.ok) {
+      throw new Error(`Failed to search posts: ${res.status}`);
+    }
+    
+    const posts = await res.json();
+    
+    const totalPosts = parseInt(res.headers.get('x-wp-total') || '0', 10);
+    const totalPages = parseInt(res.headers.get('x-wp-totalpages') || '0', 10);
+    
+    return {
+      posts,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalPosts
+      }
+    };
+  } catch (error) {
+    console.error('Error searching posts:', error);
+    return {
+      posts: [],
+      pagination: {
+        currentPage: page,
+        totalPages: 0,
+        totalPosts: 0
+      }
+    };
+  }
+}
+
 // Function to get all categories
 export async function getAllCategories() {
   try {

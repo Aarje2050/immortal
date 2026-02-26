@@ -36,7 +36,10 @@ export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'src', 'data', 'services.json');
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const servicesData = JSON.parse(fileContent);
-  return Object.keys(servicesData).map(service => ({ service }));
+  // Exclude hubspot-seo-services: served by custom page at services/hubspot-seo-services/page.tsx
+  return Object.keys(servicesData)
+    .filter((service) => service !== 'hubspot-seo-services')
+    .map((service) => ({ service }));
 }
 
 export async function generateMetadata({

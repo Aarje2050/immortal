@@ -6,13 +6,16 @@ interface PaginationProps {
   totalPages: number;
   basePath: string;
   queryParam?: string;
+  /** Extra query params to preserve in page URLs (e.g. { search: 'keyword' }) */
+  queryParams?: Record<string, string>;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
   basePath,
-  queryParam = 'page'
+  queryParam = 'page',
+  queryParams = {}
 }: PaginationProps) {
   // Don't render pagination if there's only one page
   if (totalPages <= 1) {
@@ -37,14 +40,20 @@ export default function Pagination({
     return range;
   };
 
-  // Helper to generate page URLs
+  // Build query string from extra params + page
+  const buildQueryString = (page: number) => {
+    const params = new URLSearchParams();
+    Object.entries(queryParams).forEach(([k, v]) => {
+      if (v != null && v !== '') params.set(k, v);
+    });
+    if (page > 1) params.set(queryParam, String(page));
+    const qs = params.toString();
+    return qs ? `?${qs}` : '';
+  };
+
+  // Helper to generate page URLs (preserves search and other query params)
   const getPageUrl = (page: number) => {
-    if (page === 1) {
-      // For page 1, return the base path without query parameter
-      return basePath;
-    }
-    // For other pages, include the page query parameter
-    return `${basePath}?${queryParam}=${page}`;
+    return `${basePath}${buildQueryString(page)}`;
   };
 
   const pageRange = getPageRange();

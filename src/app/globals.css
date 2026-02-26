@@ -46,9 +46,57 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1.5em;
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4 {
-  margin-top: 1.5em;
+/* Blog post content: clear heading hierarchy (h2–h6 in WordPress content) */
+.prose h1,
+.post-content-wrapper .prose h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 0;
   margin-bottom: 0.75em;
+  line-height: 1.25;
+}
+.prose h2,
+.post-content-wrapper .prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--secondary-dark);
+}
+.prose h3,
+.post-content-wrapper .prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.35;
+}
+.prose h4,
+.post-content-wrapper .prose h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1.25em;
+  margin-bottom: 0.4em;
+  line-height: 1.4;
+}
+.prose h5,
+.post-content-wrapper .prose h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.35em;
+  line-height: 1.4;
+}
+.prose h6,
+.post-content-wrapper .prose h6 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  line-height: 1.45;
+  color: var(--text-secondary);
 }
 
 .prose ul, .prose ol {

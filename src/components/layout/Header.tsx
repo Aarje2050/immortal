@@ -33,7 +33,12 @@ const servicesData = {
     { name: 'SaaS & B2B SEO', href: '/services/saas-seo' },
     { name: 'Small Business SEO', href: '/services/small-business-seo' },
     { name: 'Enterprise SEO', href: '/services/enterprise-seo' },
-  ]
+  ],
+  'CMS-Specific SEO': [
+    { name: 'WordPress SEO', href: '/services/wordpress-seo' },
+    { name: 'Shopify SEO', href: '/services/shopify-seo' },
+    { name: 'HubSpot SEO', href: '/services/hubspot-seo-services' },
+  ],
 };
 
 // Tools data organized by category, with optional badge for highlighted items

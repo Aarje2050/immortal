@@ -15,9 +15,10 @@ interface PaginationProps {
 interface BlogListProps {
   posts: Post[];
   pagination: PaginationProps;
+  searchQuery?: string;
 }
 
-export default function BlogList({ posts, pagination }: BlogListProps) {
+export default function BlogList({ posts, pagination, searchQuery }: BlogListProps) {
   return (
     <>
       {/* Hero Section */}
@@ -49,6 +50,47 @@ export default function BlogList({ posts, pagination }: BlogListProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Main Blog Posts */}
             <div className="md:col-span-2">
+              {/* Search: form submits to GET /blog?search=... (preserves WordPress fetch on server) */}
+              <div className="bg-white p-4 rounded-xl shadow-sm mb-6">
+                <form action="/blog" method="GET" className="flex flex-col sm:flex-row gap-2">
+                  <label htmlFor="blog-search" className="sr-only">Search blog posts</label>
+                  <input
+                    id="blog-search"
+                    type="search"
+                    name="search"
+                    defaultValue={searchQuery}
+                    placeholder="Search blog posts..."
+                    className="flex-1 min-w-0 px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-transparent text-text-primary placeholder:text-text-disabled"
+                    aria-label="Search blog posts"
+                  />
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 bg-primary-main text-white font-medium rounded-lg hover:bg-primary-dark transition-colors shrink-0"
+                  >
+                    Search
+                  </button>
+                </form>
+              </div>
+
+              {searchQuery && (
+                <div className="mb-6 flex flex-wrap items-center gap-2">
+                  <h2 className="text-lg font-semibold text-text-primary">
+                    Search results for &ldquo;{searchQuery}&rdquo;
+                    {pagination.totalPosts != null && (
+                      <span className="text-text-secondary font-normal ml-1">
+                        ({pagination.totalPosts} {pagination.totalPosts === 1 ? 'post' : 'posts'})
+                      </span>
+                    )}
+                  </h2>
+                  <Link
+                    href="/blog"
+                    className="text-sm text-primary-main hover:underline"
+                  >
+                    Clear search
+                  </Link>
+                </div>
+              )}
+
               {posts.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {posts.map((post) => (
@@ -57,20 +99,33 @@ export default function BlogList({ posts, pagination }: BlogListProps) {
                 </div>
               ) : (
                 <div className="bg-white p-8 rounded-xl shadow-sm text-center">
-                  <h2 className="text-2xl font-bold mb-4">No posts found</h2>
-                  <p className="text-text-secondary">
-                    Check back soon for new content.
+                  <h2 className="text-2xl font-bold mb-4">
+                    {searchQuery ? 'No posts match your search' : 'No posts found'}
+                  </h2>
+                  <p className="text-text-secondary mb-4">
+                    {searchQuery
+                      ? `Try a different search term or clear the search to see all posts.`
+                      : 'Check back soon for new content.'}
                   </p>
+                  {searchQuery && (
+                    <Link
+                      href="/blog"
+                      className="inline-flex items-center text-primary-main font-medium hover:underline"
+                    >
+                      View all posts
+                    </Link>
+                  )}
                 </div>
               )}
               
-              {/* Pagination */} 
-               {pagination.totalPages > 1 && (
+              {/* Pagination (preserve search in URLs) */}
+              {pagination.totalPages > 1 && (
                 <div className="mt-12">
                   <Pagination
                     currentPage={pagination.currentPage}
                     totalPages={pagination.totalPages}
                     basePath="/blog"
+                    queryParams={searchQuery ? { search: searchQuery } : undefined}
                   />
                 </div>
               )}
